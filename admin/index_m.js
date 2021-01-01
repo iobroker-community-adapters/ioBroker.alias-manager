@@ -831,6 +831,17 @@ function load(settings, onChange) {
 		var read = aliases[alias].common.read || false;
 		var write = aliases[alias].common.write || false;
 		var unsavedNew = aliases[alias].UNSAVED_NEW || false;
+		var convertedToNumber = false;
+		if(typeof min != "number" && min != ""){
+			if(isNaN(min)) min = ""; else min = parseFloat(min);
+			unsavedNew = true;
+			convertedToNumber = true;
+		}
+		if(typeof max != "number" && max != ""){
+			if(isNaN(max)) max = ""; else max = parseFloat(max);
+			unsavedNew = true;
+			convertedToNumber = true;
+		}
 		var aliasObj = aliases[alias].common.alias || {};
 		var aliasId = aliasObj.id || "";
 		var aliasRead = aliasObj.read || "";
@@ -867,12 +878,12 @@ function load(settings, onChange) {
 			listContent += "</div>";
 			listContent += "<div class='row aliasesDatapointRow' style='background-color: rgba(0,255,0,0.1);'>";
 			listContent += 	"<div class='col s12 m6 l4'>";
-			listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_MIN' id='aliasesDatapoint_" + alias + "_MIN' data-id='" + alias + "' data-setting='min' value='" + min + "'></input>";
+			listContent += 		"<input class='val aliasesDatapoint' data-type='number' type='number' name='aliasesDatapoint_" + alias + "_MIN' id='aliasesDatapoint_" + alias + "_MIN' data-id='" + alias + "' data-setting='min' value='" + min + "'></input>";
 			listContent += 		"<label for='aliasesDatapoint_" + alias + "_MIN' class='translate'></label>";
 			listContent += 		"<span class='translate'>common.min</span>";
 			listContent += 	"</div>";
 			listContent += 	"<div class='col s12 m6 l4'>";
-			listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_MAX' id='aliasesDatapoint_" + alias + "_MAX' data-id='" + alias + "' data-setting='max' value='" + max + "'></input>";
+			listContent += 		"<input class='val aliasesDatapoint' data-type='number' type='number' name='aliasesDatapoint_" + alias + "_MAX' id='aliasesDatapoint_" + alias + "_MAX' data-id='" + alias + "' data-setting='max' value='" + max + "'></input>";
 			listContent += 		"<label for='aliasesDatapoint_" + alias + "_MAX' class='translate'></label>";
 			listContent += 		"<span class='translate'>common.max</span>";
 			listContent += 	"</div>";
@@ -910,9 +921,14 @@ function load(settings, onChange) {
 		listContent += "</div>";
 		listContent += "</div>";
 		listContent += "<div class='row aliasesDatapointRow'>";
-		listContent += 	"<div class='col s12 m12 l12'>";
+		listContent += 	"<div class='col s12 m6 l6'>";
 		listContent += 		"<a class='aliasesDatapoint save waves-effect waves-light btn' id='aliasesDatapoint_" + alias + "_SAVE' data-id='" + alias + "' data-setting='save' style='margin-top: 20px;" + (unsavedNew ? "" : " display: none;") + "'><i class='material-icons left'>save</i><span class='translate'>Save changes</span></a>";
 		listContent += 	"</div>";
+		if(convertedToNumber){
+			listContent += 	"<div class='col s12 m6 l6'>";
+			listContent += 		"<i class='material-icons left'>info</i><span class='translate'>Converted some datapoints to type number</span>";
+			listContent += 	"</div>";			
+		}
 		listContent += "</div>";
 		listContent += "</li>";
 		if(isMain){
@@ -1065,6 +1081,14 @@ function load(settings, onChange) {
 				} else {
 					if ($this.attr('type') === 'checkbox') {
 						newObj.common[setting] = $this.prop('checked');
+					} else if ($this.attr('type') === 'number') {
+						if(isNaN($this.val())){
+							alert("Error: NaN");
+						} else {
+							var numVal = parseFloat($this.val());
+							if (numVal == null) numVal = "";
+							newObj.common[setting] = numVal;
+						}
 					} else {
 						newObj.common[setting] = $this.val();
 					}

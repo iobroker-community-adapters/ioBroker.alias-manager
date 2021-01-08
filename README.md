@@ -5,12 +5,12 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.alias-manager.svg)](https://www.npmjs.com/package/iobroker.alias-manager)
 ![Number of Installations (latest)](http://iobroker.live/badges/alias-manager-installed.svg)
 ![Number of Installations (stable)](http://iobroker.live/badges/alias-manager-stable.svg)
-[![Dependency Status](https://img.shields.io/david/Sebastian Bormann/iobroker.alias-manager.svg)](https://david-dm.org/Sebastian Bormann/iobroker.alias-manager)
-[![Known Vulnerabilities](https://snyk.io/test/github/Sebastian Bormann/ioBroker.alias-manager/badge.svg)](https://snyk.io/test/github/Sebastian Bormann/ioBroker.alias-manager)
+[![Dependency Status](https://img.shields.io/david/sbormann/iobroker.alias-manager.svg)](https://david-dm.org/Sebastian Bormann/iobroker.alias-manager)
+[![Known Vulnerabilities](https://snyk.io/test/github/sbormann/ioBroker.alias-manager/badge.svg)](https://snyk.io/test/github/Sebastian Bormann/ioBroker.alias-manager)
 
 [![NPM](https://nodei.co/npm/iobroker.alias-manager.png?downloads=true)](https://nodei.co/npm/iobroker.alias-manager/)
 
-**Tests:**: [![Travis-CI](http://img.shields.io/travis/Sebastian Bormann/ioBroker.alias-manager/master.svg)](https://travis-ci.org/Sebastian Bormann/ioBroker.alias-manager)
+**Tests:**: [![Travis-CI](http://img.shields.io/travis/sbormann/ioBroker.alias-manager/master.svg)](https://travis-ci.org/Sebastian Bormann/ioBroker.alias-manager)
 
 ## alias-manager adapter for ioBroker
 
@@ -18,13 +18,16 @@ Manages and creates aliases.
 
 ## Changelog
 
-### 0.0.1 dev
-* (Sebastian Bormann) initial release
+### 0.0.2
+* (sbormann) added conversion for min and max to type number
+
+### 0.0.1
+* (sbormann) initial release
 
 ## License
 MIT License
 
-Copyright (c) 2020 Sebastian Bormann <sebastian@bormann.net>
+Copyright (c) 2021 Sebastian Bormann <sebastian@bormann.net>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

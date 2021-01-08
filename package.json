@@ -1,19 +1,19 @@
 {
   "name": "iobroker.alias-manager",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Manages and creates aliases",
   "author": {
     "name": "Sebastian Bormann",
     "email": "sebastian@bormann.net"
   },
-  "homepage": "https://github.com/Sebastian Bormann/ioBroker.alias-manager",
+  "homepage": "https://github.com/sbormann/ioBroker.alias-manager",
   "license": "MIT",
   "keywords": [
     "Alias"
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:Sebastian Bormann/ioBroker.alias-manager.git"
+    "url": "https://github.com/sbormann/ioBroker.alias-manager"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0"

@@ -1,82 +1,93 @@
 {
-  "common": {
-    "name": "alias-manager",
-    "version": "0.0.1",
-    "news": {
-      "0.0.1": {
-        "en": "initial release",
-        "de": "Erstveröffentlichung",
-        "ru": "Начальная версия",
-        "pt": "lançamento inicial",
-        "nl": "Eerste uitgave",
-        "fr": "Première version",
-        "it": "Versione iniziale",
-        "es": "Versión inicial",
-        "pl": "Pierwsze wydanie",
-        "zh-cn": "首次出版"
-      }
+    "common": {
+        "name": "alias-manager",
+        "version": "0.0.2",
+        "news": {
+            "0.0.2": {
+                "en": "added conversion for min and max to type number",
+                "de": "Konvertierung für min und max zur Typennummer hinzugefügt",
+                "ru": "добавлено преобразование минимума и максимума в тип числа",
+                "pt": "adição de conversão para mínimo e máximo ao tipo número",
+                "nl": "conversie toegevoegd voor min en max naar typenummer",
+                "fr": "conversion ajoutée pour min et max en nombre de type",
+                "it": "aggiunta conversione per min e max in numero di tipo",
+                "es": "conversión agregada para mínimo y máximo al número de tipo",
+                "pl": "dodana konwersja dla min i max na numer typu",
+                "zh-cn": "增加了最小和最大类型类型的转换"
+            },
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Alias-Manager",
+        "titleLang": {
+            "en": "Alias-Manager",
+            "de": "Alias-Manager",
+            "ru": "Алиас-менеджер",
+            "pt": "Alias-Manager",
+            "nl": "Alias-Manager",
+            "fr": "Alias-Manager",
+            "it": "Alias-manager",
+            "es": "Gerente de alias",
+            "pl": "Alias-Manager",
+            "zh-cn": "别名经理"
+        },
+        "desc": {
+            "en": "Manages and creates aliases",
+            "de": "Verwaltet und erstellt Aliase",
+            "ru": "Управляет и создает псевдонимы",
+            "pt": "Gerencia e cria aliases",
+            "nl": "Beheert en maakt aliassen",
+            "fr": "Gère et crée des alias",
+            "it": "Gestisce e crea alias",
+            "es": "Administra y crea alias",
+            "pl": "Zarządza i tworzy aliasy",
+            "zh-cn": "管理和创建别名"
+        },
+        "authors": [
+            "Sebastian Bormann <sebastian@bormann.net>"
+        ],
+        "keywords": [
+            "Alias"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "alias-manager.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/sbormann/ioBroker.alias-manager/master/admin/alias-manager.png",
+        "readme": "https://github.com/sbormann/ioBroker.alias-manager/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "none",
+        "type": "general",
+        "highlight": true,
+        "compact": true,
+        "singleton": true,
+        "materialize": true,
+        "materializeTab": true,
+        "blockly": false,
+        "messagebox": false,
+        "subscribe": "",
+        "noIntro": true,
+        "supportCustoms": false,
+        "connectionType": "local",
+        "dataSource": "assumption",
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            }
+        ]
     },
-    "title": "Alias-Manager",
-    "titleLang": {
-      "en": "Alias-Manager",
-      "de": "Alias-Manager",
-      "ru": "Алиас-менеджер",
-      "pt": "Alias-Manager",
-      "nl": "Alias-Manager",
-      "fr": "Alias-Manager",
-      "it": "Alias-manager",
-      "es": "Gerente de alias",
-      "pl": "Alias-Manager",
-      "zh-cn": "别名经理"
-    },
-    "desc": {
-      "en": "Manages and creates aliases",
-      "de": "Verwaltet und erstellt Aliase",
-      "ru": "Управляет и создает псевдонимы",
-      "pt": "Gerencia e cria aliases",
-      "nl": "Beheert en maakt aliassen",
-      "fr": "Gère et crée des alias",
-      "it": "Gestisce e crea alias",
-      "es": "Administra y crea alias",
-      "pl": "Zarządza i tworzy aliasy",
-      "zh-cn": "管理和创建别名"
-    },
-    "authors": [
-      "Sebastian Bormann <sebastian@bormann.net>"
-    ],
-    "keywords": [
-      "Alias"
-    ],
-    "license": "MIT",
-    "platform": "Javascript/Node.js",
-    "main": "main.js",
-    "icon": "alias-manager.png",
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/sbormann/ioBroker.alias-manager/master/admin/alias-manager.png",
-    "readme": "https://github.com/sbormann/ioBroker.alias-manager/blob/master/README.md",
-    "loglevel": "info",
-    "mode": "none",
-    "type": "general",
-    "highlight": true,
-    "compact": true,
-    "singleton": true,
-    "materialize": true,
-    "materializeTab": true,
-    "blockly": false,
-    "messagebox": false,
-    "subscribe": "",
-    "noIntro": true,
-    "supportCustoms": false,
-    "connectionType": "local",
-    "dataSource": "assumption",
-    "dependencies": [
-      {
-        "js-controller": ">=1.4.2"
-      }
-    ],
-    "installedFrom": "/opt/iobroker/iobroker.alias-manager"
-  },
-  "native": {},
-  "objects": [],
-  "instanceObjects": []
+    "native": {},
+    "objects": [],
+    "instanceObjects": []
 }

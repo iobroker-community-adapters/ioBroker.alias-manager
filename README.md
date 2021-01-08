@@ -4,7 +4,7 @@
 [![NPM version](http://img.shields.io/npm/v/iobroker.alias-manager.svg)](https://www.npmjs.com/package/iobroker.alias-manager)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.alias-manager.svg)](https://www.npmjs.com/package/iobroker.alias-manager)
 ![Number of Installations (latest)](http://iobroker.live/badges/alias-manager-installed.svg)
-![Number of Installations (stable)](http://iobroker.live/badges/alias-manager-stable.svg)
+<!-- ![Number of Installations (stable)](http://iobroker.live/badges/alias-manager-stable.svg) -->
 [![Dependency Status](https://img.shields.io/david/sbormann/iobroker.alias-manager.svg)](https://david-dm.org/sbormann/iobroker.alias-manager)
 [![Known Vulnerabilities](https://snyk.io/test/github/sbormann/ioBroker.alias-manager/badge.svg)](https://snyk.io/test/github/sbormann/ioBroker.alias-manager)
 

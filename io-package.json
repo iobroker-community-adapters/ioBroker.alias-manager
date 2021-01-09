@@ -80,7 +80,7 @@
         "noIntro": true,
         "supportCustoms": false,
         "connectionType": "local",
-        "dataSource": "assumption",
+        "dataSource": "push",
         "dependencies": [
             {
                 "js-controller": ">=1.4.2"

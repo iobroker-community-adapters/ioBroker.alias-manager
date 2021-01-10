@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "news": {
             "0.0.2": {
                 "en": "added conversion for min and max to type number",

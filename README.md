@@ -18,6 +18,9 @@ Manages and creates aliases.
 
 ## Changelog
 
+### 0.0.3
+* (sbormann) some fixes
+
 ### 0.0.2
 * (sbormann) added conversion for min and max to type number
 

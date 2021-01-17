@@ -1,10 +1,44 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.0.4",
+        "version": "0.0.5",
         "news": {
-		"0.0.4": {"en": "some fixes"},
-		"0.0.3": {"en": "some fixes"},
+            "0.0.5": {
+                "en": "some fixes",
+                "de": "einige Korrekturen",
+                "ru": "некоторые исправления",
+                "pt": "algumas correções",
+                "nl": "enkele fixes",
+                "fr": "quelques correctifs",
+                "it": "alcune correzioni",
+                "es": "algunas correcciones",
+                "pl": "kilka poprawek",
+                "zh-cn": "一些修复"
+            },
+            "0.0.4": {
+                "en": "some fixes",
+                "de": "einige Korrekturen",
+                "ru": "некоторые исправления",
+                "pt": "algumas correções",
+                "nl": "enkele fixes",
+                "fr": "quelques correctifs",
+                "it": "alcune correzioni",
+                "es": "algunas correcciones",
+                "pl": "kilka poprawek",
+                "zh-cn": "一些修复"
+            },
+            "0.0.3": {
+                "en": "some fixes",
+                "de": "einige Korrekturen",
+                "ru": "некоторые исправления",
+                "pt": "algumas correções",
+                "nl": "enkele fixes",
+                "fr": "quelques correctifs",
+                "it": "alcune correzioni",
+                "es": "algunas correcciones",
+                "pl": "kilka poprawek",
+                "zh-cn": "一些修复"
+            },
             "0.0.2": {
                 "en": "added conversion for min and max to type number",
                 "de": "Konvertierung für min und max zur Typennummer hinzugefügt",

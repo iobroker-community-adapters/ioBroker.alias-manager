@@ -616,8 +616,8 @@ function getAliasesMain(){
 		if(parentAlias != "Alias" && parseInt(parentAlias.substr(6)).toString() != parentAlias.substr(6)) aliasesMain.push(parentAlias);
 	});
 	aliasesMain = removeDuplicates(aliasesMain);
-	aliasesMain = aliasesMain.filter(function(element){ //Filter for main Aliases (that are elements, that have sub-aliases)
-		if(aliasesMain.filter(function(_element){ return (_element.indexOf(element + ".") == 0); }).length > 0) return true; else return false;
+	aliasesMain = aliasesMain.filter(function(element){ //Filter for main Aliases (that are elements, that have sub-aliases OR that are direct childs of alias.0. [which means, lastIndexOf(".") == 7])
+		if(element.lastIndexOf(".") == 7 || aliasesMain.filter(function(_element){ return (_element.indexOf(element + ".") == 0); }).length > 0) return true; else return false;
 	});
 	aliasesMain.sort();
 	return aliasesMain;
@@ -721,8 +721,13 @@ function load(settings, onChange) {
 		
 	//Enhance aliasesSelectedAlias-Selectbox with functions
 	$('#aliasesSelectedAlias').on('change', function(){
+		loadAlias($('#aliasesSelectedAlias').val());
+	});
+	
+	//Load Alias
+	function loadAlias(aliasId){
 		$('.aliasesDatapointSaveAll').hide();
-		aliasesSelectedAlias = $('#aliasesSelectedAlias').val();
+		aliasesSelectedAlias = aliasId;
 		if(aliasesSelectedAlias){
 			//Fill Datapoint list			
 			var mainFilled = false;
@@ -757,9 +762,24 @@ function load(settings, onChange) {
 		} else {
 			$('.aliasesContentDiv').hide();
 			$('.aliasesNothingSelectedDiv').show();
-		}
-	});
+		}		
+	}
 	
+	//Add function to Add Alias Button
+	$('#aliasesNewAlias').on('click', function(){
+		var aliasId = prompt(_("Please enter ID of alias"), "alias.0.MyNewAlias");
+		if(!aliasId) return;
+		if(aliasId.indexOf("alias.0.") !== 0) aliasId = "alias.0." + aliasId;
+		if(aliasId.length < 9) return;
+		if(aliases[aliasId] && !aliases[aliasId].UNSAVED_NEW){
+			alert("Error: This alias exists.");
+			return;
+		}
+		$('#aliasesSelectedAlias').append("<option value='" + aliasId + "'>" + aliasId + " [" + _("NOT SAVED") + "]" + "</option>");
+		$('#aliasesSelectedAlias').val(aliasId);
+		$('#aliasesSelectedAlias').select().trigger('change');
+	});
+
 	//Add function to Add Datapoint Button
 	$('#aliasesNewDatapoint').on('click', function(){
 		var datapoint = prompt(_("Please enter ID of datapoint"), "SET");
@@ -801,6 +821,7 @@ function load(settings, onChange) {
 	$('#aliasesDeleteAlias').on('click', function(){
 		if(confirm(_("Really delete all datapoints of this Alias?"))){
 			var ids = [];
+			ids.push(aliasesSelectedAlias);
 			$('#aliasesDatapointList li').each(function(){
 				ids.push($(this).data('id'));
 			});
@@ -951,19 +972,20 @@ function load(settings, onChange) {
 		$('.aliasesDatapoint.selectId[data-id="' + alias + '"]').on('click', function(){
 			$('#dialogSelectId').data('selectidfor', $(this).data('selectidfor'));
 			initSelectId(function (sid) {
-				sid.selectId('show', $('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.')).val(), {type: 'state'}, function (newId) {
+				sid.selectId('show', $('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.').replace(/\ /g, '\\ ')).val(), {type: 'state'}, function (newId) {
 					if (newId) {
-						$('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.')).val(newId).trigger('change');
+						$('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.').replace(/\ /g, '\\ ')).val(newId).trigger('change');
 					}
 				});
 			});
 			
 		});
-		//Enhance type with function
+		//Enhance type and role with function
 		enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]', Object.keys(defaultDatapointRoles).join(";"), false);
 		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]').on('change init', function(){
 			enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + $(this).data('id') + '"][data-setting="role"]', defaultDatapointRoles[$(this).val()].join(";"));
 		}).trigger('init');
+		enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"][data-main="true"]', defaultMainRoles.join(";"), false);
 	}
 	
 
@@ -1051,9 +1073,9 @@ function load(settings, onChange) {
 		$('.dialogAliasesCopyAliasReplaceDatapoints.selectId[data-index="' + index + '"]').on('click', function(){
 			$('#dialogSelectId').data('selectidfor', $(this).data('selectidfor'));
 			initSelectId(function (sid) {
-				sid.selectId('show', $('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.')).val(), {type: 'state'}, function (newId) {
+				sid.selectId('show', $('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.').replace(/\ /g, '\\ ')).val(), {type: 'state'}, function (newId) {
 					if (newId) {
-						$('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.')).val(newId).trigger('change');
+						$('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.').replace(/\ /g, '\\ ')).val(newId).trigger('change');
 					}
 				});
 			});
@@ -1066,9 +1088,10 @@ function load(settings, onChange) {
 		alias = ids.pop();
 		if(alias){
 			var newObj = Object.assign({}, aliases[alias]);
+			var isMain = $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').data('main');
 			delete newObj.UNSAVED_NEW;
-			if(!typeof newObj.common == "object") newObj.common = {};
-			if(!typeof newObj.common.alias == "object") newObj.common.alias = {};
+			if(typeof newObj.common != "object") newObj.common = {};
+			if(typeof newObj.common.alias != "object" && !isMain) newObj.common.alias = {};
 			$('.aliasesDatapoint.val[data-id="' + alias + '"]').each(function(){
 				$this = $(this);
 				var setting = $this.data('setting');
@@ -1094,6 +1117,11 @@ function load(settings, onChange) {
 					}
 				}
 			});
+			if(isMain){ //Update Id and Name in Selectbox
+			var name = $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').val() || alias;
+				$('#aliasesSelectedAlias option[value="' + alias + '"]').html(alias + (name != alias ? " (" + name + ")" : "&nbsp;"));
+				$('#aliasesSelectedAlias').select();
+			}
 			(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
 				var _ids = ids;
 				var _alias = alias;

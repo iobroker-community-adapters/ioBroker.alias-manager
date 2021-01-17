@@ -123,12 +123,18 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="input-field col s11 m11 l11">
+					<div class="col s12 m12 l12">
+						<a class="waves-effect waves-light btn" id="aliasesNewAlias"><i class="material-icons left">create_new_folder</i><span class="translate">New Alias</span></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12 m12 l12">
 						<select class="disabled" id="aliasesSelectedAlias">
 						</select>
 						<label for="aliasesSelectedAlias" class="translate"></label>
 						<span class="translate">Alias to edit</span>
-						<div id="aliasesSelectedAliasProgress" class="progress" style="position: absolute; bottom: 6px; left: 0px; width: 100%; display: none;"><div class="indeterminate"></div></div>					</div>
+						<div id="aliasesSelectedAliasProgress" class="progress" style="position: absolute; bottom: 6px; left: 0px; width: 100%; display: none;"><div class="indeterminate"></div></div>
+					</div>
 				</div>
 				<div class="row aliasesNothingSelectedDiv" style="min-height: 500px;">
 					<div class="col s12">
@@ -142,7 +148,6 @@
 				</div>
 				<div class="row aliasesContentDiv" style="display:none;">
 					<div class="col s12">
-						<a class="waves-effect waves-light btn" id="aliasesNewDatapoint"><i class="material-icons left">add_circle_outline</i><span class="translate">Add Datapoint</span></a>
 						<a class="waves-effect waves-light btn" id="aliasesCopyAlias"><i class="material-icons left">content_copy</i><span class="translate">Copy Alias</span></a>
 						<a class="waves-effect waves-light btn" id="aliasesRenameAlias"><i class="material-icons left">create</i><span class="translate">Rename Alias</span></a>
 						<a class="waves-effect waves-light btn red" id="aliasesDeleteAlias"><i class="material-icons left">delete</i><span class="translate">Delete Alias</span></a>
@@ -156,7 +161,7 @@
 				</div>
 				<div class="row aliasesContentDiv" style="display:none;">
 					<div class="col s12">
-						<ul id="aliasesAliasMainList" class="collection"></ul>
+						<ul id="aliasesAliasMainList" class="collection" style="overflow-y: auto;"></ul>
 					</div>
 				</div>		
 				<div class="row aliasesContentDiv" style="display:none;">
@@ -166,7 +171,12 @@
 				</div>
 				<div class="row aliasesContentDiv" style="display:none;">
 					<div class="col s12">
-						<ul id="aliasesDatapointList" class="collection"></ul>
+						<a class="waves-effect waves-light btn" id="aliasesNewDatapoint"><i class="material-icons left">add_circle_outline</i><span class="translate">Add Datapoint</span></a>
+					</div>
+				</div>
+				<div class="row aliasesContentDiv" style="display:none;">
+					<div class="col s12">
+						<ul id="aliasesDatapointList" class="collection" style="overflow-y: auto;"></ul>
 					</div>
 					<a class="waves-effect waves-light btn orange pulse aliasesDatapointSaveAll"><i class='material-icons left'>save</i><span class='translate'>Save all changes</span></a>
 				</div>		

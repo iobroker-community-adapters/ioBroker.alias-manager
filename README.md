@@ -18,7 +18,7 @@ Manages and creates aliases.
 
 ## Changelog
 
-### 0.0.3
+### 0.0.5
 * (sbormann) some fixes
 
 ### 0.0.2

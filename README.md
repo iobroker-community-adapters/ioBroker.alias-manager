@@ -18,14 +18,12 @@ Manages and creates aliases.
 
 ## Changelog
 
-### 0.0.5
-* (sbormann) some fixes
-
-### 0.0.2
-* (sbormann) added conversion for min and max to type number
+### 0.0.6 (2021-01-18)
+* (sbormann) Added delete datapoint
+* (sbormann) Some fixes 
 
 ### 0.0.1
-* (sbormann) initial release
+* (sbormann) Initial release
 
 ## License
 MIT License

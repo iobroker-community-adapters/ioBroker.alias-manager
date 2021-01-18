@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.0.5",
+        "version": "0.0.6",
         "news": {
+            "0.0.6": {
+                "en": "some fixes",
+                "de": "einige Korrekturen",
+                "ru": "некоторые исправления",
+                "pt": "algumas correções",
+                "nl": "enkele fixes",
+                "fr": "quelques correctifs",
+                "it": "alcune correzioni",
+                "es": "algunas correcciones",
+                "pl": "kilka poprawek",
+                "zh-cn": "一些修复"
+            },
             "0.0.5": {
                 "en": "some fixes",
                 "de": "einige Korrekturen",

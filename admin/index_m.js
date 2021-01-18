@@ -819,19 +819,19 @@ function load(settings, onChange) {
 	
 	//Add function to Delete Button
 	$('#aliasesDeleteAlias').on('click', function(){
-		if(confirm(_("Really delete all datapoints of this Alias?"))){
+		if(confirm(_("Really delete this Alias with all its datapoints? This cant't be undone!"))){
 			var ids = [];
-			ids.push(aliasesSelectedAlias);
-			$('#aliasesDatapointList li').each(function(){
+			$('#aliasesDatapointList > li').each(function(){
 				ids.push($(this).data('id'));
 			});
+			ids.push(aliasesSelectedAlias);
 			deleteDatapoints(ids, function(){
 				loadTabAliases();
 			});
 		}
 	});
 	
-	//Add function to Sava all Buttons
+	//Add function to Save all Buttons
 	$('.aliasesDatapointSaveAll').on('click', function(){
 		var ids = [];
 		$('.aliasesDatapoint.save').each(function(){
@@ -870,10 +870,11 @@ function load(settings, onChange) {
 		if(aliasId) aliasesUsedAliasIds.push(aliasId);
 		listContent += "<li class='collection-item'  style='background-color: rgba(255,255,255,0.5); border-width: 4px;' data-id='" + alias + "' data-main='" + (isMain ? "true" : "false") + "'>";
 		listContent += "<div class='row aliasesDatapointRow' style='background-color: rgba(0,0,0,0.2);'>";
-		listContent += 	"<div class='col s12 m6 l6'>";
+		if(!isMain) listContent += 	"<i class='aliasesDatapoint delete material-icons' data-id='" + alias + "' data-setting='delete' data-main='" + (isMain ? "true" : "false") + "' style='position:absolute; right:6px; cursor:pointer; color:#e60000;'>delete</i>";
+		listContent += 	"<div class='col s11 m6 l6'>";
 		listContent += 		"<h6>" + alias + ":<h6>";
 		listContent += 	"</div>";
-		listContent += 	"<div class='col s12 m6 l6'>";
+		listContent += 	"<div class='col s12 m5 l5'>";
 		listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_NAME' id='aliasesDatapoint_" + alias + "_NAME' data-id='" + alias + "' data-setting='name' value='" + name + "' data-main='" + (isMain ? "true" : "false") + "'></input>";
 		listContent += 		"<label for='aliasesDatapoint_" + alias + "_NAME' class='translate'></label>";
 		listContent += 		"<span class='translate'>Name</span>";
@@ -921,7 +922,7 @@ function load(settings, onChange) {
 			listContent += 		"</p></label>";
 			listContent += 	"</div>";
 			listContent += "</div>";
-			listContent += "<div class='row aliasesDatapointRow'  style='background-color: rgba(255,0,0,0.1); padding-right: 40px;'>";
+			listContent += "<div class='row aliasesDatapointRow'  style='background-color: rgba(255,0,0,0.1);'>";
 			listContent += 	"<div class='col s12 m6 l4' style='background-color: rgba(255,0,0,0.1);'>";
 			listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_ALIAS_ID' id='aliasesDatapoint_" + alias + "_ALIAS_ID' data-id='" + alias + "' data-setting='aliasId' value='" + aliasId + "'></input>";
 			listContent += 		"<label for='aliasesDatapoint_" + alias + "_ALIAS_ID' class='translate'></label>";
@@ -968,6 +969,12 @@ function load(settings, onChange) {
 		$('.aliasesDatapoint.save[data-id="' + alias + '"]').on('click', function(){
 			saveDatapoints([alias]);
 		});
+		//Delete datapoint
+		$('.aliasesDatapoint.delete[data-id="' + alias + '"]').on('click', function(){
+			if(confirm(_("Delete datapoint? This can't be undone!"))) deleteDatapoints([alias], function(){
+				$('#aliasesDatapointList li[data-id="' + alias + '"]').remove();
+			});
+		});
 		//Enhance SelectId-Buttons with function
 		$('.aliasesDatapoint.selectId[data-id="' + alias + '"]').on('click', function(){
 			$('#dialogSelectId').data('selectidfor', $(this).data('selectidfor'));
@@ -1008,19 +1015,19 @@ function load(settings, onChange) {
 					var oldObj = aliases[oldAlias];
 					var newAlias = newId + oldAlias.substring(oldId.length);
 					if(saveNew) idsToSave.push(newAlias);
-					aliases[newAlias] = Object.assign({}, aliases[oldAlias]); //Copy old alias into new
+					aliases[newAlias] = JSON.parse(JSON.stringify(aliases[oldAlias])); //Copy old alias into new
 					if(oldAlias.length == oldId.length){ // Main
 						aliases[newAlias].UNSAVED_NEW = true;
 						aliases[newAlias].type = oldObj.type || "channel";
-						if(! typeof aliases[newAlias].common == "object") aliases[newAlias].common = {};
+						if(typeof aliases[newAlias].common != "object") aliases[newAlias].common = {};
 						aliases[newAlias].common.name = newName;
 						aliases[newAlias]._id = newAlias; 
 					} else { //Datapoint
 						aliases[newAlias].UNSAVED_NEW = true;
 						aliases[newAlias].type = oldObj.type || "state";
-						if(! typeof aliases[newAlias].common == "object") aliases[newAlias].common = {};
+						if(typeof aliases[newAlias].common != "object") aliases[newAlias].common = {};
 						aliases[newAlias].common.name = (oldObj.common && oldObj.common.name || newName).replace(oldName, newName);
-						if(! typeof aliases[newAlias].common.alias == "object") aliases[newAlias].common.alias = {};
+						if(typeof aliases[newAlias].common.alias != "object") aliases[newAlias].common.alias = {};
 						aliases[newAlias].common.alias.id = multiReplace(oldObj.common && oldObj.common.alias && oldObj.common.alias.id || "", replacements);
 						aliases[newAlias]._id = newAlias; 
 					}

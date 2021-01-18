@@ -1,6 +1,6 @@
 {
   "name": "iobroker.alias-manager",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Manages and creates aliases",
   "author": {
     "name": "Sebastian Bormann",

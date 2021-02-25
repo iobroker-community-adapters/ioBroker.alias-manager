@@ -47,15 +47,16 @@ Manages and creates aliases.
 \
 Here you can:
 * (1) Set a new id and
-* (2) Set a new common name
+* (2) Set a new common name for the alias
 * (3) By clicking on 'ADD REPLACEMENT' you can add lines to the following list, where you can:
     * (4) Enter a string, that will be searched for, and replaced by (5) this string
-	* With this funcion, you can quickly change the original ioBroker-datapoints, your alias-datapoints are linked to.
+	* With this funcion, you can quickly change the original ioBroker-datapoints, your alias-datapoints are linked to
 	* Example: 
 	    * You have a fan with several datapoints like ``SET``, ``ERROR`` and ``UNREACH``
 		* These alias-datapoints are linked to original datapoints like ``hm-rpc.0.JEQ0698034.1.STATE``, ``hm-rpc.0.JEQ0698034.0.ERROR`` and ``hm-rpc.0.JEQ0698034.0.UNREACH``
-		* Now, if your original device has to be replaced, its serial number will change, lets say, for example to ASDF1234
-		* To change the links in all you alias-datapoints in one go you can search for ``hm-rpc.0.JEQ0698034`` and replace it by ``hm-rpc.0.ASDF1234``
+		* Now, if your device is broken and has to be replaced by a new one, its serial number will change, lets say, for example to ASDF1234
+		* To update all the links in all you alias-datapoints in one go you can search for ``hm-rpc.0.JEQ0698034`` and replace it by ``hm-rpc.0.ASDF1234``
+		* This is also useful, when creating new aliases, that are similar to an old one. Just copy the alias, set a new id and name and use the replacement-function, to adjust the linked datapoints
 
 ![Screenshot](img/manual_screenshot_5.png)
 * After changing settings, you can:

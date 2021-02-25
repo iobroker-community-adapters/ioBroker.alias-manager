@@ -28,13 +28,15 @@ Manages and creates aliases.
 * (2) Below you will find a list with all the datapoints of the alias
 * (3) You can add datapoints to this list or
 * (4) Delete datapoints by clicking on the garbage-icon
-* Every datapoint has several field to configure it:
+* Every datapoint has several fields to configure it:
     * In the grey area you may set the name or delete the datapoint
     * In the blue area you can configure the role, the type and - optional - the unit
-	* In the green area you can set optional min and max, and determine if the datapoint should be readonly (common.write is off) and if its value can be accessed (common.read is on - which will be in most cases)
+	* In the green area you can set optional min and max, and determine if the datapoint should be readonly (common.write is off) and if its value can be accessed (common.read is on - which will be the right setting for most cases)
 	* In the red area you can: 
 	    * (5) Configure the original ioBroker-datapoint, this alias-datapoint is linked to. Both (the original datapoint and the alias-datapoint) well be kept in sync.
-		* (6) Furthermore you can configure conversion-functions for read and write. Example: If you set ``val/10`` as "Read-Function", the value of the aias-datapoint will always be 10 percent of the original datapoint. You should then configure ``val * 10`` as "Write-Function", to keep this ratio, when writing to the alias-datapoint.
+		* (6) Furthermore you can configure conversion-functions for read and write. 
+		    * Example: If you set ``val / 10`` as "Read-Function", the value of the aias-datapoint will always be 10 percent of the original datapoint. 
+			* In most cases you would then like to configure ``val * 10`` as "Write-Function", to also keep this ratio, when writing to the alias-datapoint.
 		* Please read more about that in the ioBroker-documenation about aliases under https://www.iobroker.net/#en/documentation/dev/aliases.md
 
 ![Screenshot](img/manual_screenshot_3.png)
@@ -42,7 +44,8 @@ Manages and creates aliases.
 * (2) on 'RENAME ALIAS' to rename the alias, the following dialog field will open:
 
 ![Screenshot](img/manual_screenshot_4.png)
-When copying or renaming an alias you can:
+/
+Here you can:
 * (1) Set a new id and
 * (2) Set a new common name
 * (3) By clicking on 'ADD REPLACEMENT' you can add lines to the following list, where you can:

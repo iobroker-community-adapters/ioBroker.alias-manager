@@ -44,7 +44,7 @@ Manages and creates aliases.
 * (2) on 'RENAME ALIAS' to rename the alias, the following dialog field will open:
 
 ![Screenshot](img/manual_screenshot_4.png)
-/
+\
 Here you can:
 * (1) Set a new id and
 * (2) Set a new common name

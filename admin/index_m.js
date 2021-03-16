@@ -103,7 +103,7 @@ var defaultDatapointRoles = {
 		"level.timer.sleep",
 		"level.valve",
 		"level.volume",
-		"level.voluem.group",
+		"level.volume.group",
 		
 		"[value - readonly]",
 		"value",
@@ -667,23 +667,23 @@ function load(settings, onChange) {
 		if (M) M.updateTextFields();
 		
 		//Get iobrokerObjects
-		setTimeout(function(){
-			console.log("Getting ioBroker Objects...");
-			$('.loadingObjects').show();
-			socket.emit('getObjects', function (err, _objs) {
-				console.log("Got ioBroker Objects.");
-				iobrokerObjects = _objs;
-				iobrokerObjectsReady = true;
-				if(iobrokerObjectsReadyFunctions.length) console.log("There are some functions that were buffered while fetching the ioBroker Objects. They will be executed now...");
-				for(i = 0; i < iobrokerObjectsReadyFunctions.length; i++){
-					if (typeof iobrokerObjectsReadyFunctions[i] == 'function') iobrokerObjectsReadyFunctions[i]();
-				}
-				iobrokerObjectsReadyFunctions = [];
-				$('.loadingObjects').hide();
-				console.log("ioBroker Objects ready.");
-			});
-		}, 1000);
-	})
+		getIobrokerObjects();
+	});
+
+	function getIobrokerObjects(){
+		console.log("Getting ioBroker Objects...");
+		$('.loadingObjects').show();
+		iobrokerObjectsReady = false;
+		iobrokerObjects = Object.assign({}, parent.gMain.objects);
+		iobrokerObjectsReady = true;
+		if(iobrokerObjectsReadyFunctions.length) console.log("There are some functions that were buffered while fetching the ioBroker Objects. They will be executed now...");
+		for(i = 0; i < iobrokerObjectsReadyFunctions.length; i++){
+			if (typeof iobrokerObjectsReadyFunctions[i] == 'function') iobrokerObjectsReadyFunctions[i]();
+		}
+		iobrokerObjectsReadyFunctions = [];
+		$('.loadingObjects').hide();
+		console.log("ioBroker Objects ready.");
+	}
 
 	//++++++++++ TABS ++++++++++
 	//Enhance Tabs with onShow-Function
@@ -781,31 +781,7 @@ function load(settings, onChange) {
 	});
 
 	//Add function to Add Datapoint Button
-	$('#aliasesNewDatapoint').on('click', function(){
-		var datapoint = prompt(_("Please enter ID of datapoint"), "SET");
-		if(!datapoint) return;
-		if(aliases[$('#aliasesSelectedAlias').val() + "." + datapoint]){
-			alert("Error: This datapoint exists.");
-			return;
-		}
-		aliases[$('#aliasesSelectedAlias').val() + "." + datapoint] = {
-			UNSAVED_NEW: true,
-			type: "state", 
-			common: {
-				name: datapoint, 
-				type: "string", 
-				role: "value", 
-				unit: "",
-				min: "",
-				max: "",
-				read: true, 
-				write: true,
-				alias: {id: "", read: "", write: ""}
-			},
-			_id: $('#aliasesSelectedAlias').val() + "." + datapoint
-		};
-		aliasesDatapointListAddLine($('#aliasesSelectedAlias').val() + "." + datapoint);
-	});
+	$('#aliasesNewDatapoint').on('click', function(){ addDatapoint(); });
 
 	//Add function to Copy Button
 	$('#aliasesCopyAlias').on('click', function(){
@@ -870,9 +846,12 @@ function load(settings, onChange) {
 		if(aliasId) aliasesUsedAliasIds.push(aliasId);
 		listContent += "<li class='collection-item'  style='background-color: rgba(255,255,255,0.5); border-width: 4px;' data-id='" + alias + "' data-main='" + (isMain ? "true" : "false") + "'>";
 		listContent += "<div class='row aliasesDatapointRow' style='background-color: rgba(0,0,0,0.2);'>";
-		if(!isMain) listContent += 	"<i class='aliasesDatapoint delete material-icons' data-id='" + alias + "' data-setting='delete' data-main='" + (isMain ? "true" : "false") + "' style='position:absolute; right:6px; cursor:pointer; color:#e60000;'>delete</i>";
+		if(!isMain) listContent += 	"<i class='aliasesDatapoint copy material-icons' data-id='" + alias + "' data-setting='copy' data-main='" + (isMain ? "true" : "false") + "' style='position:absolute; right:30px; margin-top: 2px; cursor:pointer; color:#000000;'>content_copy</i>";
+		if(!isMain) listContent += 	"<i class='aliasesDatapoint delete material-icons' data-id='" + alias + "' data-setting='delete' data-main='" + (isMain ? "true" : "false") + "' style='position:absolute; right:6px; margin-top: 2px; cursor:pointer; color:#ce0000;'>delete</i>";
 		listContent += 	"<div class='col s11 m6 l6'>";
-		listContent += 		"<h6>" + alias + ":<h6>";
+		listContent += 		"<h6><span class='aliasesDatapoint id' data-id='" + alias + "' data-setting='id'>" + alias + "</span>:";
+//		if(!isMain) listContent += 	"&nbsp;&nbsp;<i class='aliasesDatapoint rename material-icons' data-id='" + alias + "' data-setting='rename' data-main='" + (isMain ? "true" : "false") + "' style='cursor:pointer; color:#000000;'>edit</i>";
+		listContent += 		"</h6>";
 		listContent += 	"</div>";
 		listContent += 	"<div class='col s12 m5 l5'>";
 		listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_NAME' id='aliasesDatapoint_" + alias + "_NAME' data-id='" + alias + "' data-setting='name' value='" + name + "' data-main='" + (isMain ? "true" : "false") + "'></input>";
@@ -969,6 +948,29 @@ function load(settings, onChange) {
 		$('.aliasesDatapoint.save[data-id="' + alias + '"]').on('click', function(){
 			saveDatapoints([alias]);
 		});
+		//Rename datapoint
+		$('.aliasesDatapoint.rename[data-id="' + alias + '"]').on('click', function(){
+			var id = alias.substr(alias.lastIndexOf('.') + 1) || "SET";
+			while(aliases[$('#aliasesSelectedAlias').val() + "." + id]){ 
+				id = prompt(_("Please enter ID of datapoint"), id || "SET");
+				if(aliases[$('#aliasesSelectedAlias').val() + "." + id]){
+					alert("Error: This datapoint exists.");
+				}
+			}
+			//------------ fehlt
+		});
+		//Copy datapoint
+		$('.aliasesDatapoint.copy[data-id="' + alias + '"]').on('click', function(){
+			var id = alias.substr(alias.lastIndexOf('.') + 1) || "SET";
+			if(aliases[$('#aliasesSelectedAlias').val() + "." + id]){
+				count = 1;
+				while(aliases[$('#aliasesSelectedAlias').val() + "." + id + count]){ count++; }
+				id = id + count;
+			}
+			if(addDatapoint(id, $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="unit"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="min"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="max"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="read"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="write"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasId"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasRead"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasWrite"]').val())){
+				setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
+			}
+		});
 		//Delete datapoint
 		$('.aliasesDatapoint.delete[data-id="' + alias + '"]').on('click', function(){
 			if(confirm(_("Delete datapoint? This can't be undone!"))) deleteDatapoints([alias], function(){
@@ -994,8 +996,35 @@ function load(settings, onChange) {
 		}).trigger('init');
 		enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"][data-main="true"]', defaultMainRoles.join(";"), false);
 	}
-	
 
+	//AddDatapoint
+	function addDatapoint(id, name, role, type, unit, min, max, read, write, aliasId, aliasRead, aliasWrite){
+		var datapoint = prompt(_("Please enter ID of datapoint"), id || "SET");
+		if(!datapoint) return false;
+		if(aliases[$('#aliasesSelectedAlias').val() + "." + datapoint]){
+			alert("Error: This datapoint exists.");
+			return false;
+		}
+		aliases[$('#aliasesSelectedAlias').val() + "." + datapoint] = {
+			UNSAVED_NEW: true,
+			type: "state", 
+			common: {
+				name: name || datapoint, 
+				role: role || "value", 
+				type: type || "string", 
+				unit: unit || "",
+				min: min || "",
+				max: max || "",
+				read: (typeof read != udef ? read : true), 
+				write: (typeof write != udef ? read : true),
+				alias: {id: aliasId || "", read: aliasRead || "", write: aliasWrite || ""}
+			},
+			_id: $('#aliasesSelectedAlias').val() + "." + datapoint
+		};
+		aliasesDatapointListAddLine($('#aliasesSelectedAlias').val() + "." + datapoint);
+		return true;
+	}
+	
 	//Copy (and rename)
 	function copyAlias(deleteOld, saveNew){
 		initDialog('dialogAliasesCopyAlias', function(){ //save dialog
@@ -1105,22 +1134,23 @@ function load(settings, onChange) {
 				if(setting == "aliasId") {
 					newObj.common.alias["id"] = $this.val();
 				} else if(setting == "aliasRead") {
-					newObj.common.alias["read"] = $this.val();
+					if($this.val()) newObj.common.alias["read"] = $this.val(); else delete newObj.common.alias.read;
 				} else if(setting == "aliasWrite") {
-					newObj.common.alias["write"] = $this.val();
+					if($this.val()) newObj.common.alias["write"] = $this.val(); else delete newObj.common.alias.write;
 				} else {
 					if ($this.attr('type') === 'checkbox') {
 						newObj.common[setting] = $this.prop('checked');
 					} else if ($this.attr('type') === 'number') {
-						if(isNaN($this.val())){
+						if($this.val() == ""){
+							delete newObj.common[setting];
+						} else if(isNaN($this.val())){
 							alert("Error: NaN");
 						} else {
 							var numVal = parseFloat($this.val());
-							if (numVal == null) numVal = "";
-							newObj.common[setting] = numVal;
+							if (numVal != null) newObj.common[setting] = numVal; else delete newObj.common[setting];
 						}
 					} else {
-						newObj.common[setting] = $this.val();
+						if($this.val()) newObj.common[setting] = $this.val(); else delete newObj.common[setting];
 					}
 				}
 			});

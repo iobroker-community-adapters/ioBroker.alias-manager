@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "news": {
+            "0.0.7": {
+                "en": "Fixed typos, Changed the way ioBroker-Objects are fetched (much faster), Added copy-button to datapoints, Empty fields are now removed (before they were set to null), Changed mode to onlyWWW.",
+                "de": "Behobene Tippfehler, Geänderte Art und Weise, wie ioBroker-Objekte abgerufen werden (viel schneller), Kopierschaltfläche zu Datenpunkten hinzugefügt, Leere Felder werden jetzt entfernt (bevor sie auf Null gesetzt wurden), Geänderter Modus in Nur WWW.",
+                "ru": "Исправлены опечатки, изменен способ получения объектов ioBroker-Objects (намного быстрее), добавлена ​​кнопка копирования для точек данных, пустые поля теперь удаляются (до того, как они были установлены на null), изменен режим на onlyWWW.",
+                "pt": "Erros de digitação corrigidos, Alteração da forma como os objetos ioBroker são buscados (muito mais rápido), Botão de cópia adicionado aos pontos de dados, Campos vazios agora são removidos (antes de serem definidos como nulos), Modo alterado para onlyWWW.",
+                "nl": "Typefouten opgelost, de manier gewijzigd waarop ioBroker-objecten worden opgehaald (veel sneller), kopieerknop toegevoegd aan datapunten, lege velden zijn nu verwijderd (voordat ze op nul werden gezet), modus gewijzigd in alleen WWW.",
+                "fr": "Correction de fautes de frappe, Modification de la façon dont les objets ioBroker sont récupérés (beaucoup plus rapide), Ajout d'un bouton de copie aux points de données, Les champs vides sont maintenant supprimés (avant qu'ils ne soient définis sur null), Changement de mode en seulementWWW.",
+                "it": "Errori di battitura corretti, Modificato il modo in cui gli oggetti ioBroker vengono recuperati (molto più velocemente), Aggiunto il pulsante di copia ai datapoint, I campi vuoti sono ora rimossi (prima che fossero impostati su null), Modificata la modalità a onlyWWW.",
+                "es": "Se corrigieron errores tipográficos, se modificó la forma en que se obtienen los objetos ioBroker (mucho más rápido), se agregó un botón de copia a los puntos de datos, los campos vacíos ahora se eliminan (antes de que se establecieran en nulos), se cambió el modo a soloWWW.",
+                "pl": "Poprawione literówki, Zmieniono sposób pobierania obiektów ioBroker (znacznie szybciej), Dodano przycisk kopiowania do punktów danych, Puste pola są teraz usuwane (zanim zostały ustawione na null), Zmieniono tryb na onlyWWW.",
+                "zh-cn": "固定错别字，更改了ioBroker对象的获取方式（快得多），向数据点添加了复制按钮，现在删除了空字段（在将它们设置为null之前），将模式更改为onlyWWW。"
+            },
             "0.0.6": {
                 "en": "some fixes",
                 "de": "einige Korrekturen",
@@ -122,6 +134,7 @@
         "singleton": true,
         "materialize": true,
         "materializeTab": true,
+        "onlyWWW": true,
         "blockly": false,
         "messagebox": false,
         "subscribe": "",

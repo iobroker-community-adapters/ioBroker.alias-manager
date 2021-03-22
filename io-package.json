@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "news": {
+            "0.0.8": {
+                "en": "Added ability to create alias-datapoint from existing datapoint.",
+                "de": "Es wurde die Möglichkeit hinzugefügt, einen Alias-Datenpunkt aus einem vorhandenen Datenpunkt zu erstellen.",
+                "ru": "Добавлена ​​возможность создания псевдонима точки данных из существующей точки данных.",
+                "pt": "Adicionada a capacidade de criar alias-datapoint a partir de datapoint existente.",
+                "nl": "Mogelijkheid toegevoegd om een ​​alias-datapunt te maken op basis van een bestaand datapunt.",
+                "fr": "Ajout de la possibilité de créer un alias-point de données à partir d'un point de données existant.",
+                "it": "Aggiunta la possibilità di creare un alias-datapoint da un datapoint esistente.",
+                "es": "Se agregó la capacidad de crear un alias-punto de datos a partir de un punto de datos existente.",
+                "pl": "Dodano możliwość tworzenia aliasu-punktu danych z istniejącego punktu danych.",
+                "zh-cn": "增加了从现有数据点创建别名数据点的功能。"
+            },
             "0.0.7": {
                 "en": "Fixed typos, Changed the way ioBroker-Objects are fetched (much faster), Added copy-button to datapoints, Empty fields are now removed (before they were set to null), Changed mode to onlyWWW.",
                 "de": "Behobene Tippfehler, Geänderte Art und Weise, wie ioBroker-Objekte abgerufen werden (viel schneller), Kopierschaltfläche zu Datenpunkten hinzugefügt, Leere Felder werden jetzt entfernt (bevor sie auf Null gesetzt wurden), Geänderter Modus in Nur WWW.",

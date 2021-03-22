@@ -781,7 +781,40 @@ function load(settings, onChange) {
 	});
 
 	//Add function to Add Datapoint Button
-	$('#aliasesNewDatapoint').on('click', function(){ addDatapoint(); });
+	$('#aliasesNewDatapoint').on('click', function(){ 
+		if(addDatapoint()){
+			setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
+		}			
+	});
+
+	//Add function to Add Datapoint From Existing Button
+	var aliasesNewDatapointFromExistingLastSelectId = "";
+	$('#aliasesNewDatapointFromExisting').on('click', function(){ 
+		$('#dialogSelectId').data('selectidfor', '');
+		initSelectId(function (sid) {
+			sid.selectId('show', aliasesNewDatapointFromExistingLastSelectId, {type: 'state'}, function (newId) {
+				if (newId && iobrokerObjects[newId]) {
+					console.log(iobrokerObjects[newId]);
+					var id = newId.substr(newId.lastIndexOf('.') + 1) || "SET";
+					var name = iobrokerObjects[newId].common && iobrokerObjects[newId].common.name || id;
+					var role = iobrokerObjects[newId].common && iobrokerObjects[newId].common.role || "value";
+					var type = iobrokerObjects[newId].common && iobrokerObjects[newId].common.type || "string";
+					var unit = iobrokerObjects[newId].common && iobrokerObjects[newId].common.unit || "";
+					var min = (iobrokerObjects[newId].common && typeof iobrokerObjects[newId].common.min != udef ? iobrokerObjects[newId].common.min : "");
+					var max = (iobrokerObjects[newId].common && typeof iobrokerObjects[newId].common.max != udef ? iobrokerObjects[newId].common.max : "");
+					var read = (iobrokerObjects[newId].common && typeof iobrokerObjects[newId].common.read != udef ? iobrokerObjects[newId].common.read : true);
+					var write = (iobrokerObjects[newId].common && typeof iobrokerObjects[newId].common.write != udef ? iobrokerObjects[newId].common.write : true);
+					var aliasId = newId;
+					var aliasRead = "";
+					var aliasWrite = "";
+					if(addDatapoint(id, name, role, type, unit, min, max, read, write, aliasId, aliasRead, aliasWrite)){
+						setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
+					}
+					aliasesNewDatapointFromExistingLastSelectId = newId;
+				}
+			});
+		});		
+	});
 
 	//Add function to Copy Button
 	$('#aliasesCopyAlias').on('click', function(){
@@ -963,9 +996,9 @@ function load(settings, onChange) {
 		$('.aliasesDatapoint.copy[data-id="' + alias + '"]').on('click', function(){
 			var id = alias.substr(alias.lastIndexOf('.') + 1) || "SET";
 			if(aliases[$('#aliasesSelectedAlias').val() + "." + id]){
-				count = 1;
-				while(aliases[$('#aliasesSelectedAlias').val() + "." + id + count]){ count++; }
-				id = id + count;
+				var count = 2;
+				while(aliases[$('#aliasesSelectedAlias').val() + "." + id + "_" + count]){ count++; }
+				id = id + "_" + count;
 			}
 			if(addDatapoint(id, $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="unit"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="min"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="max"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="read"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="write"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasId"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasRead"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasWrite"]').val())){
 				setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
@@ -986,8 +1019,7 @@ function load(settings, onChange) {
 						$('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.').replace(/\ /g, '\\ ')).val(newId).trigger('change');
 					}
 				});
-			});
-			
+			});		
 		});
 		//Enhance type and role with function
 		enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]', Object.keys(defaultDatapointRoles).join(";"), false);
@@ -999,29 +1031,36 @@ function load(settings, onChange) {
 
 	//AddDatapoint
 	function addDatapoint(id, name, role, type, unit, min, max, read, write, aliasId, aliasRead, aliasWrite){
-		var datapoint = prompt(_("Please enter ID of datapoint"), id || "SET");
-		if(!datapoint) return false;
-		if(aliases[$('#aliasesSelectedAlias').val() + "." + datapoint]){
-			alert("Error: This datapoint exists.");
-			return false;
+		id = id || "SET";
+		if(aliases[$('#aliasesSelectedAlias').val() + "." + id]){
+			var count = 2;
+			while(aliases[$('#aliasesSelectedAlias').val() + "." + id + "_" + count]){ count++; }
+			id = id + "_" + count;
 		}
-		aliases[$('#aliasesSelectedAlias').val() + "." + datapoint] = {
+		id = prompt(_("Please enter ID of datapoint"), id || "SET");
+		if(!id) return false;
+		while(aliases[$('#aliasesSelectedAlias').val() + "." + id]){ 
+			alert("Error: This datapoint exists.");
+			id = prompt(_("Please enter ID of datapoint"), id || "SET");
+			if(!id) return false;
+		}
+		aliases[$('#aliasesSelectedAlias').val() + "." + id] = {
 			UNSAVED_NEW: true,
 			type: "state", 
 			common: {
-				name: name || datapoint, 
+				name: name || id, 
 				role: role || "value", 
 				type: type || "string", 
 				unit: unit || "",
-				min: min || "",
-				max: max || "",
+				min: (typeof min != udef ? min : ""),
+				max: (typeof max != udef ? max : ""),
 				read: (typeof read != udef ? read : true), 
 				write: (typeof write != udef ? read : true),
 				alias: {id: aliasId || "", read: aliasRead || "", write: aliasWrite || ""}
 			},
-			_id: $('#aliasesSelectedAlias').val() + "." + datapoint
+			_id: $('#aliasesSelectedAlias').val() + "." + id
 		};
-		aliasesDatapointListAddLine($('#aliasesSelectedAlias').val() + "." + datapoint);
+		aliasesDatapointListAddLine($('#aliasesSelectedAlias').val() + "." + id);
 		return true;
 	}
 	

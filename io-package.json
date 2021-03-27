@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.0.8",
+        "version": "0.1.0",
         "news": {
+            "0.1.0": {
+                "en": "Alias-ID can now be an object with seperate datapoints for read and write, Alias-Datapoints can now be collapsed, Added Autocreate Alias function.",
+                "de": "Die Alias-ID kann jetzt ein Objekt mit separaten Datenpunkten zum Lesen und Schreiben sein. Alias-Datenpunkte können jetzt reduziert werden. Die Funktion \"Alias ​​automatisch erstellen\" wurde hinzugefügt.",
+                "ru": "Alias-ID теперь может быть объектом с отдельными точками данных для чтения и записи, Alias-Datapoints теперь можно свернуть, добавлена ​​функция Autocreate Alias.",
+                "pt": "Alias-ID agora pode ser um objeto com pontos de dados separados para leitura e gravação, Alias-Datapoints agora podem ser recolhidos, função Autocreate Alias ​​adicionada.",
+                "nl": "Alias-ID kan nu een object zijn met aparte datapunten voor lezen en schrijven, Alias-datapunten kunnen nu worden samengevouwen, Autocreate Alias-functie toegevoegd.",
+                "fr": "Alias-ID peut maintenant être un objet avec des points de données séparés pour la lecture et l'écriture, les points de données d'alias peuvent maintenant être réduits, Ajout de la fonction de création automatique d'alias.",
+                "it": "Alias-ID può ora essere un oggetto con datapoint separati per lettura e scrittura, Alias-Datapoints ora possono essere compressi, Aggiunta funzione di creazione automatica alias.",
+                "es": "Alias-ID ahora puede ser un objeto con puntos de datos separados para lectura y escritura, los Alias-Datapoints ahora se pueden contraer, se agregó la función Autocreate Alias.",
+                "pl": "Alias-ID może być teraz obiektem z oddzielnymi punktami danych do odczytu i zapisu, Alias-Datapoints można teraz zwinąć, Dodano funkcję Autocreate Alias.",
+                "zh-cn": "Alias-ID现在可以是具有用于读写的单独数据点的对象，Alias-Datapoints现在可以折叠，添加了自动创建别名功能。"
+            },
             "0.0.8": {
                 "en": "Added ability to create alias-datapoint from existing datapoint.",
                 "de": "Es wurde die Möglichkeit hinzugefügt, einen Alias-Datenpunkt aus einem vorhandenen Datenpunkt zu erstellen.",

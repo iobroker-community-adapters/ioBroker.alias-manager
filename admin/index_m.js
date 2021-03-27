@@ -286,8 +286,10 @@ var defaultDatapointRoles = {
 }
 var defaultMainRoles = [
 	"unknown",
+		"airCondition",
 	"blind",
 	"button",
+		"buttonSensor",
 	"camera",
 	"ct",
 	"dimmer",
@@ -312,6 +314,7 @@ var defaultMainRoles = [
 	"temperature",
 	"thermostat",
 	"url",
+		"vacuumCleaner",
 	"valve",
 	"volume",
 	"volumeGroup",
@@ -581,6 +584,19 @@ function getAliases(aliasName, callback) {
 									result[res.rows[i].id] = res.rows[i].value;
 								}
 							}
+							//Augment with missing main-datapoints
+							for(key in result){ 
+								if(key.split('.').length > 3 && typeof result[key.substr(0, key.lastIndexOf('.'))] == udef){
+									result[key.substr(0, key.lastIndexOf('.'))] = {
+										type: "channel",
+										common: {
+											name: "",
+											role: ""
+										},
+										_id: key
+									};
+								}
+							}
 							callback && callback(null, result);
 						} else {
 							callback && callback(err, {});
@@ -623,6 +639,48 @@ function getAliasesMain(){
 	return aliasesMain;
 }	
 
+//Helpers
+function getDatapointConfiguration(id){
+	if (id && iobrokerObjects[id]) {	
+		var r = {};
+		r.id = id.substr(id.lastIndexOf('.') + 1) || "SET";
+		r.name = iobrokerObjects[id].common && iobrokerObjects[id].common.name || id;
+		if(typeof r.name == "object") r.name = r.name[systemLang] || r.name["de"] || r.name["en"] || Object.keys(r.name)[0] || "";
+		r.role = iobrokerObjects[id].common && iobrokerObjects[id].common.role || "value";
+		r.type = iobrokerObjects[id].common && iobrokerObjects[id].common.type || "string";
+		r.unit = iobrokerObjects[id].common && iobrokerObjects[id].common.unit || "";
+		r.min = (iobrokerObjects[id].common && typeof iobrokerObjects[id].common.min != udef ? iobrokerObjects[id].common.min : "");
+		r.max = (iobrokerObjects[id].common && typeof iobrokerObjects[id].common.max != udef ? iobrokerObjects[id].common.max : "");
+		r.read = (iobrokerObjects[id].common && typeof iobrokerObjects[id].common.read != udef ? iobrokerObjects[id].common.read : true);
+		r.write = (iobrokerObjects[id].common && typeof iobrokerObjects[id].common.write != udef ? iobrokerObjects[id].common.write : true);
+		r.aliasId = id;
+		r.aliasRead = "";
+		r.aliasWrite = "";
+		return r;
+	} else {
+		return false;
+	}	
+}
+function getNewId(aliasPath, id, askForId, excludeList){
+	id = id || "SET";
+	excludeList = excludeList || [];
+	if(aliases[aliasPath + "." + id] || excludeList.indexOf(id) > -1){
+		var count = 2;
+		while(aliases[aliasPath + "." + id + "_" + count] || excludeList.indexOf(id + "_" + count) > -1){ count++; }
+		id = id + "_" + count;
+	}
+	if(askForId){
+		id = prompt(_("Please enter ID of datapoint"), id || "SET");
+		if(!id) return false;
+		while(aliases[aliasPath + "." + id] || excludeList[id]){
+			alert("Error: This datapoint exists.");
+			id = prompt(_("Please enter ID of datapoint"), id || "SET");
+			if(!id) return false;
+		}
+	}
+	return id;
+}
+
 
 /************** LOAD ********************************************************
 *** This will be called by the admin adapter when the settings page loads ***
@@ -655,6 +713,9 @@ function load(settings, onChange) {
 	//Signal to admin, that no changes yet
 	onChange(false);	
 
+	//Init ChannelDetector
+	var channelDetector = new ChannelDetector();
+
 	//Load Aliases
 	loadAliases(function(){
 		//Show Settings
@@ -685,6 +746,8 @@ function load(settings, onChange) {
 		console.log("ioBroker Objects ready.");
 	}
 
+
+
 	//++++++++++ TABS ++++++++++
 	//Enhance Tabs with onShow-Function
 	$('ul.tabs li a').on('click', function(){ onTabShow($(this).attr('href'));});
@@ -694,8 +757,14 @@ function load(settings, onChange) {
 			case "#tabAliases":
 			loadTabAliases();
 			break;
+			
+			case "#tabAutocreateAlias":
+			loadTabAutocreateAlias();
+			break;
 		}
 	}
+
+
 
 	//++++++++++ ALIASES ++++++++++
 	var aliasesSelectedAlias = false;
@@ -711,7 +780,7 @@ function load(settings, onChange) {
 		$('#aliasesSelectedAlias').empty().append("<option disabled" + (showAlias ? "" : " selected") + " value>" + _("Select Alias") + "</option>");
 		getAliasesMain().forEach(function(alias, index){ 
 			var name = getAliasName(alias);
-			$('#aliasesSelectedAlias').append("<option value='" + alias + "'>" + alias + (name != alias ? " (" + name + ")" : "&nbsp;") + "</option>"); 
+			$('#aliasesSelectedAlias').append("<option value='" + alias + "' data-index='" + index + "'>" + alias + (name != "" && name != alias ? " (" + name + ")" : "&nbsp;") + "</option>"); 
 		});
 		$('#aliasesSelectedAlias').removeClass('disabled');
 		$('#aliasesSelectedAlias').val(showAlias);
@@ -721,11 +790,11 @@ function load(settings, onChange) {
 		
 	//Enhance aliasesSelectedAlias-Selectbox with functions
 	$('#aliasesSelectedAlias').on('change', function(){
-		loadAlias($('#aliasesSelectedAlias').val());
+		aliasesLoadAlias($('#aliasesSelectedAlias').val());
 	});
 	
 	//Load Alias
-	function loadAlias(aliasId){
+	function aliasesLoadAlias(aliasId){
 		$('.aliasesDatapointSaveAll').hide();
 		aliasesSelectedAlias = aliasId;
 		if(aliasesSelectedAlias){
@@ -734,7 +803,7 @@ function load(settings, onChange) {
 			$('#aliasesAliasMainList').empty();
 			$('#aliasesDatapointList').empty();
 			aliasesUsedAliasIds = [];
-			for(alias in aliases){
+			Object.keys(aliases).sort().forEach(function(alias){
 				if(alias.indexOf(aliasesSelectedAlias) == 0){
 					if(alias.length == aliasesSelectedAlias.length){ // Main
 						var name = getAliasName(alias);
@@ -744,7 +813,7 @@ function load(settings, onChange) {
 						aliasesDatapointListAddLine(alias);
 					}
 				}
-			};
+			})
 			if(!mainFilled){
 				aliases[aliasesSelectedAlias] = {
 					UNSAVED_NEW: true,
@@ -782,7 +851,7 @@ function load(settings, onChange) {
 
 	//Add function to Add Datapoint Button
 	$('#aliasesNewDatapoint').on('click', function(){ 
-		if(addDatapoint()){
+		if(aliasesAddDatapoint()){
 			setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
 		}			
 	});
@@ -795,19 +864,8 @@ function load(settings, onChange) {
 			sid.selectId('show', aliasesNewDatapointFromExistingLastSelectId, {type: 'state'}, function (newId) {
 				if (newId && iobrokerObjects[newId]) {
 					console.log(iobrokerObjects[newId]);
-					var id = newId.substr(newId.lastIndexOf('.') + 1) || "SET";
-					var name = iobrokerObjects[newId].common && iobrokerObjects[newId].common.name || id;
-					var role = iobrokerObjects[newId].common && iobrokerObjects[newId].common.role || "value";
-					var type = iobrokerObjects[newId].common && iobrokerObjects[newId].common.type || "string";
-					var unit = iobrokerObjects[newId].common && iobrokerObjects[newId].common.unit || "";
-					var min = (iobrokerObjects[newId].common && typeof iobrokerObjects[newId].common.min != udef ? iobrokerObjects[newId].common.min : "");
-					var max = (iobrokerObjects[newId].common && typeof iobrokerObjects[newId].common.max != udef ? iobrokerObjects[newId].common.max : "");
-					var read = (iobrokerObjects[newId].common && typeof iobrokerObjects[newId].common.read != udef ? iobrokerObjects[newId].common.read : true);
-					var write = (iobrokerObjects[newId].common && typeof iobrokerObjects[newId].common.write != udef ? iobrokerObjects[newId].common.write : true);
-					var aliasId = newId;
-					var aliasRead = "";
-					var aliasWrite = "";
-					if(addDatapoint(id, name, role, type, unit, min, max, read, write, aliasId, aliasRead, aliasWrite)){
+					var r = getDatapointConfiguration(newId);
+					if(r & aliasesAddDatapoint(r.id, r.name, r.role, r.type, r.unit, r.min, r.max, r.read, r.write, r.aliasId, r.aliasRead, r.aliasWrite)){
 						setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
 					}
 					aliasesNewDatapointFromExistingLastSelectId = newId;
@@ -818,12 +876,12 @@ function load(settings, onChange) {
 
 	//Add function to Copy Button
 	$('#aliasesCopyAlias').on('click', function(){
-		copyAlias();
+		aliasesCopyAlias();
 	});
 	
 	//Add function to Rename Button
 	$('#aliasesRenameAlias').on('click', function(){
-		copyAlias(true, true);
+		aliasesCopyAlias(true, true);
 	});
 	
 	//Add function to Delete Button
@@ -834,7 +892,7 @@ function load(settings, onChange) {
 				ids.push($(this).data('id'));
 			});
 			ids.push(aliasesSelectedAlias);
-			deleteDatapoints(ids, function(){
+			aliasesDeleteDatapoints(ids, function(){
 				loadTabAliases();
 			});
 		}
@@ -846,7 +904,17 @@ function load(settings, onChange) {
 		$('.aliasesDatapoint.save').each(function(){
 			if($(this).css('display') != "none") ids.push($(this).data('id'));				
 		});
-		saveDatapoints(ids);
+		aliasesSaveDatapoints(ids);
+	});
+
+	//Add function to Expand all Button
+	$('#aliasesDatapointCollapsibleExpandAll').on('click', function(){
+		M.Collapsible.getInstance($('#aliasesDatapointList')).open()
+	});
+
+	//Add function to Collapse all Button
+	$('#aliasesDatapointCollapsibleCollapseAll').on('click', function(){
+		M.Collapsible.getInstance($('#aliasesDatapointList')).close()
 	});
 
 	//Add Line to Datapoint List
@@ -877,13 +945,13 @@ function load(settings, onChange) {
 		var aliasRead = aliasObj.read || "";
 		var aliasWrite = aliasObj.write || "";
 		if(aliasId) aliasesUsedAliasIds.push(aliasId);
-		listContent += "<li class='collection-item'  style='background-color: rgba(255,255,255,0.5); border-width: 4px;' data-id='" + alias + "' data-main='" + (isMain ? "true" : "false") + "'>";
+		listContent += "<li class='aliasesDatapointCollapsibleItem" + (isMain ? " active" : "") + "' style='background-color: rgba(255,255,255,0.5); border-width: 4px;' data-id='" + alias + "' data-main='" + (isMain ? "true" : "false") + "'>";
+		listContent += "<div class='aliasesDatapointCollapsibleHeader collapsible-header' data-id='" + alias + "' data-main='" + (isMain ? "true" : "false") + "'>";
 		listContent += "<div class='row aliasesDatapointRow' style='background-color: rgba(0,0,0,0.2);'>";
-		if(!isMain) listContent += 	"<i class='aliasesDatapoint copy material-icons' data-id='" + alias + "' data-setting='copy' data-main='" + (isMain ? "true" : "false") + "' style='position:absolute; right:30px; margin-top: 2px; cursor:pointer; color:#000000;'>content_copy</i>";
+		if(!isMain && aliases[alias].type == "state") listContent += 	"<i class='aliasesDatapoint copy material-icons' data-id='" + alias + "' data-setting='copy' data-main='" + (isMain ? "true" : "false") + "' style='position:absolute; right:30px; margin-top: 2px; cursor:pointer; color:#000000;'>content_copy</i>";
 		if(!isMain) listContent += 	"<i class='aliasesDatapoint delete material-icons' data-id='" + alias + "' data-setting='delete' data-main='" + (isMain ? "true" : "false") + "' style='position:absolute; right:6px; margin-top: 2px; cursor:pointer; color:#ce0000;'>delete</i>";
 		listContent += 	"<div class='col s11 m6 l6'>";
-		listContent += 		"<h6><span class='aliasesDatapoint id' data-id='" + alias + "' data-setting='id'>" + alias + "</span>:";
-//		if(!isMain) listContent += 	"&nbsp;&nbsp;<i class='aliasesDatapoint rename material-icons' data-id='" + alias + "' data-setting='rename' data-main='" + (isMain ? "true" : "false") + "' style='cursor:pointer; color:#000000;'>edit</i>";
+		listContent += 		"<h6><i class='material-icons'>keyboard_arrow_down</i><span class='aliasesDatapoint id' data-id='" + alias + "' data-setting='id'>" + alias + "</span>:";
 		listContent += 		"</h6>";
 		listContent += 	"</div>";
 		listContent += 	"<div class='col s12 m5 l5'>";
@@ -892,6 +960,8 @@ function load(settings, onChange) {
 		listContent += 		"<span class='translate'>Name</span>";
 		listContent += 	"</div>";
 		listContent += "</div>";
+		listContent += "</div>";
+		listContent += "<div class='aliasesDatapointCollapsibleBody collapsible-body' data-id='" + alias + "' data-main='" + (isMain ? "true" : "false") + "'>";
 		listContent += "<div class='row aliasesDatapointRow' style='background-color: rgba(0,0,255,0.1);'>";
 		listContent += 	"<div class='col s12 m6 l4'>";
 		listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_ROLE' id='aliasesDatapoint_" + alias + "_ROLE' data-id='" + alias + "' data-setting='role' value='" + role + "' data-main='" + (isMain ? "true" : "false") + "'></input>";
@@ -936,9 +1006,9 @@ function load(settings, onChange) {
 			listContent += "</div>";
 			listContent += "<div class='row aliasesDatapointRow'  style='background-color: rgba(255,0,0,0.1);'>";
 			listContent += 	"<div class='col s12 m6 l4' style='background-color: rgba(255,0,0,0.1);'>";
-			listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_ALIAS_ID' id='aliasesDatapoint_" + alias + "_ALIAS_ID' data-id='" + alias + "' data-setting='aliasId' value='" + aliasId + "'></input>";
+			listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_ALIAS_ID' id='aliasesDatapoint_" + alias + "_ALIAS_ID' data-id='" + alias + "' data-setting='aliasId' value='" + (typeof aliasId == "object" ? JSON.stringify(aliasId) : aliasId) + "'></input>";
 			listContent += 		"<label for='aliasesDatapoint_" + alias + "_ALIAS_ID' class='translate'></label>";
-			listContent += 		"<span class='translate'>Alias id</span>";
+			listContent += 		"<span class='translate'>Alias ID</span>";
 			listContent += 		"<i class='material-icons aliasesDatapoint selectId' data-id='" + alias + "' data-selectidfor='aliasesDatapoint_" + alias + "_ALIAS_ID' style='position: absolute; right: 5px; top: 10px; cursor: hand;'>edit</i>";
 			listContent += 	"</div>";
 			listContent += 	"<div class='col s12 m6 l4'>";
@@ -958,6 +1028,7 @@ function load(settings, onChange) {
 		listContent += 	"<div class='col s12 m6 l6'>";
 		listContent += 		"<a class='aliasesDatapoint save waves-effect waves-light btn' id='aliasesDatapoint_" + alias + "_SAVE' data-id='" + alias + "' data-setting='save' style='margin-top: 20px;" + (unsavedNew ? "" : " display: none;") + "'><i class='material-icons left'>save</i><span class='translate'>Save changes</span></a>";
 		listContent += 	"</div>";
+		listContent += 	"</div>";
 		if(convertedToNumber){
 			listContent += 	"<div class='col s12 m6 l6'>";
 			listContent += 		"<i class='material-icons left'>info</i><span class='translate'>Converted some datapoints to type number</span>";
@@ -971,6 +1042,7 @@ function load(settings, onChange) {
 			$('#aliasesDatapointList').append(listContent);
 		}
 		if (M) M.updateTextFields();
+		$('.aliasesDatapointCollapsible').collapsible({accordion: false});
 		if(unsavedNew) $('.aliasesDatapointSaveAll').show();
 		//Show save button on change
 		$('.aliasesDatapoint.val[data-id="' + alias + '"]').on('input change', function(){
@@ -979,47 +1051,54 @@ function load(settings, onChange) {
 		});
 		//Save datapoint
 		$('.aliasesDatapoint.save[data-id="' + alias + '"]').on('click', function(){
-			saveDatapoints([alias]);
-		});
-		//Rename datapoint
-		$('.aliasesDatapoint.rename[data-id="' + alias + '"]').on('click', function(){
-			var id = alias.substr(alias.lastIndexOf('.') + 1) || "SET";
-			while(aliases[$('#aliasesSelectedAlias').val() + "." + id]){ 
-				id = prompt(_("Please enter ID of datapoint"), id || "SET");
-				if(aliases[$('#aliasesSelectedAlias').val() + "." + id]){
-					alert("Error: This datapoint exists.");
-				}
-			}
-			//------------ fehlt
+			aliasesSaveDatapoints([alias]);
 		});
 		//Copy datapoint
-		$('.aliasesDatapoint.copy[data-id="' + alias + '"]').on('click', function(){
+		$('.aliasesDatapoint.copy[data-id="' + alias + '"]').on('click', function(event){
+			event.stopPropagation();
 			var id = alias.substr(alias.lastIndexOf('.') + 1) || "SET";
 			if(aliases[$('#aliasesSelectedAlias').val() + "." + id]){
 				var count = 2;
 				while(aliases[$('#aliasesSelectedAlias').val() + "." + id + "_" + count]){ count++; }
 				id = id + "_" + count;
 			}
-			if(addDatapoint(id, $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="unit"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="min"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="max"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="read"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="write"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasId"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasRead"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasWrite"]').val())){
+			if(aliasesAddDatapoint(id, $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="unit"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="min"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="max"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="read"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="write"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasId"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasRead"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasWrite"]').val())){
 				setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
 			}
 		});
 		//Delete datapoint
-		$('.aliasesDatapoint.delete[data-id="' + alias + '"]').on('click', function(){
-			if(confirm(_("Delete datapoint? This can't be undone!"))) deleteDatapoints([alias], function(){
+		$('.aliasesDatapoint.delete[data-id="' + alias + '"]').on('click', function(event){
+			event.stopPropagation();
+			if(confirm(_("Delete datapoint? This can't be undone!"))) aliasesDeleteDatapoints([alias], function(){
 				$('#aliasesDatapointList li[data-id="' + alias + '"]').remove();
 			});
 		});
 		//Enhance SelectId-Buttons with function
 		$('.aliasesDatapoint.selectId[data-id="' + alias + '"]').on('click', function(){
-			$('#dialogSelectId').data('selectidfor', $(this).data('selectidfor'));
-			initSelectId(function (sid) {
-				sid.selectId('show', $('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.').replace(/\ /g, '\\ ')).val(), {type: 'state'}, function (newId) {
-					if (newId) {
-						$('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.').replace(/\ /g, '\\ ')).val(newId).trigger('change');
-					}
-				});
-			});		
+			initDialog('dialogAliasesSelectAliasId', function(){ //save dialog
+				if($("#tabsDialogAliasesSelectAliasId a.active").attr('href') == "#dialogAliasesSelectAliasIdSeperateReadWrite"){ //SeperateReadWrite
+					var newId = '{"read": "' + $('#dialogAliasesSelectAliasIdSeperateReadWriteAliasIdRead').val() + '", "write": "' + $('#dialogAliasesSelectAliasIdSeperateReadWriteAliasIdWrite').val() + '"}';
+				} else { //OneReadWrite
+					var newId = $('#dialogAliasesSelectAliasIdOneReadWriteAliasId').val();
+				}
+				$('#' + $('#dialogAliasesSelectAliasId').data('selectidfor')).val(newId).trigger('change');
+			});
+			$('#dialogAliasesSelectAliasId').data('selectidfor', $.escapeSelector($(this).data('selectidfor')));
+			var val = $('#' + $('#dialogAliasesSelectAliasId').data('selectidfor')).val();
+			val = tryParseJSON(val) || val;
+			if (typeof val == "object" && (val.read || val.write)) { //SeperateReadWrite
+				M.Tabs.getInstance($('#tabsDialogAliasesSelectAliasId')).select('dialogAliasesSelectAliasIdSeperateReadWrite');
+				$('#dialogAliasesSelectAliasIdOneReadWriteAliasId').val(val.read || "");
+				$('#dialogAliasesSelectAliasIdSeperateReadWriteAliasIdRead').val(val.read || "");
+				$('#dialogAliasesSelectAliasIdSeperateReadWriteAliasIdWrite').val(val.write || "");
+			} else { //OneReadWrite
+				M.Tabs.getInstance($('#tabsDialogAliasesSelectAliasId')).select('dialogAliasesSelectAliasIdOneReadWrite');
+				$('#dialogAliasesSelectAliasIdOneReadWriteAliasId').val(val);
+				$('#dialogAliasesSelectAliasIdSeperateReadWriteAliasIdRead').val(val);
+				$('#dialogAliasesSelectAliasIdSeperateReadWriteAliasIdWrite').val(val);
+			}
+			$('#dialogAliasesSelectAliasId').modal('open');
+			$('#dialogAliasesSelectAliasId').css('z-index', modalZIndexCount++);			
 		});
 		//Enhance type and role with function
 		enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]', Object.keys(defaultDatapointRoles).join(";"), false);
@@ -1027,23 +1106,27 @@ function load(settings, onChange) {
 			enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + $(this).data('id') + '"][data-setting="role"]', defaultDatapointRoles[$(this).val()].join(";"));
 		}).trigger('init');
 		enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"][data-main="true"]', defaultMainRoles.join(";"), false);
+		//StopPropagation for aliasesDatapoints
+		$('.aliasesDatapoint.val').off('click').on('click', function(event){ 
+			event.stopPropagation(); 
+		});
+		
 	}
+	$('.dialogAliasesSelectAliasIdAliasesDatapoint.selectId').on('click', function(){
+		$('#dialogSelectId').data('selectidfor', $.escapeSelector($(this).data('selectidfor')));
+		initSelectId(function (sid) {
+			sid.selectId('show', $('#' + $('#dialogSelectId').data('selectidfor')).val(), {type: 'state'}, function (newId) {
+				if (newId) {
+					$('#' + $('#dialogSelectId').data('selectidfor')).val(newId).trigger('change');
+				}
+			});
+		});		
+	});
 
 	//AddDatapoint
-	function addDatapoint(id, name, role, type, unit, min, max, read, write, aliasId, aliasRead, aliasWrite){
-		id = id || "SET";
-		if(aliases[$('#aliasesSelectedAlias').val() + "." + id]){
-			var count = 2;
-			while(aliases[$('#aliasesSelectedAlias').val() + "." + id + "_" + count]){ count++; }
-			id = id + "_" + count;
-		}
-		id = prompt(_("Please enter ID of datapoint"), id || "SET");
+	function aliasesAddDatapoint(id, name, role, type, unit, min, max, read, write, aliasId, aliasRead, aliasWrite){
+		id = getNewId($('#aliasesSelectedAlias').val(), id, true);
 		if(!id) return false;
-		while(aliases[$('#aliasesSelectedAlias').val() + "." + id]){ 
-			alert("Error: This datapoint exists.");
-			id = prompt(_("Please enter ID of datapoint"), id || "SET");
-			if(!id) return false;
-		}
 		aliases[$('#aliasesSelectedAlias').val() + "." + id] = {
 			UNSAVED_NEW: true,
 			type: "state", 
@@ -1065,7 +1148,7 @@ function load(settings, onChange) {
 	}
 	
 	//Copy (and rename)
-	function copyAlias(deleteOld, saveNew){
+	function aliasesCopyAlias(deleteOld, saveNew){
 		initDialog('dialogAliasesCopyAlias', function(){ //save dialog
 			var oldName = $('#dialogAliasesCopyAlias').data('oldName');
 			var newName = $('#dialogAliasesCopyAliasNewName').val();
@@ -1104,8 +1187,8 @@ function load(settings, onChange) {
 					}
 				}
 			};
-			saveDatapoints(idsToSave, function(err){ 
-				if(!err) deleteDatapoints(idsToDelete, function(err) {
+			aliasesSaveDatapoints(idsToSave, function(err){ 
+				if(!err) aliasesDeleteDatapoints(idsToDelete, function(err) {
 					if(!err) loadTabAliases(newId); else alert(_("Error deleting old Datapoints"));
 				}); else alert(_("Error saving Datapoints"));
 			});	
@@ -1146,11 +1229,11 @@ function load(settings, onChange) {
 		$('#dialogAliasesCopyAliasReplaceDatapointsList').data('length', index + 1);
 		enhanceTextInputToCombobox('.dialogAliasesCopyAliasReplaceDatapoints.searchValue', aliasesUsedAliasIds.join(";"), false);
 		$('.dialogAliasesCopyAliasReplaceDatapoints.selectId[data-index="' + index + '"]').on('click', function(){
-			$('#dialogSelectId').data('selectidfor', $(this).data('selectidfor'));
+			$('#dialogSelectId').data('selectidfor', $.escapeSelector($(this).data('selectidfor')));
 			initSelectId(function (sid) {
-				sid.selectId('show', $('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.').replace(/\ /g, '\\ ')).val(), {type: 'state'}, function (newId) {
+				sid.selectId('show', $('#' + $('#dialogSelectId').data('selectidfor')).val(), {type: 'state'}, function (newId) {
 					if (newId) {
-						$('#' + $('#dialogSelectId').data('selectidfor').replace(/\./g, '\\.').replace(/\ /g, '\\ ')).val(newId).trigger('change');
+						$('#' + $('#dialogSelectId').data('selectidfor')).val(newId).trigger('change');
 					}
 				});
 			});
@@ -1159,7 +1242,7 @@ function load(settings, onChange) {
 	});
 
 	//Save Datapoints
-	function saveDatapoints(ids, callback){
+	function aliasesSaveDatapoints(ids, callback){
 		alias = ids.pop();
 		if(alias){
 			var newObj = Object.assign({}, aliases[alias]);
@@ -1171,7 +1254,9 @@ function load(settings, onChange) {
 				$this = $(this);
 				var setting = $this.data('setting');
 				if(setting == "aliasId") {
-					newObj.common.alias["id"] = $this.val();
+					var val = $this.val();
+					val = tryParseJSON(val) || val;
+					newObj.common.alias["id"] = val;
 				} else if(setting == "aliasRead") {
 					if($this.val()) newObj.common.alias["read"] = $this.val(); else delete newObj.common.alias.read;
 				} else if(setting == "aliasWrite") {
@@ -1189,12 +1274,18 @@ function load(settings, onChange) {
 							if (numVal != null) newObj.common[setting] = numVal; else delete newObj.common[setting];
 						}
 					} else {
-						if($this.val()) newObj.common[setting] = $this.val(); else delete newObj.common[setting];
+						if($this.val()){
+							var val = $this.val();
+							val = tryParseJSON(val) || val;
+							newObj.common[setting] = val;
+						} else {
+							delete newObj.common[setting];
+						}	
 					}
 				}
 			});
 			if(isMain){ //Update Id and Name in Selectbox
-			var name = $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').val() || alias;
+				var name = $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').val() || alias;
 				$('#aliasesSelectedAlias option[value="' + alias + '"]').html(alias + (name != alias ? " (" + name + ")" : "&nbsp;"));
 				$('#aliasesSelectedAlias').select();
 			}
@@ -1212,7 +1303,7 @@ function load(settings, onChange) {
 						});
 						if(allSaved) $('.aliasesDatapointSaveAll').hide();
 						if(_ids.length){
-							saveDatapoints(_ids, _callback);
+							aliasesSaveDatapoints(_ids, _callback);
 						} else {
 							if(_callback) _callback();
 						}
@@ -1227,7 +1318,7 @@ function load(settings, onChange) {
 	}
 	
 	//Delete Datapoints
-	function deleteDatapoints(ids, callback){
+	function aliasesDeleteDatapoints(ids, callback){
 		alias = ids.pop();
 		if(alias){
 			(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
@@ -1238,7 +1329,296 @@ function load(settings, onChange) {
 					if(!err) {
 						delete aliases[_alias];
 						if(_ids.length){
-							deleteDatapoints(_ids, _callback);
+							aliasesDeleteDatapoints(_ids, _callback);
+						} else {
+							if(_callback) _callback();
+						}
+					} else {
+						if(_callback) _callback("error");
+					}
+				});		
+			})(); //<--End Closure
+		} else {
+			if(callback) callback();
+		}
+	}
+
+
+	
+	//++++++++++ AUTOCREATE ALIAS ++++++++++
+	//Load Tab Autocreate Alias
+	function loadTabAutocreateAlias(){
+		$('#autocreateAliasSourceId').val('').trigger('change');
+		$('.autocreateAliasVal').val('');
+		autocreateAliasDatapointListEmpty();
+		$('.autocreateAliasSaveAll').hide();
+	}
+
+	//Add roles to combobox autocreateAliasCommonRole
+	enhanceTextInputToCombobox('#autocreateAliasCommonRole', defaultMainRoles.join(";"), false);
+
+	//Enhance autocreateAliasSourceId with function
+	$('#autocreateAliasSourceId').on('input change', function(){
+		dialogDeviceAutocreateResult = {};
+		var toDo = function(){
+			if(iobrokerObjects[$('#autocreateAliasSourceId').val()]){
+				$('#autocreateAliasSourceIdCommonName').html(iobrokerObjects[$('#autocreateAliasSourceId').val()].common.name);
+				$('#autocreateAliasCreatePreview').removeClass('disabled').addClass('pulse');
+			} else {
+				$('#autocreateAliasSourceIdCommonName').html("");
+				$('#autocreateAliasCreatePreview').addClass('disabled').removeClass('pulse');
+			}
+		}
+		if(iobrokerObjectsReady) {
+			toDo();
+		} else {
+			iobrokerObjectsReadyFunctions.push(toDo);
+		}
+	});
+	$('#autocreateAliasSourceIdSelectIdButton').on('click', function(){
+		initSelectId(function (sid) {
+			sid.selectId('show', $('#autocreateAliasSourceId').val(), {type: 'state'}, function (newId) {
+				if (newId) {
+					$('#autocreateAliasSourceId').val(newId).trigger('change');
+					if (M) M.updateTextFields();
+				}
+			});
+		});
+	});
+
+	//Enhance autocreateAliasCreatePreview with function
+	$('#autocreateAliasCreatePreview').on('click', function(){
+		var sourceId = $('#autocreateAliasSourceId').val();
+		if(!sourceId || typeof iobrokerObjects[sourceId] == udef) return;
+		$('#autocreateAliasCreatePreview').removeClass('pulse');
+		var r = getDatapointConfiguration(sourceId);
+		$('#autocreateAliasId').val('alias.0.' + r.name);
+		$('#autocreateAliasName').val(r.name);
+		$('#autocreateAliasCommonRole').val(r.role);
+		$('#autocreateAliasCreatePreview').addClass('disabled').removeClass('pulse');
+		$('.autocreateAliasSaveAll').show();
+		autocreateAliasDatapointListEmpty();
+		//Use ChannelDetector to find out role and matching states
+		var channelDetectorResult = channelDetector.detect({
+			objects: iobrokerObjects,
+			id: sourceId,
+			ignoreIndicators: ["STICKY_UNREACH"]
+		});
+		var channelDetectorUsedDeviceTypeForCommonRole;
+		var channelDetectorResultDatapoints = [];
+		var channelDetectorResultDatapointAliasIds = [];
+		var channelDetectorResultDatapointIds = [];
+		if (channelDetectorResult) {
+			channelDetectorResult.forEach(function (device){ //Iterate through all all found device-types
+				console.log("Detected channel type " + device.type + ":");
+				if (!channelDetectorUsedDeviceTypeForCommonRole){ //Role was not matched before
+					console.log("   Set this as role for the new device.");
+					channelDetectorUsedDeviceTypeForCommonRole = device.type;
+				}
+				device.states.forEach(function(state){ //Iterate through all found states
+					if (state.id) { //This is a state with an id
+						r = getDatapointConfiguration(state.id);
+						console.log("   Detected " + JSON.stringify(r));
+						if(channelDetectorResultDatapointAliasIds.indexOf(state.id) > -1){ //Was matched before
+							console.log("      aliasId was mateched before!");
+							r.deactivateLine = true;
+						}
+						if (r.id == "CONNECTED") {
+							console.log("      Convert CONNECTED to UNREACH");
+							r.id = "UNREACH";
+							r.aliasRead = "!val";
+							r.aliasWrite = "!val";
+						}
+						r.detectedId = r.id;
+						r.id = getNewId($('#autocreateAliasId').val(), r.id, false, channelDetectorResultDatapointIds);
+						if(r.detectedId != r.id){ //Id exists
+							console.log("      Id exists - set to new Id " + r.id);
+							r.deactivateLine = true;
+						}
+						channelDetectorResultDatapointIds.push(r.id);
+						channelDetectorResultDatapointAliasIds.push(state.id);
+						channelDetectorResultDatapoints.push(r);
+					}
+				});
+			});
+		} else {
+			console.log("No Device detected.");
+		}
+		//Get unmatchedChildStates to match states, that were not assigned by ChannelDetector
+		console.log("Checking for unmatchedChildStates");
+		var unmatchedChildStates = [];
+		for(id in iobrokerObjects){
+			if(id.indexOf(sourceId) == 0 && iobrokerObjects[id].type == 'state' && channelDetectorResultDatapointAliasIds.indexOf(id) == -1) {
+				unmatchedChildStates.push(id);
+			}
+		}
+		//unmatchedChildStates.sort().reverse(); //reverse order, so that the top channel of multi-channel-devices wins
+		for(i = 0; i < unmatchedChildStates.length; i++){ //Try to match unmatchedChildStates
+			var stateId = unmatchedChildStates[i];
+			r = getDatapointConfiguration(stateId);
+			r.deactivateLine = true;
+			console.log("   Unmatched ChildState " + JSON.stringify(r));
+			if(channelDetectorResultDatapointAliasIds.indexOf(stateId) > -1){ //Was matched before
+				console.log("      aliasId was mateched before!");
+			}
+			if (r.id == "CONNECTED") {
+				console.log("      Convert CONNECTED to UNREACH");
+				r.id = "UNREACH";
+				r.aliasRead = "!val";
+				r.aliasWrite = "!val";
+			}
+			r.detectedId = r.id;
+			r.id = getNewId($('#autocreateAliasId').val(), r.id, false, channelDetectorResultDatapointIds);
+			if(r.detectedId != r.id){ //Id exists
+				console.log("      Id exists - set to new Id " + r.id);
+			}
+			channelDetectorResultDatapointIds.push(r.id);
+			channelDetectorResultDatapointAliasIds.push(stateId);
+			channelDetectorResultDatapoints.push(r);
+		}
+		console.log("Add detected datapoints to datapoint list");
+		for(i = 0; i < channelDetectorResultDatapoints.length; i++){
+			r = channelDetectorResultDatapoints[i];
+			autocreateAliasDatapointListAddLine(r.id, r.name, r.role, r.type, r.unit, r.min, r.max, r.read, r.write, r.aliasId, r.aliasRead, r.aliasWrite, r.deactivateLine);
+		}
+	});	
+
+	//Enhance autocreateAliasAddDatapoint with function
+	var autocreateAliasAddDatapointLastSelectId = "";
+	$('#autocreateAliasAddDatapoint').on('click', function(){ 
+		$('#dialogSelectId').data('selectidfor', '');
+		initSelectId(function (sid) {
+			sid.selectId('show', autocreateAliasAddDatapointLastSelectId, {type: 'state', noMultiselect: false}, function (newId) {
+				if (newId && iobrokerObjects[newId]) {
+					console.log(iobrokerObjects[newId]);
+					var r = getDatapointConfiguration(newId);
+					var excludeList = [];
+					$('.autocreateAliasDatapointListVal.id').each(function(){ if($(this).val()) excludeList.push($(this).val()); });
+					if(r) r.id = getNewId($('#autocreateAliasId').val() || "", r.id, false, excludeList);
+					if(r && autocreateAliasDatapointListAddLine(r.id, r.name, r.role, r.type, r.unit, r.min, r.max, r.read, r.write, r.aliasId, r.aliasRead, r.aliasWrite)){
+						setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
+					}
+					autocreateAliasAddDatapointLastSelectId = newId;
+				}
+			});
+		});		
+	});
+	
+	//Enhance autocreateAliasClearDatapoints with function
+	$('#autocreateAliasClearDatapoints').on('click', function(){
+		autocreateAliasDatapointListEmpty();
+	});
+		
+	//Enhance autocreateAliasSaveAll with function
+	$('.autocreateAliasSaveAll').on('click', function(){
+		autocreateAliasSaveAll();
+	});
+		
+	//Add Line to datapoint List
+	function autocreateAliasDatapointListAddLine(id, name, role, type, unit, min, max, read, write, aliasId, aliasRead, aliasWrite, deactivateLine){
+		var index = $('#autocreateAliasDatapointListTableBody').data('length') || 0;
+		var tableLine = "";
+		tableLine += "<tr class='autocreateAliasDatapointListLine' data-index='" + index + "' data-alias-id='" + aliasId + "' data-role='" + role + "' data-type='" + type + "' data-unit='" + unit + "' data-min='" + min + "' data-max='" + max + "' data-read='" + read + "' data-write='" + write + "' data-alias-read='" + aliasRead + "' data-alias-write='" + aliasWrite + "'>";
+		tableLine += "	<td><label><input type='checkbox'" + (deactivateLine ? "" : " checked='checked'") + "' /><span>" + aliasId + "</span></label></td>";
+		tableLine += "	<td><input class='autocreateAliasDatapointListVal id' type='text' id='autocreateAliasDatapointListId_" + index + "' value='" + id + "' data-index='" + index + "'/></td>";
+		tableLine += "	<td><input class='autocreateAliasDatapointListVal name' type='text' id='autocreateAliasDatapointListName_" + index + "' value='" + name + "' data-index='" + index + "'/></td>";
+		tableLine += "	<td>";
+		tableLine += "		<a class='autocreateAliasDatapointListDelete btn-flat' onclick='$(\".autocreateAliasDatapointListLine[data-index=" + index + "]\").remove();'><i class='material-icons'>delete</i></a>";
+		tableLine += "	</td>";
+		tableLine += "</tr>";
+		$('#autocreateAliasDatapointListTableBody').append(tableLine);
+		index++;
+		$('#autocreateAliasDatapointListTableBody').data('length', index);
+		$('.autocreateAliasSaveAll').show();
+		//Show save button on change
+		$('.autocreateAliasVal, .autocreateAliasDatapointListLine').off('input change').on('input change', function(){
+			$('.autocreateAliasSaveAll').show();
+		});
+	}
+	
+	//Empty autocreateAliasDatapointList
+	function autocreateAliasDatapointListEmpty(){
+		$('#autocreateAliasDatapointListTableBody').empty();
+		$('#autocreateAliasDatapointListTableBody').data('length', 0);
+	}
+	
+	//Save Alias with Datapoints
+	function autocreateAliasSaveAll(){
+		var aliasPath = $('#autocreateAliasId').val();
+		if(!aliasPath){
+			alert("Error: Please enter a valid Alias ID");
+			return false;
+		}
+		if(aliasPath.substr(0, 8) != "alias.0."){
+			if(!confirm("Warning: Alias ID does not start with 'alias.0', continue anyway?")) return false;
+		}
+		if(iobrokerObjects[aliasPath]){
+			if(!confirm("Warning: Alias ID '" + aliasPath + "' exists. Overwrite?")) return false;
+		}
+		var ids = ["*MAIN*"];
+		$('.autocreateAliasDatapointListLine').each(function(){
+			if($(this).find('input[type=checkbox]').prop('checked')) ids.push($(this).find('.autocreateAliasDatapointListVal.id').val());
+		});
+		if(JSON.stringify(removeDuplicates(ids)) != JSON.stringify(ids)){
+			alert("Error: You have duplicated destination IDs. Each destination ID must be unique.");
+			return false;
+		}
+		(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
+			var _aliasPath = aliasPath;
+			autocreateAliasSave(aliasPath, ids, function(err){
+				if(err) {
+					alert("Error saving Alias - Please check your aliases.");
+				} else {
+					alert("Alias successfully saved.");
+					loadAliases(function(){
+						M.Tabs.getInstance($('#tabsTop')).select('tabAliases');
+						setTimeout(function(){ $('#aliasesSelectedAlias').val(_aliasPath).select().trigger('change'); }, 10);
+					});
+				}
+			});
+		})(); //<--End Closure
+	}
+	function autocreateAliasSave(aliasPath, ids, callback){
+		alias = ids.pop();
+		if(alias){
+			var newObj = Object.assign({}, aliases[aliasPath + "." + alias]);
+			if(alias == "*MAIN*"){
+				var isMain = true;
+				alias = "";
+			} else {
+				var isMain = false;
+			}
+			delete newObj.UNSAVED_NEW;
+			if(typeof newObj.common != "object") newObj.common = {};
+			if(typeof newObj.common.alias != "object" && !isMain) newObj.common.alias = {};
+			if(isMain){
+				newObj.type = "channel";
+				newObj.common.name = $('#autocreateAliasName').val() || "";
+				newObj.common.role = $('#autocreateAliasCommonRole').val() || "";
+			} else {
+				newObj.type = "state";
+				$line = $('.autocreateAliasDatapointListVal.id[value="' + alias + '"]').parent('td').parent('tr');
+				newObj.common.name = $line.find('autocreateAliasDatapointListVal.name').val() || alias;
+				newObj.common.role = $line.data('role') || "value";
+				newObj.common.type = $line.data('type') || "string";
+				newObj.common.unit = $line.data('unit') || "";
+				newObj.common.min = (typeof $line.data('min') != udef ? $line.data('min') : "");
+				newObj.common.max = (typeof $line.data('max') != udef ? $line.data('max') : "");
+				newObj.common.read = (typeof $line.data('read') != udef ? $line.data('read') : true);
+				newObj.common.write = (typeof $line.data('write') != udef ? $line.data('write') : true);
+				newObj.common.alias.id = $line.data('alias-id') || "";
+				newObj.common.alias.read =  $line.data('alias-read') || "";
+				newObj.common.alias.write =  $line.data('alias-write') || "";
+			}
+			(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
+				var _aliasPath = aliasPath;
+				var _ids = ids;
+				var _alias = alias;
+				var _callback = callback;
+				socket.emit('setObject', aliasPath + (alias ? "." + alias : ""), newObj, function(err){
+					if(!err) {
+						if(_ids.length){
+							autocreateAliasSave(_aliasPath, _ids, _callback);
 						} else {
 							if(_callback) _callback();
 						}

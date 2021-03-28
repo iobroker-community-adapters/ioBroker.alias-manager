@@ -39,6 +39,7 @@
     "Save Alias with all checked items": "保存所有选中项的别名",
     "Save all changes": "保存所有更改",
     "Select": "选择",
+    "Select Alias": "选择别名",
     "Select Alias ID:": "选择别名ID：",
     "Select an alias to edit:": "选择一个别名进行编辑：",
     "Select device ID from ioBroker-Object-Tree:": "从ioBroker-Object-Tree中选择设备ID：",

@@ -39,6 +39,7 @@
     "Save Alias with all checked items": "Zapisz alias ze wszystkimi zaznaczonymi elementami",
     "Save all changes": "Zapisz wszystkie zmiany",
     "Select": "Wybierz",
+    "Select Alias": "Wybierz Alias",
     "Select Alias ID:": "Wybierz alias ID:",
     "Select an alias to edit:": "Wybierz alias do edycji:",
     "Select device ID from ioBroker-Object-Tree:": "Wybierz identyfikator urządzenia z ioBroker-Object-Tree:",

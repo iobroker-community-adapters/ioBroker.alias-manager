@@ -89,6 +89,9 @@ Here you can:
 
 ## Changelog
 
+### 0.1.2 dev
+* (sbormann) Added translations.
+
 ### 0.1.1 (2021-03-28)
 * (sbormann) Added alias-manager as tab to the ioBroker side menu.
 * (sbormann) Added list of aliases to main tab.

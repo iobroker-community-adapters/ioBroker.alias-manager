@@ -39,6 +39,7 @@
     "Save Alias with all checked items": "Сохранить псевдоним со всеми отмеченными элементами",
     "Save all changes": "Сохранить все изменения",
     "Select": "Выбирать",
+    "Select Alias": "Выберите псевдоним",
     "Select Alias ID:": "Выберите ID псевдонима:",
     "Select an alias to edit:": "Выберите псевдоним для редактирования:",
     "Select device ID from ioBroker-Object-Tree:": "Выберите идентификатор устройства из ioBroker-Object-Tree:",

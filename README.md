@@ -69,11 +69,11 @@ Here you can:
 
 ### Autocreate Alias
 
-![Screenshot](img/manual_screenshot_6.png)
+![Screenshot](img/manual_screenshot_6b.png)
 
 * (1) Klick on 'AUTOCREATE ALIASE'
 
-![Screenshot](img/manual_screenshot_7.png)
+![Screenshot](img/manual_screenshot_7b.png)
 * (1) First select an ID of a device from the ioBroker Object tree
 * (2) Then click on 'TRY TO CREATE ALIAS FROM THIS DEVICE'
 * (3) Afterwards you will find the determined settings for the Alias and

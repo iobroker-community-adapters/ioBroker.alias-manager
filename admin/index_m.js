@@ -909,12 +909,16 @@ function load(settings, onChange) {
 
 	//Add function to Expand all Button
 	$('#aliasesDatapointCollapsibleExpandAll').on('click', function(){
-		M.Collapsible.getInstance($('#aliasesDatapointList')).open()
+		$('#aliasesDatapointList li.aliasesDatapointCollapsibleItem').removeClass('active');
+		$('#aliasesDatapointList').collapsible('open');
+		$('#aliasesDatapointList li.aliasesDatapointCollapsibleItem').addClass('active');
 	});
 
 	//Add function to Collapse all Button
 	$('#aliasesDatapointCollapsibleCollapseAll').on('click', function(){
-		M.Collapsible.getInstance($('#aliasesDatapointList')).close()
+		$('#aliasesDatapointList li.aliasesDatapointCollapsibleItem').addClass('active');
+		$('#aliasesDatapointList').collapsible('close');
+		$('#aliasesDatapointList li.aliasesDatapointCollapsibleItem').removeClass('active');
 	});
 
 	//Add Line to Datapoint List

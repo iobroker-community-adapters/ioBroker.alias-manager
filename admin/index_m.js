@@ -1,4 +1,4 @@
-//Adapter-Manager - Copyright (c) by Sebatian Bormann
+//Alias-Manager - Copyright (c) by Sebatian Bormann
 //Please visit https://github.com/sbormann/ioBroker.adapter-manager for licence-agreement and further information
 
 //Settings
@@ -718,6 +718,9 @@ function load(settings, onChange) {
 
 	//Load Aliases
 	loadAliases(function(){
+		//Add Aliases to tabMain
+		loadTabMain();
+		
 		//Show Settings
 		console.log("All settings loaded. Adapter ready.");
 		$('.hideOnLoad').show();
@@ -754,6 +757,10 @@ function load(settings, onChange) {
 	function onTabShow(tabId){
 		console.log("Open tab: " + tabId);
 		switch(tabId){
+			case "#tabMain":
+			loadTabMain();
+			break;
+			
 			case "#tabAliases":
 			loadTabAliases();
 			break;
@@ -762,6 +769,38 @@ function load(settings, onChange) {
 			loadTabAutocreateAlias();
 			break;
 		}
+	}
+
+
+
+	//++++++++++ MAIN ++++++++++
+	function loadTabMain(){
+		//Get Aliases and add them to Table
+		$('#mainAliasListTableBody').empty();
+		getAliasesMain().forEach(function(alias, index){ 
+			var name = getAliasName(alias);
+			var tableRow = "";
+			tableRow += "<tr class='mainAliasListTableRow' data-alias='" + alias + "' style='cursor: pointer;'>";
+			tableRow += "	<td>";
+			tableRow += 		alias;
+			tableRow += "	</td>";
+			tableRow += "	<td>";
+			tableRow += 		name;
+			tableRow += "	</td>";
+			tableRow += "	<td>";
+			tableRow += "		<a class='waves-effect waves-light btn-floating btn-flat btn-small mainAliasListEditButton' id='mainAliasListEditButton_" + index + "' data-alias='" + alias + "'><i class='material-icons left' style='color: black;'>edit</i></a>";
+			tableRow += "	</td>";
+			tableRow += "</tr>";
+			$('#mainAliasListTableBody').append(tableRow);
+		});
+		$('.mainAliasListEditButton, .mainAliasListTableRow').off('click').on('click', function(){
+			M.Tabs.getInstance($('#tabsTop')).select('tabAliases');
+			var aliasPath = $(this).data('alias');
+			(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
+				var _aliasPath = aliasPath;
+				setTimeout(function(){ $('#aliasesSelectedAlias').val(_aliasPath).select().trigger('change'); }, 10);			
+			})(); //<--End Closure
+		});
 	}
 
 
@@ -1107,7 +1146,7 @@ function load(settings, onChange) {
 		//Enhance type and role with function
 		enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]', Object.keys(defaultDatapointRoles).join(";"), false);
 		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]').on('change init', function(){
-			enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + $(this).data('id') + '"][data-setting="role"]', defaultDatapointRoles[$(this).val()].join(";"));
+			enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + $(this).data('id') + '"][data-setting="role"]', (defaultDatapointRoles[$(this).val()] || []).join(";"));
 		}).trigger('init');
 		enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"][data-main="true"]', defaultMainRoles.join(";"), false);
 		//StopPropagation for aliasesDatapoints
@@ -1213,7 +1252,7 @@ function load(settings, onChange) {
 		listContent += 	"<div class='col s12 m5 l5'>";
 		listContent += 		"<input class='val dialogAliasesCopyAliasReplaceDatapoints searchvalue' name='dialogAliasesCopyAliasReplaceDatapoints_" + index + "_SEARCH_VALUE' id='dialogAliasesCopyAliasReplaceDatapoints_" + index + "_SEARCH_VALUE' data-index='" + index + "' data-setting='searchvalue' value=''></input>";
 		listContent += 		"<label for='dialogAliasesCopyAliasReplaceDatapoints_" + index + "_SEARCH_VALUE' class='translate'></label>";
-		listContent += 		"<span class='translate'>Replace this string...</span>";
+		listContent += 		"<span class='translate'>" + _("Replace this string...") + "</span>";
 		listContent += 	"</div>";
 		listContent += 	"<div class='col s1 m1 l1'>";
 		listContent += 		"<i class='material-icons' style='margin-top:35px;'>arrow_forward</i>";
@@ -1221,7 +1260,7 @@ function load(settings, onChange) {
 		listContent += 	"<div class='col s10 m5 l5'>";
 		listContent += 		"<input class='val dialogAliasesCopyAliasReplaceDatapoints newvalue' name='dialogAliasesCopyAliasReplaceDatapoints_" + index + "_NEW_VALUE' id='dialogAliasesCopyAliasReplaceDatapoints_" + index + "_NEW_VALUE' data-index='" + index + "' data-setting='newvalue' value=''></input>";
 		listContent += 		"<label for='dialogAliasesCopyAliasReplaceDatapoints_" + index + "_NEW_VALUE' class='translate'></label>";
-		listContent += 		"<span class='translate'>...with this string.</span>";
+		listContent += 		"<span class='translate'>" + _("...with this string.") + "</span>";
 		listContent += 		"<i class='material-icons dialogAliasesCopyAliasReplaceDatapoints selectId' data-index='" + index + "' data-selectidfor='dialogAliasesCopyAliasReplaceDatapoints_" + index + "_NEW_VALUE' style='position: absolute; right: 5px; top: 10px; cursor: hand;'>edit</i>";
 		listContent += 	"</div>";
 		listContent += 	"<div class='col s1 m1 l1'>";

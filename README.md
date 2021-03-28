@@ -89,8 +89,11 @@ Here you can:
 
 ## Changelog
 
-### 0.1.1 dev
-* (sbormann) Ehanced open all / close all function for collapsibles.
+### 0.1.1 (2021-03-28)
+* (sbormann) Added alias-manager as tab to the ioBroker side menu.
+* (sbormann) Added list of aliases to main tab.
+* (sbormann) Enhanced open all / close all function for collapsibles.
+* (sbormann) Added translations.
 
 ### 0.1.0 (2021-03-27)
 * (sbormann) Alias-ID can now be an object with seperate datapoints for read and write.

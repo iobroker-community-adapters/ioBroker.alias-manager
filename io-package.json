@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "news": {
+            "0.1.1": {
+                "en": "Added alias-manager as tab to the ioBroker side menu, Added list of aliases to main tab, Enhanced open all / close all function for collapsibles, Added translations.",
+                "de": "Alias-Manager als Registerkarte zum ioBroker-Seitenmenü hinzugefügt, Liste der Aliase zur Hauptregisterkarte hinzugefügt, Erweiterte Funktion zum Öffnen / Schließen aller Funktionen für zusammenklappbare Elemente hinzugefügt, Übersetzungen hinzugefügt.",
+                "ru": "Добавлен alias-manager как вкладка в боковое меню ioBroker, Добавлен список псевдонимов на главную вкладку, Улучшена функция открытия всех / закрытия всех для сворачиваемых файлов, Добавлены переводы.",
+                "pt": "Adicionado o gerenciador de alias como guia ao menu lateral do ioBroker, lista de apelidos adicionada à guia principal, função de abrir / fechar tudo aprimorada para recolhíveis, traduções adicionadas.",
+                "nl": "Alias-manager toegevoegd als tabblad aan het ioBroker-zijmenu, lijst met aliassen toegevoegd aan het hoofdtabblad, Verbeterde functie Alles openen / sluiten voor samenvouwbare functies, Vertalingen toegevoegd.",
+                "fr": "Ajout du gestionnaire d'alias en tant qu'onglet au menu latéral d'ioBroker, Ajout de la liste des alias à l'onglet principal, Amélioration de la fonction ouvrir tout / fermer tout pour les collapsibles, Ajout de traductions.",
+                "it": "Aggiunto alias-manager come scheda al menu laterale di ioBroker, Aggiunto elenco di alias alla scheda principale, Migliorata la funzione apri tutto / chiudi tutto per i pieghevoli, Aggiunte traduzioni.",
+                "es": "Se agregó un administrador de alias como pestaña al menú lateral de ioBroker, se agregó una lista de alias a la pestaña principal, se mejoró la función abrir todo / cerrar todo para plegables, se agregaron traducciones.",
+                "pl": "Dodano menedżera aliasów jako zakładkę do menu bocznego ioBroker, Dodano listę aliasów do zakładki głównej, Ulepszono funkcję otwierania wszystkich / zamykania wszystkich dla collapsibles, Dodano tłumaczenia.",
+                "zh-cn": "在ioBroker侧面菜单中添加了别名管理器作为选项卡，在主选项卡中添加了别名列表，增强了可折叠对象的全部打开/关闭所有功能，添加了翻译。"
+            },
             "0.1.0": {
                 "en": "Alias-ID can now be an object with seperate datapoints for read and write, Alias-Datapoints can now be collapsed, Added Autocreate Alias function.",
                 "de": "Die Alias-ID kann jetzt ein Objekt mit separaten Datenpunkten zum Lesen und Schreiben sein. Alias-Datenpunkte können jetzt reduziert werden. Die Funktion \"Alias ​​automatisch erstellen\" wurde hinzugefügt.",
@@ -158,6 +170,21 @@
         "singleton": true,
         "materialize": true,
         "materializeTab": true,
+        "adminTab": {
+            "name": {
+                "en": "Alias-Manager",
+                "de": "Alias-Manager",
+                "ru": "Alias-Manager",
+                "pt": "Alias-Manager",
+                "nl": "Alias-Manager",
+                "fr": "Alias-Manager",
+                "it": "Alias-Manager",
+                "es": "Alias-Manager",
+                "pl": "Alias-Manager",
+                "zh-cn": "Alias-Manager"
+            },
+            "fa-icon": "control_point_duplicate"
+        },
         "onlyWWW": true,
         "blockly": false,
         "messagebox": false,

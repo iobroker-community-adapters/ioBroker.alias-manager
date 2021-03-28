@@ -74,10 +74,10 @@ Here you can:
 * (1) Klick on 'AUTOCREATE ALIASE'
 
 ![Screenshot](img/manual_screenshot_7b.png)
-* (1) First select an ID of a device from the ioBroker Object tree
+* (1) First select an ID of a device from the ioBroker object tree
 * (2) Then click on 'TRY TO CREATE ALIAS FROM THIS DEVICE'
 * (3) Afterwards you will find the determined settings for the Alias and
-* (4) A List of all Datapoints of the selected device
+* (4) A list of all datapoints of the selected device
     * All automatically recognized datapoints will be checked (only checked lines will be saved)
 	* If automatically recognized, the datapoint will have an 'Destination ID' set. This will be the corresponding datapoint of the alias (the original datapoint will be linked to this new alias-datapoint). The autocreate-function tries to match to stanardized datapoint-ids, depending on the type of device that was recognized. However, you can change the settings as you like, but every 'Destination ID' has to be unique.
 	* And finally you can enter a name for the destination alias-datapoint

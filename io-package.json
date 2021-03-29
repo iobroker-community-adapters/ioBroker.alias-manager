@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.1.2",
+        "version": "0.1.3",
         "news": {
+            "0.1.3": {
+                "en": "Changed admin tab to singleton mode.",
+                "de": "Die Registerkarte \"Admin\" wurde in den Singleton-Modus geändert.",
+                "ru": "Изменена вкладка администратора в одноэлементный режим.",
+                "pt": "Alterada a guia admin para o modo singleton.",
+                "nl": "Admin-tabblad gewijzigd in singleton-modus.",
+                "fr": "On a changé l'onglet d'administration en mode singleton.",
+                "it": "Modificata la scheda di amministrazione in modalità singleton.",
+                "es": "Se cambió la pestaña de administración al modo singleton.",
+                "pl": "Zmieniono zakładkę administratora na tryb singleton.",
+                "zh-cn": "将管理标签更改为单例模式。"
+            },
             "0.1.2": {
                 "en": "Fixed link to admin tab, Added translations.",
                 "de": "Link zur Registerkarte \"Admin\" behoben, Übersetzungen hinzugefügt.",
@@ -195,6 +207,7 @@
                 "pl": "Alias-Manager",
                 "zh-cn": "Alias-Manager"
             },
+            "singleton": true,
             "fa-icon": "control_point_duplicate",
             "link": "/adapter/alias-manager/index_m.html"
         },

@@ -89,6 +89,9 @@ Here you can:
 
 ## Changelog
 
+### 0.1.3 (2021-03-29)
+* (sbormann) Changed admin tab to singleton mode.
+
 ### 0.1.2 (2021-03-29)
 * (sbormann) Fixed link to admin tab.
 * (sbormann) Added translations.

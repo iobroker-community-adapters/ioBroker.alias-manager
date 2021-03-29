@@ -89,7 +89,8 @@ Here you can:
 
 ## Changelog
 
-### 0.1.2 dev
+### 0.1.2 (2021-03-29)
+* (sbormann) Fixed link to admin tab.
 * (sbormann) Added translations.
 
 ### 0.1.1 (2021-03-28)

@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.1.1",
+        "version": "0.1.2",
         "news": {
+            "0.1.2": {
+                "en": "Fixed link to admin tab, Added translations.",
+                "de": "Link zur Registerkarte \"Admin\" behoben, Übersetzungen hinzugefügt.",
+                "ru": "Исправлена ​​ссылка на вкладку администратора, добавлены переводы.",
+                "pt": "Link corrigido para a guia admin, traduções adicionadas.",
+                "nl": "Vaste link naar admin-tabblad, vertalingen toegevoegd.",
+                "fr": "Lien fixe vers l'onglet d'administration, ajout de traductions.",
+                "it": "Collegamento fisso alla scheda di amministrazione, traduzioni aggiunte.",
+                "es": "Enlace fijo a la pestaña de administración, traducciones agregadas.",
+                "pl": "Naprawiono link do zakładki administratora, Dodano tłumaczenia.",
+                "zh-cn": "修复了指向“管理”标签的链接，添加了翻译。"
+            },
             "0.1.1": {
                 "en": "Added alias-manager as tab to the ioBroker side menu, Added list of aliases to main tab, Enhanced open all / close all function for collapsibles, Added translations.",
                 "de": "Alias-Manager als Registerkarte zum ioBroker-Seitenmenü hinzugefügt, Liste der Aliase zur Hauptregisterkarte hinzugefügt, Erweiterte Funktion zum Öffnen / Schließen aller Funktionen für zusammenklappbare Elemente hinzugefügt, Übersetzungen hinzugefügt.",
@@ -183,7 +195,8 @@
                 "pl": "Alias-Manager",
                 "zh-cn": "Alias-Manager"
             },
-            "fa-icon": "control_point_duplicate"
+            "fa-icon": "control_point_duplicate",
+            "link": "/adapter/alias-manager/index_m.html"
         },
         "onlyWWW": true,
         "blockly": false,

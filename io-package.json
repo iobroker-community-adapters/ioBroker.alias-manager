@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "0.1.3",
+        "version": "1.0.0",
         "news": {
+            "1.0.0": {
+                "en": "Updated dependencies, Removed bottom-border if used as tab.",
+                "de": "Aktualisierte Abhängigkeiten, unterer Rand entfernt, wenn als Registerkarte verwendet.",
+                "ru": "Обновлены зависимости, удалена нижняя граница, если используется как вкладка.",
+                "pt": "Dependências atualizadas, borda inferior removida se usada como guia.",
+                "nl": "Bijgewerkte afhankelijkheden, onderrand verwijderd indien gebruikt als tabblad.",
+                "fr": "Dépendances mises à jour, bordure inférieure supprimée si elle est utilisée comme onglet.",
+                "it": "Dipendenze aggiornate, bordo inferiore rimosso se utilizzato come scheda.",
+                "es": "Dependencias actualizadas, Borde inferior eliminado si se usa como pestaña.",
+                "pl": "Zaktualizowano zależności, usunięto dolną ramkę, jeśli jest używana jako karta.",
+                "zh-cn": "更新了相关性，如果用作选项卡，则删除了底部边框。"
+            },
             "0.1.3": {
                 "en": "Changed admin tab to singleton mode.",
                 "de": "Die Registerkarte \"Admin\" wurde in den Singleton-Modus geändert.",

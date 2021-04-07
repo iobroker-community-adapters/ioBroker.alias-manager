@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "news": {
+            "1.0.1": {
+                "en": "Fixed alias read and alias write function not working, if containing quotation marks.",
+                "de": "Problem, dass die Lese- und Schreibfunktion für Alias ​​nicht funktionierte, wenn Anführungszeichen enthalten waren - gefixt",
+                "ru": "Исправлены функции чтения псевдонимов и записи псевдонимов, которые не работали, если они содержат кавычки.",
+                "pt": "As funções de leitura e gravação de alias corrigidas não funcionavam, caso contivessem aspas.",
+                "nl": "Vaste alias lezen en alias schrijffunctie niet werken, indien met aanhalingstekens.",
+                "fr": "Correction des fonctions de lecture d'alias et d'écriture d'alias ne fonctionnant pas, si elles contiennent des guillemets.",
+                "it": "Risolto il problema con la funzione di lettura alias e scrittura alias che non funzionava, se contenevano virgolette.",
+                "es": "Se corrigió que la función de lectura de alias y escritura de alias no funcionara, si contenía comillas.",
+                "pl": "Naprawiono niedziałającą funkcję odczytu aliasu i zapisu aliasu, jeśli zawierała cudzysłowy.",
+                "zh-cn": "修复了别名读取和别名写入功能（如果包含引号）不起作用的问题。"
+            },
             "1.0.0": {
                 "en": "Updated dependencies, Removed bottom-border if used as tab.",
                 "de": "Aktualisierte Abhängigkeiten, unterer Rand entfernt, wenn als Registerkarte verwendet.",

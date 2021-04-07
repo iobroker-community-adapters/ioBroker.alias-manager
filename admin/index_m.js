@@ -1055,12 +1055,12 @@ function load(settings, onChange) {
 			listContent += 		"<i class='material-icons aliasesDatapoint selectId' data-id='" + alias + "' data-selectidfor='aliasesDatapoint_" + alias + "_ALIAS_ID' style='position: absolute; right: 5px; top: 10px; cursor: hand;'>edit</i>";
 			listContent += 	"</div>";
 			listContent += 	"<div class='col s12 m6 l4'>";
-			listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_ALIAS_READ' id='aliasesDatapoint_" + alias + "_ALIAS_READ' data-id='" + alias + "' data-setting='aliasRead' value='" + aliasRead + "'></input>";
+			listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_ALIAS_READ' id='aliasesDatapoint_" + alias + "_ALIAS_READ' data-id='" + alias + "' data-setting='aliasRead' value=''></input>"; //Value is set later, because it can contain special chars
 			listContent += 		"<label for='aliasesDatapoint_" + alias + "_ALIAS_READ' class='translate'></label>";
 			listContent += 		"<span class='translate'>Alias Read-Function (keyword for value is val)</span>";
 			listContent += 	"</div>";
 			listContent += 	"<div class='col s12 m6 l4'>";
-			listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_ALIAS_WRITE' id='aliasesDatapoint_" + alias + "_ALIAS_WRITE' data-id='" + alias + "' data-setting='aliasWrite' value='" + aliasWrite + "'></input>";
+			listContent += 		"<input class='val aliasesDatapoint' name='aliasesDatapoint_" + alias + "_ALIAS_WRITE' id='aliasesDatapoint_" + alias + "_ALIAS_WRITE' data-id='" + alias + "' data-setting='aliasWrite' value=''></input>"; //Value is set later, because it can contain special chars
 			listContent += 		"<label for='aliasesDatapoint_" + alias + "_ALIAS_WRITE' class='translate'></label>";
 			listContent += 		"<span class='translate'>Alias Write-Function (keyword for value is val)</span>";
 			listContent += 	"</div>";
@@ -1084,6 +1084,8 @@ function load(settings, onChange) {
 		} else {
 			$('#aliasesDatapointList').append(listContent);
 		}
+		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasRead"]').val(aliasRead);
+		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasWrite"]').val(aliasWrite);
 		if (M) M.updateTextFields();
 		$('.aliasesDatapointCollapsible').collapsible({accordion: false});
 		if(unsavedNew) $('.aliasesDatapointSaveAll').show();

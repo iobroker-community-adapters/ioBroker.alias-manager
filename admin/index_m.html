@@ -54,6 +54,7 @@
 		.aliasesDatapointCollapsibleHeader { display: block !important; padding: 0 18px 0 18px !important; border: none !important; }
 		.aliasesDatapointCollapsibleBody { padding: 0 18px 0 18px !important; border: none !important; }
 		.aliasesDatapointRow { margin-bottom: 0 !important; padding-bottom: 2px !important; }
+		xxx.adapter-body { height: 100% !important }
 	</style>
 </head>
 <body>
@@ -170,6 +171,11 @@
 						<a class="waves-effect waves-light btn" id="aliasesRenameAlias"><i class="material-icons left">create</i><span class="translate">Rename Alias</span></a>
 						<a class="waves-effect waves-light btn red" id="aliasesDeleteAlias"><i class="material-icons left">delete</i><span class="translate">Delete Alias</span></a>
 						<a class="waves-effect waves-light btn orange pulse aliasesDatapointSaveAll"><i class='material-icons left'>save</i><span class='translate'>Save all changes</span></a>
+					</div>
+				</div>
+				<div class="row aliasesContentDiv" style="display:none;">
+					<div class="col s12">
+						<p><i class="material-icons" style="color: #2196f3; vertical-align: middle; font-size: 1rem; margin-right: 6px;">info</i><span class="translate">You can use search and replace in the 'Rename Alias' function to adjust multiple Alias-IDs at once (e.g. when replacing a broken device)</span></p>
 					</div>
 				</div>
 				<div class="row aliasesContentDiv" style="display:none;">
@@ -357,7 +363,7 @@
 				</div>
 				<div class="row">
 					<div class="col s12">
-						<h6 class="translate sub-title">Replace Alias-Datapoints:</h6>
+						<h6 class="translate sub-title">Search and Replace Alias-Datapoints:</h6>
 					</div>
 				</div>
 				<div class="row" style="">

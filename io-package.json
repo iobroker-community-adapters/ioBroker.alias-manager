@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "1.0.1",
+        "version": "1.0.2",
         "news": {
+            "1.0.2": {
+                "en": "Added info texts and translations.",
+                "de": "Infotexte und Übersetzungen hinzugefügt.",
+                "ru": "Добавлены информационные тексты и переводы.",
+                "pt": "Adicionados textos informativos e traduções.",
+                "nl": "Infoteksten en vertalingen toegevoegd.",
+                "fr": "Ajout de textes d'information et de traductions.",
+                "it": "Aggiunti testi informativi e traduzioni.",
+                "es": "Añadidos textos de información y traducciones.",
+                "pl": "Dodano teksty informacyjne i tłumaczenia.",
+                "zh-cn": "添加了信息文本和翻译。"
+            },
             "1.0.1": {
                 "en": "Fixed alias read and alias write function not working, if containing quotation marks.",
                 "de": "Problem, dass die Lese- und Schreibfunktion für Alias ​​nicht funktionierte, wenn Anführungszeichen enthalten waren - gefixt",

@@ -738,15 +738,34 @@ function load(settings, onChange) {
 		console.log("Getting ioBroker Objects...");
 		$('.loadingObjects').show();
 		iobrokerObjectsReady = false;
-		iobrokerObjects = Object.assign({}, parent.gMain.objects);
-		iobrokerObjectsReady = true;
-		if(iobrokerObjectsReadyFunctions.length) console.log("There are some functions that were buffered while fetching the ioBroker Objects. They will be executed now...");
-		for(i = 0; i < iobrokerObjectsReadyFunctions.length; i++){
-			if (typeof iobrokerObjectsReadyFunctions[i] == 'function') iobrokerObjectsReadyFunctions[i]();
+		if(parent && parent.gMain && typeof parent.gMain.objects == "object"){
+			console.log("...assigning ioBroker Objects via parent.gMain.objects...");
+			iobrokerObjects = Object.assign({}, parent.gMain.objects);
+			iobrokerObjectsReady = true;
+			if(iobrokerObjectsReadyFunctions.length) console.log("There are some functions that were buffered while fetching the ioBroker Objects. They will be executed now...");
+			for(i = 0; i < iobrokerObjectsReadyFunctions.length; i++){
+				if (typeof iobrokerObjectsReadyFunctions[i] == 'function') iobrokerObjectsReadyFunctions[i]();
+			}
+			iobrokerObjectsReadyFunctions = [];
+			$('.loadingObjects').hide();
+			console.log("ioBroker Objects ready.");
+		} else {
+			setTimeout(function(){
+				console.log("...fetching ioBroker Objects via socket...");
+				$('.loadingObjects').show();
+				socket.emit('getObjects', function (err, _objs) {
+					iobrokerObjects = _objs;
+					iobrokerObjectsReady = true;
+					if(iobrokerObjectsReadyFunctions.length) console.log("There are some functions that were buffered while fetching the ioBroker Objects. They will be executed now...");
+					for(i = 0; i < iobrokerObjectsReadyFunctions.length; i++){
+						if (typeof iobrokerObjectsReadyFunctions[i] == 'function') iobrokerObjectsReadyFunctions[i]();
+					}
+					iobrokerObjectsReadyFunctions = [];
+					$('.loadingObjects').hide();
+					console.log("ioBroker Objects ready.");
+				});
+			}, 1000);
 		}
-		iobrokerObjectsReadyFunctions = [];
-		$('.loadingObjects').hide();
-		console.log("ioBroker Objects ready.");
 	}
 
 

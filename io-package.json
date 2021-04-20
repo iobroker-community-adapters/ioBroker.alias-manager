@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "1.0.2",
+        "version": "1.1.0",
         "news": {
+            "1.1.0": {
+                "en": "Added compatibility to new react-ui of admin-adapter.",
+                "de": "Kompatibilität zur neuen Reaktions-Benutzeroberfläche des Admin-Adapters hinzugefügt.",
+                "ru": "Добавлена ​​совместимость с новым response-ui админ-адаптера.",
+                "pt": "Adicionada compatibilidade para o novo react-ui do adaptador admin.",
+                "nl": "Compatibiliteit toegevoegd aan nieuwe react-ui van admin-adapter.",
+                "fr": "Ajout de la compatibilité avec le nouveau react-ui d'admin-adapter.",
+                "it": "Aggiunta compatibilità alla nuova interfaccia utente di reazione dell'adattatore di amministrazione.",
+                "es": "Se agregó compatibilidad con el nuevo react-ui de admin-adapter.",
+                "pl": "Dodano kompatybilność z nowym interfejsem reagowania adaptera administratora.",
+                "zh-cn": "添加了对新的admin-adapter-ui的兼容性。"
+            },
             "1.0.2": {
                 "en": "Added info texts and translations.",
                 "de": "Infotexte und Übersetzungen hinzugefügt.",

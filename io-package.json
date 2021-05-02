@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "news": {
+            "1.2.0": {
+                "en": "Added handling of common.custom and common.states",
+                "de": "Behandlung von common.custom und common.states hinzugefügt",
+                "ru": "Добавлена ​​обработка common.custom и common.states.",
+                "pt": "Adicionado tratamento de common.custom e common.states",
+                "nl": "Behandeling van common.custom en common.states toegevoegd",
+                "fr": "Ajout de la gestion de common.custom et common.states",
+                "it": "Aggiunta la gestione di common.custom e common.states",
+                "es": "Manejo agregado de common.custom y common.states",
+                "pl": "Dodano obsługę stanów common.custom i common.states",
+                "zh-cn": "添加了对common.custom和common.states的处理"
+            },
             "1.1.0": {
                 "en": "Added compatibility to new react-ui of admin-adapter.",
                 "de": "Kompatibilität zur neuen Reaktions-Benutzeroberfläche des Admin-Adapters hinzugefügt.",
@@ -271,7 +283,8 @@
             {
                 "js-controller": ">=1.4.2"
             }
-        ]
+        ],
+        "installedFrom": "/opt/iobroker/iobroker.alias-manager"
     },
     "native": {},
     "objects": [],

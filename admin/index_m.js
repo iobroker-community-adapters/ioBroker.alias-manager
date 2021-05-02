@@ -624,14 +624,14 @@ function getAliases(aliasName, callback) {
     });
 }
 function getAliasName(alias){
-	var name = _(alias);
+	var name = alias;
 	if(aliases[alias] && typeof aliases[alias].common != udef && typeof aliases[alias].common.name != udef){
 		if(typeof aliases[alias].common.name == "object" && typeof aliases[alias].common.name[systemLang] != udef){
 			name = aliases[alias].common.name[systemLang];
 		} else if(typeof aliases[alias].common.name == "object" && typeof aliases[alias].common.name["en"] != udef){
-			name = _(aliases[alias].common.name["en"]);
+			name = aliases[alias].common.name["en"];
 		} else if (typeof aliases[alias].common.name == "string") {
-			name = _(aliases[alias].common.name);
+			name = aliases[alias].common.name;
 		}
 	}
 	return name;
@@ -651,6 +651,28 @@ function getAliasesMain(){
 	return aliasesMain;
 }	
 
+//History-Instances
+var historyInstances = [];
+function getHistoryInstances(callback){
+	(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
+		var _callback = callback;
+		var _toDo = function(){
+			historyInstances = [];
+			for(id in iobrokerObjects){ 
+				if(id.indexOf('system.adapter.') == 0 && !isNaN(id.substr(id.lastIndexOf('.') + 1)) && iobrokerObjects[id] && iobrokerObjects[id].common && iobrokerObjects[id].common.type === 'storage'){
+					historyInstances.push(id.substring('system.adapter.'.length));
+				}
+			}
+			_callback && _callback(historyInstances);		
+		}
+		if(iobrokerObjectsReady) {
+			_toDo();
+		} else {
+			iobrokerObjectsReadyFunctions.push(_toDo);
+		}
+	})(); //<--End Closure
+}
+
 //Helpers
 function getDatapointConfiguration(id){
 	if (id && iobrokerObjects[id]) {	
@@ -668,6 +690,8 @@ function getDatapointConfiguration(id){
 		r.aliasId = id;
 		r.aliasRead = "";
 		r.aliasWrite = "";
+		r.states = (iobrokerObjects[id].common && typeof iobrokerObjects[id].common.states != udef ? iobrokerObjects[id].common.states : null);
+		r.custom = (iobrokerObjects[id].common && typeof iobrokerObjects[id].common.custom != udef ? iobrokerObjects[id].common.custom : null);
 		return r;
 	} else {
 		return false;
@@ -764,6 +788,9 @@ function load(settings, onChange) {
 				customCSS += ".m .btn { background-color: #e0e0e0; color: #000000; }";
 				customCSS += ".m .btn:hover { background-color: #d5d5d5; }";
 				customCSS += ".m .btn.disabled { background-color: rgba(0, 0, 0, 0.12) !important; color: rgba(0, 0, 0, 0.26) !important; }";
+				customCSS += ".m .btn.red  { background-color: rgba(244,67,54,0.4) !important; }";
+				customCSS += ".m .btn.red:hover { background-color: rgba(244,67,54,1) !important; color: #ffffff !important; }";
+				customCSS += ".m .btn.red:hover i { color: #ffffff; transition: color 0.3s; }";
 
 				customCSS += ".m .btn-floating { background-color: transparent; box-shadow: none; color: #000000; }";
 				customCSS += ".m .btn-floating:hover { background-color: rgba(0,0,0,0.08); }";
@@ -788,7 +815,10 @@ function load(settings, onChange) {
 
 				customCSS += ".m .dropdown-content li>span { color: rgba(0, 0, 0, 0.86); }";
 				customCSS += ".m .dropdown-content li>a { color: rgba(0, 0, 0, 0.86); }";
+
 				customCSS += ".m [type=checkbox].filled-in:checked+span:not(.lever):after { border: #164477; background-color: #164477; }";
+				customCSS += ".m [type=radio].with-gap:checked+span:after, .m [type=radio]:checked+span:after { background-color: #164477; }";
+				customCSS += ".m [type=radio].with-gap:checked+span:after, .m [type=radio].with-gap:checked+span:before, .m [type=radio]:checked+span:after { border: 2px solid #164477; }";
 				
 				addCustomCSS(customCSS, "reactCSS");
 				$('.table-button-add').addClass('grey lighten-2');
@@ -798,6 +828,9 @@ function load(settings, onChange) {
 				isReact = false;
 			}						
 		});
+
+		//Get historyInstances
+		getHistoryInstances();
 
 		//Get iobrokerObjects
 		getIobrokerObjects();
@@ -872,6 +905,40 @@ function load(settings, onChange) {
 
 	//++++++++++ MAIN ++++++++++
 	function loadTabMain(){
+		/*
+		//Get Aliases and add them to Tree
+		var aliasesMainTree = getAliasesMain().reduce(function(total, current){
+			current.split('.').reduce(function(currentTotal, currentValue, currentIndex, currentArray){
+				var id = currentArray.slice(0, currentIndex + 1).join('.');
+				var	temp = (currentTotal.children = currentTotal.children || []).find(o => o.id === id);
+				if (!temp) currentTotal.children.push(temp = {id: id});
+				return temp;
+			}, total);
+			return total;
+		}, {children: []}).children;
+		function mainCreateNestedAliasesMainList(list){
+			if(list?.length > 0){
+				var html = "<ul class='collapsible expandable mainAliasTreeCollapsible'>";
+				list.forEach(function(entry){
+					console.log("|- " + entry.id + ":");
+					html += "	<li>";
+					html += "		<div class='collapsible-header'><i class='material-icons collapsible-header-inactive'>keyboard_arrow_right</i><i class='material-icons collapsible-header-active'>keyboard_arrow_down</i>" + entry.id + "</div>";
+					html += "		<div class='collapsible-body'>";
+					html += "			" + mainCreateNestedAliasesMainList(entry.children);
+					html += "		</div>";
+					html += "	</li>";		
+				});
+				html += "</ul>";
+				return html;
+			} else {
+				console.log("   has no childs -|");
+				return "";
+			}
+		}
+		$('#mainAliasTreeContainer').html(mainCreateNestedAliasesMainList(aliasesMainTree));
+		$('.mainAliasTreeCollapsible').collapsible({accordion: false});
+		*/
+
 		//Get Aliases and add them to Table
 		$('#mainAliasListTableBody').empty();
 		getAliasesMain().forEach(function(alias, index){ 
@@ -1001,7 +1068,7 @@ function load(settings, onChange) {
 				if (newId && iobrokerObjects[newId]) {
 					console.log(iobrokerObjects[newId]);
 					var r = getDatapointConfiguration(newId);
-					if(r & aliasesAddDatapoint(r.id, r.name, r.role, r.type, r.unit, r.min, r.max, r.read, r.write, r.aliasId, r.aliasRead, r.aliasWrite)){
+					if(r & aliasesAddDatapoint(r)){
 						setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
 					}
 					aliasesNewDatapointFromExistingLastSelectId = newId;
@@ -1068,6 +1135,8 @@ function load(settings, onChange) {
 		var max = aliases[alias].common.max || "";
 		var read = aliases[alias].common.read || false;
 		var write = aliases[alias].common.write || false;
+		var states = aliases[alias].common.states || null;
+		var custom = aliases[alias].common.custom || null;
 		var unsavedNew = aliases[alias].UNSAVED_NEW || false;
 		var convertedToNumber = false;
 		if(typeof min != "number" && min != ""){
@@ -1143,6 +1212,10 @@ function load(settings, onChange) {
 			listContent += 		"<span class='translate'>common.write</span>";
 			listContent += 		"</p></label>";
 			listContent += 	"</div>";
+			listContent += 	"<div class='col s12 m6 l4' style='padding: 0 0 0 2px;'>";
+			listContent += 		"<a class='val button aliasesDatapoint btn-floating" + (states ? " blue" : "") + "' data-type='button' name='aliasesDatapoint_" + alias + "_STATES' id='aliasesDatapoint_" + alias + "_STATES' data-id='" + alias + "' data-setting='states'><i class='material-icons'>view_list</i></a>&nbsp;";
+			listContent += 		"<a class='val button aliasesDatapoint btn-floating" + (custom ? " blue" : "") + "' data-type='button' name='aliasesDatapoint_" + alias + "_CUSTOM' id='aliasesDatapoint_" + alias + "_CUSTOM' data-id='" + alias + "' data-setting='custom'><i class='material-icons'>build</i></a>&nbsp;";
+			listContent += 	"</div>";
 			listContent += "</div>";
 			listContent += "<div class='row aliasesDatapointRow'  style='background-color: rgba(255,0,0,0.1);'>";
 			listContent += 	"<div class='col s12 m6 l4' style='background-color: rgba(255,0,0,0.1);'>";
@@ -1165,14 +1238,16 @@ function load(settings, onChange) {
 		listContent += "</div>";
 		listContent += "</div>";
 		listContent += "<div class='row aliasesDatapointRow'>";
-		listContent += 	"<div class='col s12 m6 l6'>";
+		listContent += 	"<div class='col s12 m12 l12'>";
 		listContent += 		"<a class='aliasesDatapoint save waves-effect waves-light btn' id='aliasesDatapoint_" + alias + "_SAVE' data-id='" + alias + "' data-setting='save' style='margin-top: 20px;" + (unsavedNew ? "" : " display: none;") + "'><i class='material-icons left'>save</i><span class='translate'>Save changes</span></a>";
 		listContent += 	"</div>";
-		listContent += 	"</div>";
+		listContent += "</div>";
 		if(convertedToNumber){
-			listContent += 	"<div class='col s12 m6 l6'>";
-			listContent += 		"<i class='material-icons left'>info</i><span class='translate'>Converted some datapoints to type number</span>";
+			listContent += "<div class='row aliasesDatapointRow'>";
+			listContent += 	"<div class='col s12 m12 l12' style='padding-top: 5px;'>";
+			listContent += 		"<i class='material-icons left' style='vertical-align: middle; font-size: 1rem; margin-right: 6px;'>info</i><span class='translate'>Converted some datapoints to type number</span>";
 			listContent += 	"</div>";			
+			listContent += "</div>";			
 		}
 		listContent += "</div>";
 		listContent += "</li>";
@@ -1183,6 +1258,8 @@ function load(settings, onChange) {
 		}
 		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasRead"]').val(aliasRead);
 		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasWrite"]').val(aliasWrite);
+		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="states"]').data('value', states);
+		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="custom"]').data('value', custom);
 		if (M) M.updateTextFields();
 		$('.aliasesDatapointCollapsible').collapsible({accordion: false});
 		if(unsavedNew) $('.aliasesDatapointSaveAll').show();
@@ -1204,7 +1281,7 @@ function load(settings, onChange) {
 				while(aliases[$('#aliasesSelectedAlias').val() + "." + id + "_" + count]){ count++; }
 				id = id + "_" + count;
 			}
-			if(aliasesAddDatapoint(id, $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="unit"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="min"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="max"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="read"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="write"]').prop('checked'), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasId"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasRead"]').val(), $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasWrite"]').val())){
+			if(aliasesAddDatapoint({id: id, name: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').val(), role: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"]').val(), type: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="type"]').val(), unit: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="unit"]').val(), min: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="min"]').val(), max: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="max"]').val(), read: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="read"]').prop('checked'), write: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="write"]').prop('checked'), aliasId: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasId"]').val(), aliasRead: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasRead"]').val(), aliasWrite: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="aliasWrite"]').val(), states: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="states"]').data('value'), custom: $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="custom"]').data('value')})){
 				setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
 			}
 		});
@@ -1214,6 +1291,37 @@ function load(settings, onChange) {
 			if(confirm(_("Delete datapoint? This can't be undone!"))) aliasesDeleteDatapoints([alias], function(){
 				$('#aliasesDatapointList li[data-id="' + alias + '"]').remove();
 			});
+		});
+		//Edit states
+		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="states"]').on('click', function(event){
+			event.stopPropagation();
+			initDialog('dialogAliasesShowStates', function(){ //save dialog
+			});
+			$('#dialogAliasesShowStates').data('alias', alias);
+			$('#dialogAliasesShowStatesTitle').html(alias);
+			var states = $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="states"]').data('value');
+			if(states && typeof states == "object") states = JSON.stringify(states, null, '\t');
+			$('#dialogAliasesShowStatesTable').html("<pre>" + (states ? states : _("Not defined")) + "</pre>");
+			$('#dialogAliasesShowStates').modal('open');
+			$('#dialogAliasesShowStates').css('z-index', modalZIndexCount++);			
+		});
+		//Edit custom
+		$('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="custom"]').on('click', function(event){
+			event.stopPropagation();
+			initDialog('dialogAliasesShowCustom', function(){ //save dialog
+			});
+			$('#dialogAliasesShowCustom').data('alias', alias);
+			$('#dialogAliasesShowCustomTitle').html(alias);
+			$('#dialogAliasesShowCustomTableEdit').off('click').on('click', function(){
+				if(aliases[alias]?.UNSAVED_NEW) alert("You may need to save it first.");
+				var url = window.location.origin + "/#tab-objects/customs/" + encodeURIComponent(alias);
+				window.open(url);				
+			});
+			var custom = $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="custom"]').data('value');
+			if(custom && typeof custom == "object") custom = JSON.stringify(custom, null, '\t');
+			$('#dialogAliasesShowCustomTable').html("<pre>" + (custom ? custom : _("Not defined")) + "</pre>");
+			$('#dialogAliasesShowCustom').modal('open');
+			$('#dialogAliasesShowCustom').css('z-index', modalZIndexCount++);			
 		});
 		//Enhance SelectId-Buttons with function
 		$('.aliasesDatapoint.selectId[data-id="' + alias + '"]').on('click', function(){
@@ -1249,7 +1357,7 @@ function load(settings, onChange) {
 		}).trigger('init');
 		enhanceTextInputToCombobox('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="role"][data-main="true"]', defaultMainRoles.join(";"), false);
 		//StopPropagation for aliasesDatapoints
-		$('.aliasesDatapoint.val').off('click').on('click', function(event){ 
+		$('.aliasesDatapoint.val:not(.button)').off('click').on('click', function(event){ 
 			event.stopPropagation(); 
 		});
 		
@@ -1265,26 +1373,30 @@ function load(settings, onChange) {
 		});		
 	});
 
-	//AddDatapoint
-	function aliasesAddDatapoint(id, name, role, type, unit, min, max, read, write, aliasId, aliasRead, aliasWrite){
-		id = getNewId($('#aliasesSelectedAlias').val(), id, true);
+	//AddDatapoint 
+	function aliasesAddDatapoint(obj){
+		obj = obj || {};
+		var id = getNewId($('#aliasesSelectedAlias').val(), obj.id, true);
 		if(!id) return false;
-		aliases[$('#aliasesSelectedAlias').val() + "." + id] = {
+		var newObj =  {
 			UNSAVED_NEW: true,
 			type: "state", 
 			common: {
-				name: name || id, 
-				role: role || "value", 
-				type: type || "string", 
-				unit: unit || "",
-				min: (typeof min != udef ? min : ""),
-				max: (typeof max != udef ? max : ""),
-				read: (typeof read != udef ? read : true), 
-				write: (typeof write != udef ? read : true),
-				alias: {id: aliasId || "", read: aliasRead || "", write: aliasWrite || ""}
+				name: obj.name || id, 
+				role: obj.role || "value", 
+				type: obj.type || "string", 
+				unit: obj.unit || "",
+				min: (typeof obj.min != udef ? obj.min : ""),
+				max: (typeof obj.max != udef ? obj.max : ""),
+				read: (typeof obj.read != udef ? obj.read : true), 
+				write: (typeof obj.write != udef ? obj.write : true),
+				alias: {id: obj.aliasId || "", read: obj.aliasRead || "", write: obj.aliasWrite || ""}
 			},
 			_id: $('#aliasesSelectedAlias').val() + "." + id
 		};
+		if(obj.states) newObj.common.states = obj.states;
+		if(obj.custom) newObj.common.custom = obj.custom;
+		aliases[$('#aliasesSelectedAlias').val() + "." + id] = newObj;
 		aliasesDatapointListAddLine($('#aliasesSelectedAlias').val() + "." + id);
 		return true;
 	}
@@ -1621,7 +1733,9 @@ function load(settings, onChange) {
 		console.log("Add detected datapoints to datapoint list");
 		for(i = 0; i < channelDetectorResultDatapoints.length; i++){
 			r = channelDetectorResultDatapoints[i];
-			autocreateAliasDatapointListAddLine(r.id, r.name, r.role, r.type, r.unit, r.min, r.max, r.read, r.write, r.aliasId, r.aliasRead, r.aliasWrite, r.deactivateLine);
+			var deactivateLine = r.deactivateLine;
+			delete r.deactivateLine;
+			autocreateAliasDatapointListAddLine(r, deactivateLine);
 		}
 	});	
 
@@ -1637,7 +1751,7 @@ function load(settings, onChange) {
 					var excludeList = [];
 					$('.autocreateAliasDatapointListVal.id').each(function(){ if($(this).val()) excludeList.push($(this).val()); });
 					if(r) r.id = getNewId($('#autocreateAliasId').val() || "", r.id, false, excludeList);
-					if(r && autocreateAliasDatapointListAddLine(r.id, r.name, r.role, r.type, r.unit, r.min, r.max, r.read, r.write, r.aliasId, r.aliasRead, r.aliasWrite)){
+					if(r && autocreateAliasDatapointListAddLine(r)){
 						setTimeout(function(){ $(".adapter-body").scrollTop($(".adapter-body")[0].scrollHeight); }, 500);
 					}
 					autocreateAliasAddDatapointLastSelectId = newId;
@@ -1655,20 +1769,31 @@ function load(settings, onChange) {
 	$('.autocreateAliasSaveAll').on('click', function(){
 		autocreateAliasSaveAll();
 	});
+	
+	//Enhance options with function
+	$('#autocreateAliasOptionsAdoptCommonCustom').on('change', function(){
+		if($(this).prop('checked')){
+			$('input[name=autocreateAliasOptionsAdoptCommonCustomRemoveHistoryFrom]').attr('disabled', null);
+		} else {
+			$('input[name=autocreateAliasOptionsAdoptCommonCustomRemoveHistoryFrom]').attr('disabled', 'disabled');
+		}
+	});
 		
 	//Add Line to datapoint List
-	function autocreateAliasDatapointListAddLine(id, name, role, type, unit, min, max, read, write, aliasId, aliasRead, aliasWrite, deactivateLine){
+	function autocreateAliasDatapointListAddLine(obj, deactivateLine){
+		var id = obj.id;
 		var index = $('#autocreateAliasDatapointListTableBody').data('length') || 0;
 		var tableLine = "";
-		tableLine += "<tr class='autocreateAliasDatapointListLine' data-index='" + index + "' data-alias-id='" + aliasId + "' data-role='" + role + "' data-type='" + type + "' data-unit='" + unit + "' data-min='" + min + "' data-max='" + max + "' data-read='" + read + "' data-write='" + write + "' data-alias-read='" + aliasRead + "' data-alias-write='" + aliasWrite + "'>";
-		tableLine += "	<td><label><input type='checkbox'" + (deactivateLine ? "" : " checked='checked'") + "' /><span>" + aliasId + "</span></label></td>";
+		tableLine += "<tr class='autocreateAliasDatapointListLine' data-index='" + index + "'>";
+		tableLine += "	<td><label><input type='checkbox'" + (deactivateLine ? "" : " checked='checked'") + "' /><span>" + obj.aliasId + "</span></label></td>";
 		tableLine += "	<td><input class='autocreateAliasDatapointListVal id' type='text' id='autocreateAliasDatapointListId_" + index + "' value='" + id + "' data-index='" + index + "'/></td>";
-		tableLine += "	<td><input class='autocreateAliasDatapointListVal name' type='text' id='autocreateAliasDatapointListName_" + index + "' value='" + name + "' data-index='" + index + "'/></td>";
+		tableLine += "	<td><input class='autocreateAliasDatapointListVal name' type='text' id='autocreateAliasDatapointListName_" + index + "' value='" + obj.name + "' data-index='" + index + "'/></td>";
 		tableLine += "	<td>";
 		tableLine += "		<a class='autocreateAliasDatapointListDelete btn-flat' onclick='$(\".autocreateAliasDatapointListLine[data-index=" + index + "]\").remove();'><i class='material-icons'>delete</i></a>";
 		tableLine += "	</td>";
 		tableLine += "</tr>";
 		$('#autocreateAliasDatapointListTableBody').append(tableLine);
+		$('#autocreateAliasDatapointListTableBody').find('.autocreateAliasDatapointListLine[data-index="' + index + '"]').data('object', obj);
 		index++;
 		$('#autocreateAliasDatapointListTableBody').data('length', index);
 		$('.autocreateAliasSaveAll').show();
@@ -1686,43 +1811,53 @@ function load(settings, onChange) {
 	
 	//Save Alias with Datapoints
 	function autocreateAliasSaveAll(){
-		var aliasPath = $('#autocreateAliasId').val();
-		if(!aliasPath){
-			alert("Error: Please enter a valid Alias ID");
-			return false;
-		}
-		if(aliasPath.substr(0, 8) != "alias.0."){
-			if(!confirm("Warning: Alias ID does not start with 'alias.0', continue anyway?")) return false;
-		}
-		if(iobrokerObjects[aliasPath]){
-			if(!confirm("Warning: Alias ID '" + aliasPath + "' exists. Overwrite?")) return false;
-		}
-		var ids = ["*MAIN*"];
-		$('.autocreateAliasDatapointListLine').each(function(){
-			if($(this).find('input[type=checkbox]').prop('checked')) ids.push($(this).find('.autocreateAliasDatapointListVal.id').val());
-		});
-		if(JSON.stringify(removeDuplicates(ids)) != JSON.stringify(ids)){
-			alert("Error: You have duplicated destination IDs. Each destination ID must be unique.");
-			return false;
-		}
-		(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
-			var _aliasPath = aliasPath;
-			autocreateAliasSave(aliasPath, ids, function(err){
-				if(err) {
-					alert("Error saving Alias - Please check your aliases.");
-				} else {
-					alert("Alias successfully saved.");
-					loadAliases(function(){
-						M.Tabs.getInstance($('#tabsTop')).select('tabAliases');
-						setTimeout(function(){ $('#aliasesSelectedAlias').val(_aliasPath).select().trigger('change'); }, 10);
-					});
-				}
+		var toDo = function(){
+			var aliasPath = $('#autocreateAliasId').val();
+			if(!aliasPath){
+				alert("Error: Please enter a valid Alias ID");
+				return false;
+			}
+			if(aliasPath.substr(0, 8) != "alias.0."){
+				if(!confirm("Warning: Alias ID does not start with 'alias.0', continue anyway?")) return false;
+			}
+			if(iobrokerObjects[aliasPath]){
+				if(!confirm("Warning: Alias ID '" + aliasPath + "' exists. Overwrite?")) return false;
+			}
+			var ids = ["*MAIN*"];
+			$('.autocreateAliasDatapointListLine').each(function(){
+				if($(this).find('input[type=checkbox]').prop('checked')) ids.push($(this).find('.autocreateAliasDatapointListVal.id').val());
 			});
-		})(); //<--End Closure
+			if(JSON.stringify(removeDuplicates(ids)) != JSON.stringify(ids)){
+				alert("Error: You have duplicated destination IDs. Each destination ID must be unique.");
+				return false;
+			}
+			(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
+				var _aliasPath = aliasPath;
+				autocreateAliasSave(aliasPath, ids, function(err){
+					if(err) {
+						alert("Error saving Alias - Please check your aliases.");
+					} else {
+						alert("Alias successfully saved.");
+						loadAliases(function(){
+							M.Tabs.getInstance($('#tabsTop')).select('tabAliases');
+							setTimeout(function(){ $('#aliasesSelectedAlias').val(_aliasPath).select().trigger('change'); }, 10);
+						});
+					}
+				});
+			})(); //<--End Closure
+		};
+		if(iobrokerObjectsReady) {
+			toDo();
+		} else {
+			iobrokerObjectsReadyFunctions.push(toDo);
+		}		
 	}
 	function autocreateAliasSave(aliasPath, ids, callback){
 		alias = ids.pop();
 		if(alias){
+			var sourceId = "";
+			var sourceObject = {};
+			var sourceObjectModified = false;
 			var newObj = Object.assign({}, aliases[aliasPath + "." + alias]);
 			if(alias == "*MAIN*"){
 				var isMain = true;
@@ -1739,30 +1874,64 @@ function load(settings, onChange) {
 				newObj.common.role = $('#autocreateAliasCommonRole').val() || "";
 			} else {
 				newObj.type = "state";
-				$line = $('.autocreateAliasDatapointListVal.id[value="' + alias + '"]').parent('td').parent('tr');
+				var $line = $('.autocreateAliasDatapointListVal.id[value="' + alias + '"]').parent('td').parent('tr');
+				var lineObject = $line.data('object');
 				newObj.common.name = $line.find('autocreateAliasDatapointListVal.name').val() || alias;
-				newObj.common.role = $line.data('role') || "value";
-				newObj.common.type = $line.data('type') || "string";
-				newObj.common.unit = $line.data('unit') || "";
-				newObj.common.min = (typeof $line.data('min') != udef ? $line.data('min') : "");
-				newObj.common.max = (typeof $line.data('max') != udef ? $line.data('max') : "");
-				newObj.common.read = (typeof $line.data('read') != udef ? $line.data('read') : true);
-				newObj.common.write = (typeof $line.data('write') != udef ? $line.data('write') : true);
-				newObj.common.alias.id = $line.data('alias-id') || "";
-				newObj.common.alias.read =  $line.data('alias-read') || "";
-				newObj.common.alias.write =  $line.data('alias-write') || "";
+				newObj.common.role = lineObject.role || "value";
+				newObj.common.type = lineObject.type || "string";
+				newObj.common.unit = lineObject.unit || "";
+				newObj.common.min = (typeof lineObject.min != udef ? lineObject.min : "");
+				newObj.common.max = (typeof lineObject.max != udef ? lineObject.max : "");
+				newObj.common.read = (typeof lineObject.read != udef ? lineObject.read : true);
+				newObj.common.write = (typeof lineObject.write != udef ? lineObject.write : true);
+				newObj.common.alias.id = lineObject.aliasId || "";
+				newObj.common.alias.read =  lineObject.aliasRead || "";
+				newObj.common.alias.write =  lineObject.aliasWrite || "";
+				if(lineObject.states) newObj.common.states = lineObject.states; 
+				if($('#autocreateAliasOptionsAdoptCommonCustom').prop('checked') && lineObject.custom){
+					var removeHistoryFrom = $('input[name=autocreateAliasOptionsAdoptCommonCustomRemoveHistoryFrom]:checked').val();	
+					if(removeHistoryFrom != "none"){
+						sourceId = lineObject.aliasId;
+						sourceObject = JSON.parse(JSON.stringify(iobrokerObjects[sourceId] || {}));
+						sourceObject = {
+							type: sourceObject.type || "state",
+							common: sourceObject.common || {},
+							native: sourceObject.native || {}
+						}
+						sourceObjectModified = false;
+						historyInstances.forEach(function(historyInstance){
+							if(removeHistoryFrom == "source" && sourceObject?.common?.custom?.[historyInstance]){
+								sourceObject.common.custom[historyInstance].enabled = false;
+								sourceObjectModified = true;
+							} else if(removeHistoryFrom == "destination"){
+								delete lineObject?.custom?.[historyInstance];
+							}
+						});
+					}
+					if(Object.keys(lineObject.custom).length) newObj.common.custom = lineObject.custom; 
+				}
 			}
 			(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
 				var _aliasPath = aliasPath;
 				var _ids = ids;
 				var _alias = alias;
 				var _callback = callback;
+				var _sourceId = sourceId;
+				var _sourceObject = JSON.parse(JSON.stringify(sourceObject));
+				var _sourceObjectModified = sourceObjectModified;
 				socket.emit('setObject', aliasPath + (alias ? "." + alias : ""), newObj, function(err){
 					if(!err) {
-						if(_ids.length){
-							autocreateAliasSave(_aliasPath, _ids, _callback);
+						if (_sourceObjectModified) {
+							console.log("sourceObjectModified: " + _sourceId + " -> " + JSON.stringify(_sourceObject));
+							socket.emit('setObject', _sourceId, _sourceObject, function(){
+								if(!err) {
+									autocreateAliasSave(_aliasPath, _ids, _callback);
+								} else {
+									if(_callback) _callback("error");
+								}
+							});
 						} else {
-							if(_callback) _callback();
+							autocreateAliasSave(_aliasPath, _ids, _callback);
 						}
 					} else {
 						if(_callback) _callback("error");

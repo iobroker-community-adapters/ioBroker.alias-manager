@@ -97,7 +97,15 @@
 						<p class="translate">Select an alias to edit:</p>
 					</div>
 				</div>
-				<div class="row hideOnLoad"  style="display: none;">
+				<!--div class="row hideOnLoad" style="display: none;">
+					<div class="col s12">
+						<div id="mainAliasTreeContainer"></div>
+					</div>
+				</div>
+				<div class="section hideOnLoad" style="display: none;">
+					<div class="divider"></div>
+				</div-->				
+				<div class="row hideOnLoad" style="display: none;">
 					<div class="col s12">
 						<table class="responsive-table highlight">
 							<thead>
@@ -276,6 +284,22 @@
 				<p><br><br></p>
 				<div class="row">
 					<div class="col s12">
+						<h6 class="translate sub-title">Options:</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<label><input type="checkbox" class="filled-in" checked="checked" id="autocreateAliasOptionsAdoptCommonCustom" /><span class="translate" style="height:unset;">Adopt common.custom (some datapoints have custom configurations for adapters like history, sql or iQontrol, which are stored in common.custom)</span></label>
+						<div style="padding-left:35px;">
+							<label><input type="radio" class="with-gap" name="autocreateAliasOptionsAdoptCommonCustomRemoveHistoryFrom" value="none" checked="checked" /><span class="translate" style="height:unset;">Keep common.custom as it is</span></label>
+							<label><input type="radio" class="with-gap" name="autocreateAliasOptionsAdoptCommonCustomRemoveHistoryFrom" value="source" /><span class="translate" style="height:unset;">Remove settings of history-adapters in common.custom from the original datapoint</span></label>
+							<label><input type="radio" class="with-gap" name="autocreateAliasOptionsAdoptCommonCustomRemoveHistoryFrom" value="destination" /><span class="translate" style="height:unset;">Remove settings of history-adapters in common.custom from the new alias-datapoint</span></label>
+						</div>
+					</div>
+				</div>
+				<p><br><br></p>
+				<div class="row">
+					<div class="col s12">
 						<h6 class="translate sub-title">Datapoint List:</h6>
 					</div>
 				</div>
@@ -379,6 +403,51 @@
             </div>
             <div class="modal-footer">
                 <a class="modal-action modal-close waves-effect waves-green btn btn-set"><i class="large material-icons left">check</i><span class="translate">Copy this alias</span></a>
+                <a class="modal-action modal-close waves-effect waves-green btn btn-close"><i class="large material-icons left">close</i><span class="translate">Cancel</span></a>
+            </div>
+        </div>
+
+		<!-- DIALOG: dialogAliasesShowStates -->
+        <div id="dialogAliasesShowStates" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="title"><span id="dialogAliasesShowStatesTitle"></span>&nbsp;-&nbsp;common.states:</h6>
+                    </div>
+                </div>
+				<div class="row">
+					<div class="col s12">
+						<div id="dialogAliasesShowStatesTable"></div>
+					</div>
+				</div>
+			</div>
+            <div class="modal-footer">
+                <!--a class="modal-action modal-close waves-effect waves-green btn btn-set"><i class="large material-icons left">check</i><span class="translate">OK</span></a-->
+                <a class="modal-action modal-close waves-effect waves-green btn btn-close"><i class="large material-icons left">close</i><span class="translate">Cancel</span></a>
+            </div>
+        </div>
+
+		<!-- DIALOG: dialogAliasesShowCustom -->
+        <div id="dialogAliasesShowCustom" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="title"><span id="dialogAliasesShowCustomTitle"></span>&nbsp;-&nbsp;common.custom:</h6>
+                    </div>
+                </div>
+				<div class="row">
+					<div class="col s12">
+						<div id="dialogAliasesShowCustomTable"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<a class="btn" id="dialogAliasesShowCustomTableEdit"><i class="material-icons left">build</i><span class="translate">Edit</span></a>
+					</div>
+				</div>
+			</div>
+            <div class="modal-footer">
+                <!--a class="modal-action modal-close waves-effect waves-green btn btn-set"><i class="large material-icons left">check</i><span class="translate">OK</span></a-->
                 <a class="modal-action modal-close waves-effect waves-green btn btn-close"><i class="large material-icons left">close</i><span class="translate">Cancel</span></a>
             </div>
         </div>

@@ -905,13 +905,14 @@ function load(settings, onChange) {
 
 	//++++++++++ MAIN ++++++++++
 	function loadTabMain(){
-		/*
 		//Get Aliases and add them to Tree
-		var aliasesMainTree = getAliasesMain().reduce(function(total, current){
+		var aliasesMain = getAliasesMain();
+		var aliasesMainTree = aliasesMain.reduce(function(total, current){
 			current.split('.').reduce(function(currentTotal, currentValue, currentIndex, currentArray){
 				var id = currentArray.slice(0, currentIndex + 1).join('.');
+				var label = currentArray.slice(currentIndex, currentIndex + 1).join('.');
 				var	temp = (currentTotal.children = currentTotal.children || []).find(o => o.id === id);
-				if (!temp) currentTotal.children.push(temp = {id: id});
+				if (!temp) currentTotal.children.push(temp = {id: id, label: label});
 				return temp;
 			}, total);
 			return total;
@@ -919,13 +920,25 @@ function load(settings, onChange) {
 		function mainCreateNestedAliasesMainList(list){
 			if(list?.length > 0){
 				var html = "<ul class='collapsible expandable mainAliasTreeCollapsible'>";
-				list.forEach(function(entry){
-					console.log("|- " + entry.id + ":");
+				list.forEach(function(alias){
+					console.log("|- " + alias.id + ":");
+					var name = getAliasName(alias.id);
 					html += "	<li>";
-					html += "		<div class='collapsible-header'><i class='material-icons collapsible-header-inactive'>keyboard_arrow_right</i><i class='material-icons collapsible-header-active'>keyboard_arrow_down</i>" + entry.id + "</div>";
-					html += "		<div class='collapsible-body'>";
-					html += "			" + mainCreateNestedAliasesMainList(entry.children);
+					html += "		<div class='collapsible-header'><i class='material-icons collapsible-header-inactive indigo-text text-darken-4' style='margin: -9px 6px -9px 0px;'>folder</i><i class='material-icons collapsible-header-active indigo-text text-darken-4' style='margin: -9px 6px -9px 0px;'>folder_open</i>";
+					html += 			alias.label + (name && name != alias.label ? "<br>(" + name + ")" : "");
+					if(alias.id != "alias" && alias.id != "alias.0"){
+						html += "		<a class='waves-effect waves-light btn-floating btn-flat btn-small mainAliasListEditButton' data-alias='" + alias.id + "' style='margin: -6px; position: absolute; right: 25px;'><i class='material-icons left' style='color: black;'>edit</i></a>";
+					}
 					html += "		</div>";
+					html += "		<div class='collapsible-body'>";
+					html += 			mainCreateNestedAliasesMainList(alias.children);
+					var datapoints = Object.keys(aliases).filter(function(element){return (element.indexOf(alias.id) == 0 && element.substr(alias.id.length).lastIndexOf(".") == 0 && aliasesMain.indexOf(element) == -1);}).join("<br><li>");
+					if(datapoints){
+						html += "		<div style='padding: 10px; cursor: pointer;' class='mainAliasTreeDatapoints' data-alias='" + alias.id + "'><ul>";
+						html += "			<li>" + datapoints;
+						html += "		</ul></div>";
+						html += "	</div>";
+					}
 					html += "	</li>";		
 				});
 				html += "</ul>";
@@ -937,11 +950,10 @@ function load(settings, onChange) {
 		}
 		$('#mainAliasTreeContainer').html(mainCreateNestedAliasesMainList(aliasesMainTree));
 		$('.mainAliasTreeCollapsible').collapsible({accordion: false});
-		*/
 
 		//Get Aliases and add them to Table
 		$('#mainAliasListTableBody').empty();
-		getAliasesMain().forEach(function(alias, index){ 
+		aliasesMain.forEach(function(alias, index){ 
 			var name = getAliasName(alias);
 			var tableRow = "";
 			tableRow += "<tr class='mainAliasListTableRow' data-alias='" + alias + "' style='cursor: pointer;'>";
@@ -952,12 +964,14 @@ function load(settings, onChange) {
 			tableRow += 		name;
 			tableRow += "	</td>";
 			tableRow += "	<td>";
-			tableRow += "		<a class='waves-effect waves-light btn-floating btn-flat btn-small mainAliasListEditButton' id='mainAliasListEditButton_" + index + "' data-alias='" + alias + "'><i class='material-icons left' style='color: black;'>edit</i></a>";
+			tableRow += "		<a class='waves-effect waves-light btn-floating btn-flat btn-small mainAliasListEditButton' id='mainAliasListTableEditButton_" + index + "' data-alias='" + alias + "'><i class='material-icons left' style='color: black;'>edit</i></a>";
 			tableRow += "	</td>";
 			tableRow += "</tr>";
 			$('#mainAliasListTableBody').append(tableRow);
 		});
-		$('.mainAliasListEditButton, .mainAliasListTableRow').off('click').on('click', function(){
+		
+		//Enhance edit-buttons with function
+		$('.mainAliasListEditButton, .mainAliasListTableRow, .mainAliasTreeDatapoints	').off('click').on('click', function(){
 			M.Tabs.getInstance($('#tabsTop')).select('tabAliases');
 			var aliasPath = $(this).data('alias');
 			(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)

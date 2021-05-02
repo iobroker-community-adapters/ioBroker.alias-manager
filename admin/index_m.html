@@ -54,7 +54,10 @@
 		.aliasesDatapointCollapsibleHeader { display: block !important; padding: 0 18px 0 18px !important; border: none !important; }
 		.aliasesDatapointCollapsibleBody { padding: 0 18px 0 18px !important; border: none !important; }
 		.aliasesDatapointRow { margin-bottom: 0 !important; padding-bottom: 2px !important; }
-		xxx.adapter-body { height: 100% !important }
+		.mainAliasTreeCollapsible ul { padding: 0; margin: 0 !important; }
+		.mainAliasTreeCollapsible .collapsible-body { padding: 0 0 0 30px; }
+		.mainAliasTreeCollapsible li.active > div > .collapsible-header-inactive { display: none; }
+		.mainAliasTreeCollapsible li:not(.active) > div > .collapsible-header-active { display: none; }
 	</style>
 </head>
 <body>
@@ -97,27 +100,37 @@
 						<p class="translate">Select an alias to edit:</p>
 					</div>
 				</div>
-				<!--div class="row hideOnLoad" style="display: none;">
+				<div class="row">
 					<div class="col s12">
-						<div id="mainAliasTreeContainer"></div>
+						<ul class="tabs hideOnLoad" id="tabsTop" style="display: none;">
+							<li class="tab col s2"><a href="#tabMainTable" class="translate active">View as Table</a></li>
+							<li class="tab col s2"><a href="#tabMainTree" class="translate">View as Tree</a></li>
+						</ul>
+					</div>			
+					<div id="tabMainTable" class="col s12 page">
+						<div class="row hideOnLoad" style="display: none;">
+							<div class="col s12">
+								<table class="responsive-table highlight">
+									<thead>
+										<tr>
+											<th>Alias</th>
+											<th>Name</th>
+											<th style="width:50px;"></th>
+										</tr>
+									</thead>
+									<tbody id="mainAliasListTableBody">
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="section hideOnLoad" style="display: none;">
-					<div class="divider"></div>
-				</div-->				
-				<div class="row hideOnLoad" style="display: none;">
-					<div class="col s12">
-						<table class="responsive-table highlight">
-							<thead>
-								<tr>
-									<th>Alias</th>
-									<th>Name</th>
-									<th style="width:50px;"></th>
-								</tr>
-							</thead>
-							<tbody id="mainAliasListTableBody">
-							</tbody>
-						</table>
+					<div id="tabMainTree" class="col s12 page">
+						<div class="row hideOnLoad" style="display: none;">
+							<div class="col s12">
+								<div id="mainAliasTreeContainer">
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="row loadingObjects" style="display: none;">

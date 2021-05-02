@@ -60,6 +60,8 @@
     "Start": "Начинать",
     "Still loading some objects...": "Все еще загружаются некоторые объекты ...",
     "Try to create Alias from this device": "Попробуйте создать псевдоним с этого устройства",
+    "View as Table": "Просмотр в виде таблицы",
+    "View as Tree": "Просмотреть как дерево",
     "You can use search and replace in the 'Rename Alias' function to adjust multiple Alias-IDs at once (e.g. when replacing a broken device)": "Вы можете использовать поиск и замену в функции «Переименовать псевдоним», чтобы настроить несколько псевдонимов одновременно (например, при замене неисправного устройства)",
     "You may need to save it first.": "Возможно, вам сначала потребуется сохранить его.",
     "alias-manager adapter settings": "Настройки адаптера для alias-manager",

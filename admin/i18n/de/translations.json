@@ -60,6 +60,8 @@
     "Start": "Start",
     "Still loading some objects...": "Es werden noch einige Objekte im Hintergrund geladen...",
     "Try to create Alias from this device": "Versuche einen Alias aus diesem Gerät zu erstellen",
+    "View as Table": "Als Tabelle darstellen",
+    "View as Tree": "Als Baum darstellen",
     "You can use search and replace in the 'Rename Alias' function to adjust multiple Alias-IDs at once (e.g. when replacing a broken device)": "Sie können 'Suchen und Ersetzen' in der 'Alias umbenennen'-Funktion benutzen, um mehrere Alias-IDs auf einmal anzupassen (z.B. wenn ein defektes Gerät getauscht werden soll)",
     "You may need to save it first.": "Ggf. müssen sie den Datenpunkt vorher speichern.",
     "alias-manager adapter settings": "Adaptereinstellungen für alias-manager",

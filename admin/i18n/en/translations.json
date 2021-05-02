@@ -60,6 +60,8 @@
     "Start": "Start",
     "Still loading some objects...": "Still loading some objects...",
     "Try to create Alias from this device": "Try to create Alias from this device",
+    "View as Table": "View as Table",
+    "View as Tree": "View as Tree",
     "You can use search and replace in the 'Rename Alias' function to adjust multiple Alias-IDs at once (e.g. when replacing a broken device)": "You can use search and replace in the 'Rename Alias' function to adjust multiple Alias-IDs at once (e.g. when replacing a broken device)",
     "You may need to save it first.": "You may need to save it first.",
     "alias-manager adapter settings": "Adapter settings for alias-manager",

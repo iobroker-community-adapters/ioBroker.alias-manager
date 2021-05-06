@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "1.2.0",
+        "version": "1.2.1",
         "news": {
+            "1.2.1": {
+                "en": "Added treeview, Fixed renaming and copying of datapoints.",
+                "de": "Baumansicht hinzugefügt, Umbenennen und Kopieren von Datenpunkten behoben.",
+                "ru": "Добавлен древовидный вид, Исправлено переименование и копирование точек данных.",
+                "pt": "Adicionado treeview, renomeando e copiando fixos de pontos de dados.",
+                "nl": "Treeview toegevoegd, hernoemen en kopiëren van datapunten opgelost.",
+                "fr": "Ajout de l'arborescence, correction du changement de nom et de la copie des points de données.",
+                "it": "Aggiunta la visualizzazione ad albero, correzione della ridenominazione e copia dei punti dati.",
+                "es": "Vista de árbol agregada, cambio de nombre fijo y copia de puntos de datos.",
+                "pl": "Dodano widok drzewa, naprawiono zmianę nazwy i kopiowanie punktów danych.",
+                "zh-cn": "添加了树视图，修复了数据点的重命名和复制。"
+            },
             "1.2.0": {
                 "en": "Added handling of common.custom and common.states",
                 "de": "Behandlung von common.custom und common.states hinzugefügt",

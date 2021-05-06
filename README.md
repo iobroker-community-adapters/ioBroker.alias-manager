@@ -89,8 +89,9 @@ Here you can:
 
 ## Changelog
 
-### 1.2.1 dev
+### 1.2.1 (2021-05-06)
 * (sbormann) Added treeview.
+* (sbormann) Fixed renaming and copying of datapoints.
 
 ### 1.2.0 (2021-05-02)
 * (sbormann) Some design-adjustments for react-ui.

@@ -436,7 +436,8 @@ function removeCustomCSS(customID){
 
 function multiReplace(string, replacementObj){ //Replaces multiple replacements in string. replacementObj = [{searchValue: "", newValue: ""}, ...]
 	replacementObj.forEach(function(replacement){
-		string = string.replace(replacement.searchValue, replacement.newValue);
+		var regex = new RegExp(replacement.searchValue, "g");
+		string = string.replace(regex, replacement.newValue);
 	});
 	return string;
 }
@@ -923,7 +924,7 @@ function load(settings, onChange) {
 				list.forEach(function(alias){
 					console.log("|- " + alias.id + ":");
 					var name = getAliasName(alias.id);
-					html += "	<li>";
+					html += "	<li" + ((alias.id == "alias" || alias.id == "alias.0") ? " class='active'" : "") + ">";
 					html += "		<div class='collapsible-header'><i class='material-icons collapsible-header-inactive indigo-text text-darken-4' style='margin: -9px 6px -9px 0px;'>folder</i><i class='material-icons collapsible-header-active indigo-text text-darken-4' style='margin: -9px 6px -9px 0px;'>folder_open</i>";
 					html += 			alias.label + (name && name != alias.label ? "<br>(" + name + ")" : "");
 					if(alias.id != "alias" && alias.id != "alias.0"){
@@ -932,10 +933,10 @@ function load(settings, onChange) {
 					html += "		</div>";
 					html += "		<div class='collapsible-body'>";
 					html += 			mainCreateNestedAliasesMainList(alias.children);
-					var datapoints = Object.keys(aliases).filter(function(element){return (element.indexOf(alias.id) == 0 && element.substr(alias.id.length).lastIndexOf(".") == 0 && aliasesMain.indexOf(element) == -1);}).join("<br><li>");
+					var datapoints = Object.keys(aliases).filter(function(element){return (element.indexOf(alias.id) == 0 && element.substr(alias.id.length).lastIndexOf(".") == 0 && aliasesMain.indexOf(element) == -1);});
 					if(datapoints){
-						html += "		<div style='padding: 10px; cursor: pointer;' class='mainAliasTreeDatapoints' data-alias='" + alias.id + "'><ul>";
-						html += "			<li>" + datapoints;
+						html += "		<div style='padding: 10px; overflow-x: auto; cursor: pointer;' class='mainAliasTreeDatapoints' data-alias='" + alias.id + "'><ul>";
+						html += "			<li>" + datapoints.join("</li><li>");
 						html += "		</ul></div>";
 						html += "	</div>";
 					}
@@ -1015,23 +1016,13 @@ function load(settings, onChange) {
 		$('.aliasesDatapointSaveAll').hide();
 		aliasesSelectedAlias = aliasId;
 		if(aliasesSelectedAlias){
-			//Fill Datapoint list			
-			var mainFilled = false;
+			//Fill Datapoint list
 			$('#aliasesAliasMainList').empty();
 			$('#aliasesDatapointList').empty();
 			aliasesUsedAliasIds = [];
-			Object.keys(aliases).sort().forEach(function(alias){
-				if(alias.indexOf(aliasesSelectedAlias) == 0){
-					if(alias.length == aliasesSelectedAlias.length){ // Main
-						var name = getAliasName(alias);
-						aliasesDatapointListAddLine(alias, true);
-						mainFilled = true;
-					} else { //Datapoint
-						aliasesDatapointListAddLine(alias);
-					}
-				}
-			})
-			if(!mainFilled){
+			if(aliases[aliasesSelectedAlias]){
+				aliasesDatapointListAddLine(aliasesSelectedAlias, true);
+			} else {
 				aliases[aliasesSelectedAlias] = {
 					UNSAVED_NEW: true,
 					type: "channel",
@@ -1043,6 +1034,11 @@ function load(settings, onChange) {
 				};
 				aliasesDatapointListAddLine(aliasesSelectedAlias, true);
 			}
+			var aliasesMain = getAliasesMain();
+			var datapoints = Object.keys(aliases).filter(function(element){return (element.indexOf(aliasesSelectedAlias) == 0 && element.substr(aliasesSelectedAlias.length).lastIndexOf(".") == 0 && aliasesMain.indexOf(element) == -1);});
+			datapoints.forEach(function(alias){
+				aliasesDatapointListAddLine(alias);
+			})
 			$('.aliasesContentDiv').show();
 			$('.aliasesNothingSelectedDiv').hide();
 		} else {
@@ -1253,12 +1249,12 @@ function load(settings, onChange) {
 		listContent += "</div>";
 		listContent += "<div class='row aliasesDatapointRow'>";
 		listContent += 	"<div class='col s12 m12 l12'>";
-		listContent += 		"<a class='aliasesDatapoint save waves-effect waves-light btn' id='aliasesDatapoint_" + alias + "_SAVE' data-id='" + alias + "' data-setting='save' style='margin-top: 20px;" + (unsavedNew ? "" : " display: none;") + "'><i class='material-icons left'>save</i><span class='translate'>Save changes</span></a>";
+		listContent += 		"<a class='aliasesDatapoint save waves-effect waves-light btn' id='aliasesDatapoint_" + alias + "_SAVE' data-id='" + alias + "' data-setting='save' style='margin: 8px;" + (unsavedNew ? "" : " display: none;") + "'><i class='material-icons left'>save</i><span class='translate'>Save changes</span></a>";
 		listContent += 	"</div>";
 		listContent += "</div>";
 		if(convertedToNumber){
 			listContent += "<div class='row aliasesDatapointRow'>";
-			listContent += 	"<div class='col s12 m12 l12' style='padding-top: 5px;'>";
+			listContent += 	"<div class='col s12 m12 l12' style='margin: 2px 0px 2px 8px;>";
 			listContent += 		"<i class='material-icons left' style='vertical-align: middle; font-size: 1rem; margin-right: 6px;'>info</i><span class='translate'>Converted some datapoints to type number</span>";
 			listContent += 	"</div>";			
 			listContent += "</div>";			
@@ -1423,7 +1419,7 @@ function load(settings, onChange) {
 			var oldId = aliasesSelectedAlias;
 			var newId = $('#dialogAliasesCopyAliasNewId').val();
 			var replacements = [];
-			$('#dialogAliasesCopyAliasReplaceDatapointsList li').each(function(){
+			$('#dialogAliasesCopyAliasReplaceDatapointsList > li').each(function(){
 				var index = $(this).data('index');
 				replacements.push({searchValue: $('.dialogAliasesCopyAliasReplaceDatapoints.searchvalue[data-index=' + index + ']').val(), newValue: $('.dialogAliasesCopyAliasReplaceDatapoints.newvalue[data-index=' + index + ']').val()});
 			});
@@ -1447,7 +1443,16 @@ function load(settings, onChange) {
 						if(typeof aliases[newAlias].common != "object") aliases[newAlias].common = {};
 						aliases[newAlias].common.name = (oldObj.common && oldObj.common.name || newName).replace(oldName, newName);
 						if(typeof aliases[newAlias].common.alias != "object") aliases[newAlias].common.alias = {};
-						aliases[newAlias].common.alias.id = multiReplace(oldObj.common && oldObj.common.alias && oldObj.common.alias.id || "", replacements);
+						if(oldObj.common && oldObj.common.alias && oldObj.common.alias.id ){
+							if(typeof oldObj.common.alias.id == "object"){
+								aliases[newAlias].common.alias.id = JSON.parse(multiReplace(JSON.stringify(oldObj.common.alias.id), replacements));
+								
+							} else {
+								aliases[newAlias].common.alias.id = multiReplace(oldObj.common.alias.id || "", replacements);
+							}
+						} else {
+							aliases[newAlias].common.alias.id = "";
+						}
 						aliases[newAlias]._id = newAlias; 
 					}
 					if(deleteOld && oldAlias != newAlias){
@@ -1455,11 +1460,18 @@ function load(settings, onChange) {
 					}
 				}
 			};
-			aliasesSaveDatapoints(idsToSave, function(err){ 
-				if(!err) aliasesDeleteDatapoints(idsToDelete, function(err) {
-					if(!err) loadTabAliases(newId); else alert(_("Error deleting old Datapoints"));
-				}); else alert(_("Error saving Datapoints"));
-			});	
+			loadTabAliases(newId);
+			aliasesSaveDatapoints(idsToSave, function(err){
+				if(!err){
+					aliasesDeleteDatapoints(idsToDelete, function(err){
+						if(err){
+							alert(_("Error deleting old Datapoints"));
+						}
+					});
+				} else {
+					alert(_("Error saving Datapoints"));
+				}				
+			});
 		});
 		$('#dialogAliasesCopyAlias').data('oldName', getAliasName(aliasesSelectedAlias));
 		$('#dialogAliasesCopyAliasNewName').val(getAliasName(aliasesSelectedAlias));

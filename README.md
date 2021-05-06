@@ -89,6 +89,9 @@ Here you can:
 
 ## Changelog
 
+### dev
+* (sbormann) Updated dependencies.
+
 ### 1.2.1 (2021-05-06)
 * (sbormann) Added treeview.
 * (sbormann) Fixed renaming and copying of datapoints.

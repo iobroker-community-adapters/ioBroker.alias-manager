@@ -295,8 +295,7 @@
             {
                 "js-controller": ">=1.4.2"
             }
-        ],
-        "installedFrom": "/opt/iobroker/iobroker.alias-manager"
+        ]
     },
     "native": {},
     "objects": [],

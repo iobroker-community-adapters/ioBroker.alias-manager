@@ -3,7 +3,7 @@
     "Add Alias-Datapoint from existing Datapoint": "Add Alias-Datapoint from existing Datapoint",
     "Add Replacement": "Add Replacement",
     "Add empty Alias-Datapoint": "Add empty Alias-Datapoint",
-    "Adopt common.custom (some datapoints have custom configurations for adapters like History, SQL or iQontrol, which are stored in common.custom)": "",
+    "Adopt common.custom (some datapoints have custom configurations for adapters like History, SQL or iQontrol, which are stored in common.custom)": "Adopt common.custom (some datapoints have custom configurations for adapters like History, SQL or iQontrol, which are stored in common.custom)",
     "Adopt common.custom (some datapoints have custom configurations for adapters like history, sql or iQontrol, which are stored in common.custom)": "Adopt common.custom (some datapoints have custom configurations for adapters like history, sql or iQontrol, which are stored in common.custom)",
     "Alias": "Alias",
     "Alias ID": "Alias ID",

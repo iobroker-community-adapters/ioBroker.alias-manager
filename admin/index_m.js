@@ -1159,6 +1159,11 @@ function load(settings, onChange) {
 			unsavedNew = true;
 			convertedToNumber = true;
 		}
+		var addedNative = false;
+		if(typeof aliases[alias].native != "object"){
+			unsavedNew = true;			
+			addedNative = true;
+		}
 		var aliasObj = aliases[alias].common.alias || {};
 		var aliasId = aliasObj.id || "";
 		var aliasRead = aliasObj.read || "";
@@ -1254,8 +1259,15 @@ function load(settings, onChange) {
 		listContent += "</div>";
 		if(convertedToNumber){
 			listContent += "<div class='row aliasesDatapointRow'>";
-			listContent += 	"<div class='col s12 m12 l12' style='margin: 2px 0px 2px 8px;>";
-			listContent += 		"<i class='material-icons left' style='vertical-align: middle; font-size: 1rem; margin-right: 6px;'>info</i><span class='translate'>Converted some datapoints to type number</span>";
+			listContent += 	"<div class='col s12 m12 l12' style='margin: 2px 0px 2px 8px;'>";
+			listContent += 		"<i class='material-icons left' style='vertical-align: middle; font-size: 1rem; margin-right: 6px;'>info</i><span class='translate'>Converted some objects to type number</span>";
+			listContent += 	"</div>";			
+			listContent += "</div>";			
+		}
+		if(addedNative){
+			listContent += "<div class='row aliasesDatapointRow'>";
+			listContent += 	"<div class='col s12 m12 l12' style='margin: 2px 0px 2px 8px;'>";
+			listContent += 		"<i class='material-icons left' style='vertical-align: middle; font-size: 1rem; margin-right: 6px;'>info</i><span class='translate'>Added empty native-ojbect to datapoint</span>";
 			listContent += 	"</div>";			
 			listContent += "</div>";			
 		}
@@ -1529,6 +1541,7 @@ function load(settings, onChange) {
 			var isMain = $('.aliasesDatapoint.val[data-id="' + alias + '"][data-setting="name"]').data('main');
 			delete newObj.UNSAVED_NEW;
 			if(typeof newObj.common != "object") newObj.common = {};
+			if(typeof newObj.native != "object") newObj.native = {};
 			if(typeof newObj.common.alias != "object" && !isMain) newObj.common.alias = {};
 			$('.aliasesDatapoint.val[data-id="' + alias + '"]').each(function(){
 				$this = $(this);
@@ -1893,6 +1906,7 @@ function load(settings, onChange) {
 			}
 			delete newObj.UNSAVED_NEW;
 			if(typeof newObj.common != "object") newObj.common = {};
+			if(typeof newObj.native != "object") newObj.native = {};
 			if(typeof newObj.common.alias != "object" && !isMain) newObj.common.alias = {};
 			if(isMain){
 				newObj.type = "channel";

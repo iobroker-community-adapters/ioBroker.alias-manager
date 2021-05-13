@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "1.2.1",
+        "version": "1.2.2",
         "news": {
+            "1.2.2": {
+                "en": "Updated dependencies, Add empty native-object to datapoint, if it is missing.",
+                "de": "Aktualisierte Abhängigkeiten. Fügen Sie dem Datenpunkt ein leeres natives Objekt hinzu, falls es fehlt.",
+                "ru": "Обновленные зависимости. Добавьте пустой родной объект в точку данных, если он отсутствует.",
+                "pt": "Dependências atualizadas, Adicionar objeto nativo vazio ao ponto de dados, se estiver faltando.",
+                "nl": "Bijgewerkte afhankelijkheden, voeg leeg native-object toe aan datapunt, als het ontbreekt.",
+                "fr": "Dépendances mises à jour, ajoutez un objet natif vide au point de données, s'il est manquant.",
+                "it": "Dipendenze aggiornate, aggiungi un oggetto nativo vuoto al punto dati, se mancante.",
+                "es": "Dependencias actualizadas, agregue un objeto nativo vacío al punto de datos, si falta.",
+                "pl": "Zaktualizowano zależności, dodaj pusty obiekt natywny do punktu danych, jeśli go brakuje.",
+                "zh-cn": "更新了依赖关系，如果缺少，则将空的本机对象添加到数据点。"
+            },
             "1.2.1": {
                 "en": "Added treeview, Fixed renaming and copying of datapoints.",
                 "de": "Baumansicht hinzugefügt, Umbenennen und Kopieren von Datenpunkten behoben.",

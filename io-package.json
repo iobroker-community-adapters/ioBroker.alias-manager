@@ -293,7 +293,7 @@
             },
             "singleton": true,
             "fa-icon": "control_point_duplicate",
-            "link": "/adapter/alias-manager/index_m.html"
+            "link": "/adapter/alias-manager/index_m.html?noFooter"
         },
         "onlyWWW": true,
         "blockly": false,

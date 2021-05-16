@@ -844,7 +844,7 @@ function load(settings, onChange) {
 			var toDo = function(){
 				console.log("Subscribing to objectChange");
 				socket.on('objectChange', function(id, obj){
-					iobrokerObjects[id] = obj;
+					if(obj) iobrokerObjects[id] = obj; else if(obj == null) delete iobrokerObjects[id];
 				});
 			}
 			iobrokerObjectsReadyFunctions.push(toDo);

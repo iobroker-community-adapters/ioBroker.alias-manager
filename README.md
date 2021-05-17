@@ -91,7 +91,7 @@ Here you can:
 
 ### dev
 * (sbormann) Fixed autocreate not working after deleting or renaming alias.
-* (sbormann) Use new adapter-settings.js (needs admin >5.0.26).
+<!--* (sbormann) Use new adapter-settings.js (needs admin >5.0.26).-->
 
 ### 1.2.2 (2021-05-13)
 * (sbormann) Updated dependencies.

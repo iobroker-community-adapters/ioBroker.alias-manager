@@ -674,6 +674,63 @@ function getHistoryInstances(callback){
 	})(); //<--End Closure
 }
 
+//Enumerations
+var enumerations = {};
+function getEnumerations(callback) {
+	(function(){ //Closure--> (everything declared inside keeps its value as ist is at the time the function is created)
+		var _callback = callback;
+		var _toDo = function(){
+			enumerations = {};
+			for(id in iobrokerObjects){
+				if(id.indexOf("enum") == 0) {
+					enumerations[id] = iobrokerObjects[id];
+				}
+			}
+			_callback && _callback(enumerations);		
+		}
+		if(iobrokerObjectsReady) {
+			_toDo();
+		} else {
+			iobrokerObjectsReadyFunctions.push(_toDo);
+		}
+	})(); //<--End Closure
+}
+function getEnumerationName(enumeration){
+	var name = _(enumeration);
+	if(enumerations[enumeration] && typeof enumerations[enumeration].common != udef && typeof enumerations[enumeration].common.name != udef){
+		if(typeof enumerations[enumeration].common.name == "object" && typeof enumerations[enumeration].common.name[systemLang] != udef){
+			name = enumerations[enumeration].common.name[systemLang];
+		} else if(typeof enumerations[enumeration].common.name == "object" && typeof enumerations[enumeration].common.name["en"] != udef){
+			name = _(enumerations[enumeration].common.name["en"]);
+		} else if (typeof enumerations[enumeration].common.name == "string") {
+			name = _(enumerations[enumeration].common.name);
+		}
+	}
+	return name;
+}
+function getEnumerationsMain(){
+	var enumerationsMain = [];
+	if(enumerations){
+		enumerationsMain = Object.keys(enumerations);
+		enumerationsMain = enumerationsMain.filter(function(element){ //Filter for main Enumerations (that are elements, that have sub-enumerations)
+			if(enumerationsMain.filter(function(_element){ return (_element.indexOf(element + ".") == 0); }).length > 0) return true; else return false;
+		});
+		$('#dialogViewsAutocreateEnumerationMain').empty().append("<option disabled selected value>" + _("Select Enumeration") + "</option>");
+		enumerationsMain.forEach(function(enumeration, index){
+			var name = getEnumerationName(enumeration);
+			$('#dialogViewsAutocreateEnumerationMain').append("<option value='" + enumeration + "'>" + name + "</option>");
+		});
+		$('#dialogViewsAutocreateEnumerationMain').select();
+		$('#viewsAutocreateButton').removeClass('disabled');
+		$('#viewsAutocreateButtonProgress').hide();
+		console.log("Enumerations ready.");
+	} else {
+		if(error) console.log("Error getting enumerations: " + error); else console.log("There are no Enumerations");
+		$('#viewsAutocreateButtonProgress').hide();
+	}
+	return enumerationsMain;
+}
+
 //Helpers
 function getDatapointConfiguration(id){
 	if (id && iobrokerObjects[id]) {	
@@ -832,6 +889,9 @@ function load(settings, onChange) {
 
 		//Get historyInstances
 		getHistoryInstances();
+		
+		//Get Enumerations
+		getEnumerations();
 
 		//Get iobrokerObjects
 		getIobrokerObjects();

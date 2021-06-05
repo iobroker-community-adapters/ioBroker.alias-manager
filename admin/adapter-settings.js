@@ -10,10 +10,11 @@ if (location.pathname.match(/^\/admin\//)) {
 var systemConfig;
 var socket   = io.connect('/', {path: parts.join('/') + '/socket.io'});
 var instance = window.location.search.slice;
-var isTab = false;		// --- MODIFIED FROM ORIGINAL ADMIN-SETTINGS.JS
+var isTab    = !!window.location.pathname.match(/tab(_m)?\.html/);
 if(isNaN(instance)){ 	// --- MODIFIED FROM ORIGINAL ADMIN-SETTINGS.JS
 	instance = 0;		// --- MODIFIED FROM ORIGINAL ADMIN-SETTINGS.JS
-	isTab = true;		// --- MODIFIED FROM ORIGINAL ADMIN-SETTINGS.JS
+	isTab = false;		// --- MODIFIED FROM ORIGINAL ADMIN-SETTINGS.JS
+															   
 }						// --- MODIFIED FROM ORIGINAL ADMIN-SETTINGS.JS
 var common   = null; // common information of adapter
 var host     = null; // host object on which the adapter runs

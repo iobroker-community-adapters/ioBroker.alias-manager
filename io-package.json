@@ -3,7 +3,18 @@
         "name": "alias-manager",
         "version": "1.2.3",
         "news": {
-			"1.2.3": {"en": "Fixed autocreate not working after deleting or renaming alias."},
+            "1.2.3": {
+                "en": "Fixed autocreate not working after deleting or renaming alias.",
+                "de": "Behoben, dass die automatische Erstellung nach dem Löschen oder Umbenennen des Alias ​​nicht funktionierte.",
+                "ru": "Исправлена ​​ошибка, из-за которой автосоздание не работало после удаления или переименования псевдонима.",
+                "pt": "A criação automática corrigida não funcionava após a exclusão ou renomeação de alias.",
+                "nl": "Vaste autocreate werkte niet na het verwijderen of hernoemen van alias.",
+                "fr": "Correction de la création automatique qui ne fonctionnait pas après la suppression ou le changement de nom d'alias.",
+                "it": "Risolto il problema con la creazione automatica che non funzionava dopo l'eliminazione o la ridenominazione dell'alias.",
+                "es": "Se corrigió que la creación automática no funcionaba después de eliminar o cambiar el nombre del alias.",
+                "pl": "Naprawiono niedziałające autotworzenie po usunięciu lub zmianie nazwy aliasu.",
+                "zh-cn": "修复了删除或重命名别名后自动创建不起作用的问题。"
+            },
             "1.2.2": {
                 "en": "Updated dependencies, Add empty native-object to datapoint, if it is missing.",
                 "de": "Aktualisierte Abhängigkeiten. Fügen Sie dem Datenpunkt ein leeres natives Objekt hinzu, falls es fehlt.",

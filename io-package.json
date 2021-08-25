@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "1.2.3",
+        "version": "1.2.4",
         "news": {
+            "1.2.4": {
+                "en": "Fixed autocreate not working after renaming destination id.",
+                "de": "Behoben, dass die automatische Erstellung nach dem Umbenennen der Ziel-ID nicht funktionierte.",
+                "ru": "Исправлена ​​ошибка, из-за которой автосоздание не работало после переименования идентификатора назначения.",
+                "pt": "Corrigido autocreate não funcionando após renomear o id de destino.",
+                "nl": "Vaste autocreate werkte niet na het hernoemen van de bestemmings-ID.",
+                "fr": "Correction de la création automatique qui ne fonctionnait pas après avoir renommé l'identifiant de destination.",
+                "it": "Risolto il problema con la creazione automatica che non funzionava dopo aver rinominato l'ID di destinazione.",
+                "es": "Se corrigió que la creación automática no funcionaba después de cambiar el nombre de la identificación de destino.",
+                "pl": "Naprawiono niedziałające automatyczne tworzenie po zmianie nazwy identyfikatora docelowego.",
+                "zh-cn": "修复了重命名目标 ID 后自动创建不起作用的问题。"
+            },
             "1.2.3": {
                 "en": "Fixed autocreate not working after deleting or renaming alias.",
                 "de": "Behoben, dass die automatische Erstellung nach dem Löschen oder Umbenennen des Alias ​​nicht funktionierte.",
@@ -305,7 +317,7 @@
             },
             "singleton": true,
             "fa-icon": "control_point_duplicate",
-            "link": "/adapter/alias-manager/index_m.html?noFooter"
+            "link": "/adapter/alias-manager/index_m.html?0&noFooter"
         },
         "onlyWWW": true,
         "blockly": false,

@@ -111,7 +111,7 @@
                 "pl": "Zaktualizowano zależności, usunięto dolną ramkę, jeśli jest używana jako karta.",
                 "zh-cn": "更新了相关性，如果用作选项卡，则删除了底部边框。"
             }
-		},
+        },
         "title": "Alias-Manager",
         "titleLang": {
             "en": "Alias-Manager",

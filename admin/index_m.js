@@ -788,7 +788,6 @@ function load(settings, onChange) {
 	$('.hideOnLoad').hide();
 	$('.showOnLoad').show();
 
-
 	//If react, make some css adjustments
 	isReact = (window.parent.adapterName === 'admin');
 	if(isReact){
@@ -837,16 +836,32 @@ function load(settings, onChange) {
 
 		customCSS += ".m .dropdown-content li>span { color: rgba(0, 0, 0, 0.86); }";
 		customCSS += ".m .dropdown-content li>a { color: rgba(0, 0, 0, 0.86); }";
-
 		customCSS += ".m [type=checkbox].filled-in:checked+span:not(.lever):after { border: #164477; background-color: #164477; }";
 		customCSS += ".m [type=radio].with-gap:checked+span:after, .m [type=radio]:checked+span:after { background-color: #164477; }";
 		customCSS += ".m [type=radio].with-gap:checked+span:after, .m [type=radio].with-gap:checked+span:before, .m [type=radio]:checked+span:after { border: 2px solid #164477; }";
 		
+		customCSS += ".m.react-dark .btn, .m.react-dark .btn-small, .m.react-dark button.btn i, .m.react-dark button.btn-small i { background-color: #272727; }";
+		customCSS += ".m.react-dark .dialog-select-container .main-header-table, .m.react-dark .dialog-select-container .main-header-table tr, .m.react-dark .dialog-select-container .objects-list-table { background: #272727!important; }";
+		customCSS += ".m.react-dark .dropdown-content li.grey.lighten-3, .m.react-dark .dropdown-content li.selected, .m.react-dark .dropdown-content li:hover { background-color: #4c4c4c !important; }";
+		customCSS += ".m.react-dark .dropdown-content li.divider { background-color: #626262; }";
+
 		addCustomCSS(customCSS, "reactCSS");
+
 		$('.table-button-add').addClass('grey lighten-2');
+
 		var selectIdImgPath = './fancytree/react/';
 		$('#fancytreeCSSLink').attr('href', './fancytree/react/ui.fancytree.min.css');
+
+		if ($('.m.adapter-container').hasClass('react-dark')) $('.m.material-dialogs').addClass('react-dark');
 	}
+
+	//Create a helper for sortable tables with preserved width of cells
+	var fixHelper = function(e, ui){
+		ui.children().each(function(){
+			$(this).width($(this).width()).css({"background-color":"rgba(180,180,180,0.75)", "box-shadow":"-5px 5px 5px 0px rgba(180,180,180,0.75)"});
+		});
+		return ui;
+	};
 
 	//Select elements with id=key and class=value and insert value
 	if (!settings) return;
@@ -941,7 +956,17 @@ function load(settings, onChange) {
 
 	//++++++++++ TABS ++++++++++
 	//Enhance Tabs with onShow-Function
-	$('ul.tabs li a').on('click', function(){ onTabShow($(this).attr('href'));});
+	$('ul.tabs li a').on('click', function(){ 
+		//Scroll tab to middle
+		$tab = $(this);
+		$parent = $(this).parents('.tabs');
+		var tabLeft = $tab.offset().left - $parent.offset().left + $parent.scrollLeft();
+		var tabWidth = $tab.innerWidth();
+		var parentWidth = $parent.innerWidth();
+		$parent.animate({ scrollLeft: (tabLeft + (tabWidth / 2) - (parentWidth / 2)) }, 250);
+		//Load onTabShow-Function
+		onTabShow($(this).attr('href'));
+	});
 	function onTabShow(tabId){
 		console.log("Open tab: " + tabId);
 		switch(tabId){
@@ -955,6 +980,10 @@ function load(settings, onChange) {
 			
 			case "#tabAutocreateAlias":
 			loadTabAutocreateAlias();
+			break;
+			
+			case "#tabRenameAliases":
+			loadTabRenameAliases();
 			break;
 		}
 	}
@@ -2043,7 +2072,142 @@ function load(settings, onChange) {
 			if(callback) callback();
 		}
 	}
+
+
+	//++++++++++ RENAME ALIASES ++++++++++
+	//Load Tab Rename Aliases
+	var renameAliasesNamePattern = [];
+	function loadTabRenameAliases(){
+		//Enhance tableRenameAliasesNamePattern with functions
+		values2table("tableRenameAliasesNamePattern", renameAliasesNamePattern, onChange, onTableRenameAliasesNamePatternReady);
+		//Get Aliases and add them to Tree
+		var aliasesMain = getAliasesMain();
+		var aliasesMainTree = aliasesMain.reduce(function(total, current){
+			current.split('.').reduce(function(currentTotal, currentValue, currentIndex, currentArray){
+				var id = currentArray.slice(0, currentIndex + 1).join('.');
+				var label = currentArray.slice(currentIndex, currentIndex + 1).join('.');
+				var	temp = (currentTotal.children = currentTotal.children || []).find(o => o.id === id);
+				if (!temp) currentTotal.children.push(temp = {id: id, label: label});
+				return temp;
+			}, total);
+			return total;
+		}, {children: []}).children;
+		function renameAliasesCreateNestedAliasesMainList(list){
+			if(list?.length > 0){
+				var html = "<ul class='collapsible expandable renameAliasesTreeCollapsible'>";
+				list.forEach(function(alias){
+					console.log("|- " + alias.id + ":");
+					var name = getAliasName(alias.id);
+					html += "	<li" + ((alias.id == "alias" || alias.id == "alias.0") ? " class='active'" : "") + ">";
+					html += "		<div class='collapsible-header'><i class='material-icons collapsible-header-inactive indigo-text text-darken-4' style='margin: -9px 6px -9px 0px;'>folder</i><i class='material-icons collapsible-header-active indigo-text text-darken-4' style='margin: -9px 6px -9px 0px;'>folder_open</i>";
+					html += 			alias.label + (name && name != alias.label ? "<br>(" + name + ")" : "");
+					html += "		</div>";
+					html += "		<div class='collapsible-body'>";
+					html += 			renameAliasesCreateNestedAliasesMainList(alias.children);
+					var datapoints = Object.keys(aliases).filter(function(element){return (element.indexOf(alias.id) == 0 && element.substr(alias.id.length).lastIndexOf(".") == 0 && aliasesMain.indexOf(element) == -1);});
+					if(datapoints){
+						html += "		<div style='padding: 10px; overflow-x: auto; cursor: pointer;' class='renameAliasesAliasTreeDatapoints' data-alias='" + alias.id + "'><ul>";
+						html += "			<li>" + datapoints.join("</li><li>");
+						html += "		</ul></div>";
+						html += "	</div>";
+					}
+					html += "	</li>";		
+				});
+				html += "</ul>";
+				return html;
+			} else {
+				console.log("   has no childs -|");
+				return "";
+			}
+		}
+		$('#renameAliasesTreeContainer').html(renameAliasesCreateNestedAliasesMainList(aliasesMainTree));
+		$('.renameAliasesTreeCollapsible').collapsible({accordion: false});
+	}
+	
+	//Enhance tableRenameAliasesNamePattern with functions
+	function onTableRenameAliasesNamePatternReady(){
+		var $div = $('#tableRenameAliasesNamePattern');
+		var $table = $div.find('.table-values');
+		var $lines = $table.find('.table-lines');
+		//Selectbox-Functions
+		$lines.find('select[data-name]').each(function () {
+			var name = $(this).data('name');
+			if (name === 'type') {
+				var index = $(this).data('index');
+				$(this).on('input change', function(){
+					$parentLine = $(this).parents('tr');
+					$value = $parentLine.find('input[data-name=value]');
+					switch($(this).val()){
+						case "text":
+						case "aliasRoot":
+						case "aliasPath":
+						case "aliasPathWithoutChannelNumber":
+						case "aliasPathWithoutChannel":
+						case "aliasParentId":
+						case "aliasParentChannelId":
+						case "aliasParentDeviceId":
+						case "readRoot":
+						case "readPath":
+						case "readPathWithoutChannelNumber":
+						case "readPathWithoutChannel":
+						case "readParentId":
+						case "readParentChannelId":
+						case "readParentDeviceId":
+						case "writeRoot":
+						case "writePath":
+						case "writePathWithoutChannelNumber":
+						case "writePathWithoutChannel":
+						case "writeParentId":
+						case "writeParentChannelId":
+						case "writeParentDeviceId":
+						$value.css('opacity', '1').prop('disabled', false);
+						break;
+						
+						default:
+						$value.css('opacity', '0').prop('disabled', true);
+					}
+				}).trigger('change');
+			}
+		});
+		//Button-Functions
+		$lines.find('a[data-command]').each(function () {
+			var command = $(this).data('command');
+			//Drag-Icon
+			if (command === 'drag_handle') {
+				var imageIndex = $(this).data('index');
+				$(this).removeClass('btn-floating').addClass('btn-flat transparent').find('i').html('drag_handle');
+			}
+		});
+		//Make table sortable
+		$("#tableRenameAliasesNamePattern tbody").sortable({
+			helper: fixHelper,
+			start: function(event, ui){
+				console.log("Drag started...");
+			},
+			stop: function(event, ui){
+				console.log("Drag ended, start resorting...");
+				$("#tableRenameAliasesNamePattern tbody").sortable('disable');
+				var sequence = [];
+				$('#tableRenameAliasesNamePattern').find('.table-values').find('.table-lines').find('tr').each(function(){
+					sequence.push($(this).data('index'));
+				});
+				var tableResorted = [];
+				for(var i = 0; i < sequence.length; i++){
+					tableResorted.push(renameAliasesNamePattern[sequence[i]]);
+				}
+				renameAliasesNamePattern = tableResorted;
+				onChange();
+				values2table('tableRenameAliasesNamePattern', renameAliasesNamePattern, onChange, onTableRenameAliasesNamePatternReady);
+				$("#tableRenameAliasesNamePattern tbody").sortable('enable');
+				console.log("resorted.");
+			},
+			axis: "y",
+			handle: "a[data-command='drag_handle']"
+		});		
+	}
 }
+
+
 
 /************** SAVE *****************************************************************
 *** This will be called by the admin adapter when the user presses the save button ***

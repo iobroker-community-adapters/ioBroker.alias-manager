@@ -18,10 +18,8 @@
 	<script type="text/javascript" src="../../js/translate.js"></script>
     <script type="text/javascript" src="../../lib/js/selectID.js"></script>
 	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
-	<!--script type="text/javascript" src="adapter-settings.js"></script-->
 
 	<!-- Load our own files -->
-
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<!--link rel="stylesheet" type="text/css" href="./materialize-colorpicker/css/materialize-colorpicker.min.css" />
 	<script type="text/javascript" src="./materialize-colorpicker/js/materialize-colorpicker.min.js"></script-->
@@ -32,7 +30,7 @@
 	<script type="text/javascript" src="./codemirror/mode/javascript/javascript.js"></script>
 	<script type="text/javascript" src="./codemirror/mode/css/css.js"></script>
 	<script type="text/javascript" src="./codemirror/mode/htmlmixed/htmlmixed.js"></script-->
-	<!--script type="text/javascript" src="./jquery.ui.touch-punch.min.js"></script-->
+	<script type="text/javascript" src="./jquery.ui.touch-punch.min.js"></script>
 	<script type="text/javascript" src="words.js"></script>
     <script type="text/javascript" src="type-detector.js"></script>
 	<script type="text/javascript" src="index_m.js"></script>
@@ -49,6 +47,13 @@
 		.m table.highlight>tbody>tr:hover { background-color: rgba(100,181,246,0.4) !important; }
 		.multiple-select-dropdown.dropdown-content li span, .multiple-select-dropdown.dropdown-content li span label { pointer-events: none; }
 		.CodeMirror{ width: 100%; width: calc(100% - 25px); height: unset !important; position: absolute; }
+		.collapsible-body .row:not(:first-child) p.sub-title{ padding-top:15px; }
+		h6.heading { background: rgba(0,0,0,0.02); margin-left:-35px; padding: 5px 0 7px 40px; box-shadow: rgba(0,0,0,0.25) 1px 1px 2px 0px; }
+		.headingIcon{ width:48px; height:48px; float:right; }
+		.tabs { scrollbar-width: 2px; } .tabs::-webkit-scrollbar { height: 2px; }
+		.scrollableTable table { min-width: 520px; }
+		.scrollableTable.wide table { min-width: 820px; width: }
+		.scrollableTable.xwide table { min-width: 1020px; }
 		.aliasesDatapointCollapsible { padding-bottom: 5px !important; overflow: visible !important; }
 		.aliasesDatapointCollapsibleItem { padding: 5px 0 0 0 !important; }
 		.aliasesDatapointCollapsibleHeader { display: block !important; padding: 0 18px 0 18px !important; border: none !important; }
@@ -58,6 +63,10 @@
 		.mainAliasTreeCollapsible .collapsible-body { padding: 0 0 0 30px; }
 		.mainAliasTreeCollapsible li.active > div > .collapsible-header-inactive { display: none; }
 		.mainAliasTreeCollapsible li:not(.active) > div > .collapsible-header-active { display: none; }
+		.renameAliasesTreeCollapsible ul { padding: 0; margin: 0 !important; }
+		.renameAliasesTreeCollapsible .collapsible-body { padding: 0 0 0 30px; }
+		.renameAliasesTreeCollapsible li.active > div > .collapsible-header-inactive { display: none; }
+		.renameAliasesTreeCollapsible li:not(.active) > div > .collapsible-header-active { display: none; }
 	</style>
 </head>
 <body>
@@ -74,11 +83,12 @@
 		</div>
 		
 		<div class="row">
-			<div class="col s12">
+			<div class="col s12 tabcontainer">
 				<ul class="tabs hideOnLoad" id="tabsTop" style="display: none;">
-					<li class="tab col s2"><a href="#tabMain" class="translate active">Start</a></li>
-					<li class="tab col s2"><a href="#tabAliases" class="translate">Manage Aliases</a></li>
-					<li class="tab col s2"><a href="#tabAutocreateAlias" class="translate">Autocreate Alias</a></li>
+					<li class="tab"><a href="#tabMain" class="translate active">Start</a></li>
+					<li class="tab"><a href="#tabAliases" class="translate">Manage Aliases</a></li>
+					<li class="tab"><a href="#tabAutocreateAlias" class="translate">Autocreate Alias</a></li>
+					<!-- li class="tab"><a href="#tabRenameAliases" class="translate">Rename Aliases</a></li-->
 				</ul>
 			</div>
 		
@@ -86,7 +96,7 @@
 			<div id="tabMain" class="col s12 page">
 				<div class="row">
 					<div class="col s12">
-						<h6 class="translate sub-title">Start</h6>
+						<h6 class="translate sub-title heading">Start</h6>
 					</div>
 				</div>
 				<div class="row showOnLoad">
@@ -160,7 +170,7 @@
 			<div id="tabAliases" class="col s12 page">
 				<div class="row">
 					<div class="col s12">
-						<h6 class="translate sub-title">Manage Aliases</h6>
+						<h6 class="translate sub-title heading">Manage Aliases</h6>
 					</div>
 				</div>
 				<div class="row">
@@ -234,7 +244,7 @@
 			<div id="tabAutocreateAlias" class="col s12 page">
 				<div class="row">
 					<div class="col s12">
-						<h6 class="translate sub-title">Autocreate Alias</h6>
+						<h6 class="translate sub-title heading">Autocreate Alias</h6>
 					</div>
 				</div>
 				<div class="row">
@@ -343,6 +353,79 @@
 				<p><br><br></p>
 				<div class="row">
 					<a class="waves-effect waves-light btn orange pulse autocreateAliasSaveAll"><i class='material-icons left'>save</i><span class='translate'>Save Alias with all checked items</span></a>
+				</div>
+			</div>
+
+			<!-- ++++++++++ TAB: Rename Aliases ++++++++++ -->
+			<div id="tabRenameAliases" class="col s12 page">
+				<div class="row">
+					<div class="col s12">
+						<h6 class="translate sub-title heading">Rename Aliases</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<h6 class="translate sub-title">1. Create Naming pattern:</h6>
+					</div>
+				</div>
+				<div class="col s12 scrollableTable" id="tableRenameAliasesNamePattern">
+					<div class="row">
+						<div class="col s2 m1 l1">
+							<button title="Add" class="translateT table-button-add btn-floating waves-effect waves-light btn-small">
+								<i class="material-icons">add</i>
+							</button>
+						</div>
+					</div>
+					<div class="col s12 m12 l12">
+						<table class="table-values highlight" style="width: 90%;">
+							<thead>
+								<tr>
+									<th data-name="prefix" class="translate">Prefix</th>
+									<th data-name="type" class="translate" data-type="select" data-options="text/Free text:;aliasRoot/Alias: root - replace '.' with:;aliasPath/Alias: path - replace '.' with:;aliasPathWithoutChannelNumber/Alias: path without channel-number - replace '.' with:;aliasPathWithoutChannel/Alias: path without channel - replace '.' with:;aliasState/Alias: state;aliasStateName/Alias: name of state;aliasParentId/Alias: ID of parent datapoint - replace '.' with:;aliasParentName/Alias: name of parent datapoint;aliasParentChannelId/Alias: ID of next parent channel - replace '.' with:;aliasParentChannelName/Alias: name of next parent channel;aliasParentDeviceId/Alias: ID of next parent device - replace '.' with:;aliasParentDeviceName/Alias: name of next parent device;readRoot/Linked Read-ID: root - replace '.' with:;readPath/Linked Read-ID: path - replace '.' with:;readPathWithoutChannelNumber/Linked Read-ID: path without channel-number - replace '.' with:;readPathWithoutChannel/Linked Read-ID: path without channel - replace '.' with:;readState/Linked Read-ID: state;readStateName/Linked Read-ID: name of state;readParentId/Linked Read-ID: ID of parent datapoint - replace '.' with:;readParentName/Linked Read-ID: name of parent datapoint;readParentChannelId/Linked Read-ID: ID of next parent channel - replace '.' with:;readParentChannelName/Linked Read-ID: name of parent channel;readParentDeviceId/Linked Read-ID: ID of next parent device - replace '.' with:;readParentDeviceName/Linked Read-ID: name of parent device;writeRoot/Linked Write-ID: root - replace '.' with:;writePath/Linked Write-ID: path - replace '.' with:;writePathWithoutChannelNumber/Linked Write-ID: path without channel-number - replace '.' with:;writePathWithoutChannel/Linked Write-ID: path without channel - replace '.' with:;writeState/Linked Write-ID: state;writeStateName/Linked Write-ID: name of state;writeParentId/Linked Write-ID: ID of parent datapoint - replace '.' with:;writeParentName/Linked Write-ID: name of parent datapoint;writeParentChannelId/Linked Write-ID: ID of next parent channel - replace '.' with:;writeParentChannelName/Linked Write-ID: name of next parent channel;writeParentDeviceId/Linked Write-ID: ID of next parent device - replace '.' with:;writeParentDeviceName/Linked Write-ID: name of next parent device">Type</th>
+									<th data-name="value" class="translate">Value</th>
+									<th data-name="postfix" class="translate">Postfix</th>
+									<th data-buttons="delete drag_handle" style="width:135px;"></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<p><br><br><br><br><br><br></p>
+				</div>
+				<p><br><br></p>
+				<div class="section">
+					<div class="divider"></div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<h6 class="translate sub-title">2. Select Aliases to rename:</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<div id="renameAliasesTreeContainer">
+						</div>
+					</div>
+				</div>
+				<p><br><br></p>
+				<div class="section">
+					<div class="divider"></div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<h6 class="translate sub-title">3. Start renaming:</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<p><span class="translate">Warning! This can't be undone!</span></p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<a class="waves-effect waves-light btn" id="devicesAutocreateButton"><i class="material-icons left">check_circle</i><span class="translate">Rename selected Aliases</span></a>
+					</div>
 				</div>
 			</div>
 		</div>

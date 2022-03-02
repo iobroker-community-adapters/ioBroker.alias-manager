@@ -89,7 +89,7 @@ Here you can:
 
 ## Changelog
 
-### Work in progress
+### 1.2.6 (2022-03-02)
 * (sbormann) Updated dependencies.
 * (sbormann) Fixed saving of common.custom.
 

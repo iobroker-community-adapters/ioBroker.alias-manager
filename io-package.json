@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "alias-manager",
-        "version": "1.2.5",
+        "version": "1.2.6",
         "news": {
+			"1.2.6": {
+  "en": "Updated dependencies.\nFixed saving of common.custom",
+  "de": "Aktualisierte Abhängigkeiten.\nSpeichern von common.custom behoben",
+  "ru": "Обновлены зависимости.\nИсправлено сохранение ххх",
+  "pt": "Dependências atualizadas.\nEconomia fixa de common.custom",
+  "nl": "Bijgewerkte afhankelijkheden.\nVaste besparing van common.custom",
+  "fr": "Dépendances mises à jour.\nEnregistrement fixe de common.custom",
+  "it": "Dipendenze aggiornate.\nRisolto il salvataggio di common.custom",
+  "es": "Dependencias actualizadas.\nAhorro fijo de common.custom",
+  "pl": "Zaktualizowane zależności.\nNaprawiono zapisywanie common.custom",
+  "zh-cn": "更新了依赖项。\n固定保存common.custom"
+},
 			"1.2.5": {
   "en": "Added All and None Buttons to select Datapoint while autocreating alias.\nSome GUI-Enhancements and fixes for dark mode.\n",
   "de": "Die Schaltflächen „Alle“ und „Keine“ wurden hinzugefügt, um Datenpunkte auszuwählen, während ein Alias automatisch erstellt wird.\nEinige GUI-Verbesserungen und Korrekturen für den Dunkelmodus.\n",

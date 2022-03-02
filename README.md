@@ -89,6 +89,10 @@ Here you can:
 
 ## Changelog
 
+### Work in progress
+* (sbormann) Updated dependencies.
+
+
 ### 1.2.5 (2022-03-02)
 * (sbormann) Added All and None Buttons to select Datapoint while autocreating alias.
 * (sbormann) Some GUI-Enhancements and fixes for dark mode.
@@ -163,7 +167,7 @@ Here you can:
 ## License
 MIT License
 
-Copyright (c) 2021 Sebastian Bormann <sebastian@bormann.net>
+Copyright (c) 2022 Sebastian Bormann <sebastian@bormann.net>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1640,6 +1640,8 @@ function load(settings, onChange) {
 					if($this.val()) newObj.common.alias["read"] = $this.val(); else delete newObj.common.alias.read;
 				} else if(setting == "aliasWrite") {
 					if($this.val()) newObj.common.alias["write"] = $this.val(); else delete newObj.common.alias.write;
+				} else if(setting == "states" || setting == "custom") {
+					//do nothing
 				} else {
 					if ($this.attr('type') === 'checkbox') {
 						newObj.common[setting] = $this.prop('checked');

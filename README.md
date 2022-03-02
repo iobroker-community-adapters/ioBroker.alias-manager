@@ -91,7 +91,7 @@ Here you can:
 
 ### Work in progress
 * (sbormann) Updated dependencies.
-
+* (sbormann) Fixed saving of common.custom.
 
 ### 1.2.5 (2022-03-02)
 * (sbormann) Added All and None Buttons to select Datapoint while autocreating alias.

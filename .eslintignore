@@ -1,0 +1,5 @@
+**/.eslintrc.js
+admin/*.js
+gulpfile.js
+lib/**
+widgets/**

@@ -4,29 +4,29 @@
         "version": "1.2.6",
         "news": {
 			"1.2.6": {
-  "en": "Updated dependencies.\nFixed saving of common.custom",
-  "de": "Aktualisierte Abhängigkeiten.\nSpeichern von common.custom behoben",
-  "ru": "Обновлены зависимости.\nИсправлено сохранение ххх",
-  "pt": "Dependências atualizadas.\nEconomia fixa de common.custom",
-  "nl": "Bijgewerkte afhankelijkheden.\nVaste besparing van common.custom",
-  "fr": "Dépendances mises à jour.\nEnregistrement fixe de common.custom",
-  "it": "Dipendenze aggiornate.\nRisolto il salvataggio di common.custom",
-  "es": "Dependencias actualizadas.\nAhorro fijo de common.custom",
-  "pl": "Zaktualizowane zależności.\nNaprawiono zapisywanie common.custom",
-  "zh-cn": "更新了依赖项。\n固定保存common.custom"
-},
+                "en": "Updated dependencies.\nFixed saving of common.custom",
+                "de": "Aktualisierte Abhängigkeiten.\nSpeichern von common.custom behoben",
+                "ru": "Обновлены зависимости.\nИсправлено сохранение ххх",
+                "pt": "Dependências atualizadas.\nEconomia fixa de common.custom",
+                "nl": "Bijgewerkte afhankelijkheden.\nVaste besparing van common.custom",
+                "fr": "Dépendances mises à jour.\nEnregistrement fixe de common.custom",
+                "it": "Dipendenze aggiornate.\nRisolto il salvataggio di common.custom",
+                "es": "Dependencias actualizadas.\nAhorro fijo de common.custom",
+                "pl": "Zaktualizowane zależności.\nNaprawiono zapisywanie common.custom",
+                "zh-cn": "更新了依赖项。\n固定保存common.custom"
+                },
 			"1.2.5": {
-  "en": "Added All and None Buttons to select Datapoint while autocreating alias.\nSome GUI-Enhancements and fixes for dark mode.\n",
-  "de": "Die Schaltflächen „Alle“ und „Keine“ wurden hinzugefügt, um Datenpunkte auszuwählen, während ein Alias automatisch erstellt wird.\nEinige GUI-Verbesserungen und Korrekturen für den Dunkelmodus.\n",
-  "ru": "Добавлены кнопки «Все» и «Нет» для выбора точки данных при автоматическом создании псевдонима.\nНекоторые улучшения графического интерфейса и исправления для темного режима.\n",
-  "pt": "Adicionados os botões All e None para selecionar Datapoint durante a criação automática de alias.\nAlguns aprimoramentos e correções da GUI para o modo escuro.\n",
-  "nl": "Knoppen Alles en Geen toegevoegd om Datapoint te selecteren tijdens het automatisch maken van een alias.\nEnkele GUI-verbeteringen en oplossingen voor de donkere modus.\n",
-  "fr": "Ajout des boutons Tout et Aucun pour sélectionner le point de données lors de la création automatique d'alias.\nQuelques améliorations de l'interface graphique et des correctifs pour le mode sombre.\n",
-  "it": "Aggiunti i pulsanti Tutto e Nessuno per selezionare Datapoint durante la creazione automatica dell'alias.\nAlcuni miglioramenti alla GUI e correzioni per la modalità oscura.\n",
-  "es": "Se agregaron los botones Todo y Ninguno para seleccionar el punto de datos mientras se crea automáticamente el alias.\nAlgunas mejoras de GUI y correcciones para el modo oscuro.\n",
-  "pl": "Dodano przyciski Wszystkie i Brak, aby wybrać punkt danych podczas automatycznego tworzenia aliasu.\nNiektóre ulepszenia GUI i poprawki dla trybu ciemnego.\n",
-  "zh-cn": "添加了所有和无按钮以在自动创建别名时选择数据点。\n暗模式的一些 GUI 增强和修复。\n"
-},
+                "en": "Added All and None Buttons to select Datapoint while autocreating alias.\nSome GUI-Enhancements and fixes for dark mode.\n",
+                "de": "Die Schaltflächen „Alle“ und „Keine“ wurden hinzugefügt, um Datenpunkte auszuwählen, während ein Alias automatisch erstellt wird.\nEinige GUI-Verbesserungen und Korrekturen für den Dunkelmodus.\n",
+                "ru": "Добавлены кнопки «Все» и «Нет» для выбора точки данных при автоматическом создании псевдонима.\nНекоторые улучшения графического интерфейса и исправления для темного режима.\n",
+                "pt": "Adicionados os botões All e None para selecionar Datapoint durante a criação automática de alias.\nAlguns aprimoramentos e correções da GUI para o modo escuro.\n",
+                "nl": "Knoppen Alles en Geen toegevoegd om Datapoint te selecteren tijdens het automatisch maken van een alias.\nEnkele GUI-verbeteringen en oplossingen voor de donkere modus.\n",
+                "fr": "Ajout des boutons Tout et Aucun pour sélectionner le point de données lors de la création automatique d'alias.\nQuelques améliorations de l'interface graphique et des correctifs pour le mode sombre.\n",
+                "it": "Aggiunti i pulsanti Tutto e Nessuno per selezionare Datapoint durante la creazione automatica dell'alias.\nAlcuni miglioramenti alla GUI e correzioni per la modalità oscura.\n",
+                "es": "Se agregaron los botones Todo y Ninguno para seleccionar el punto de datos mientras se crea automáticamente el alias.\nAlgunas mejoras de GUI y correcciones para el modo oscuro.\n",
+                "pl": "Dodano przyciski Wszystkie i Brak, aby wybrać punkt danych podczas automatycznego tworzenia aliasu.\nNiektóre ulepszenia GUI i poprawki dla trybu ciemnego.\n",
+                "zh-cn": "添加了所有和无按钮以在自动创建别名时选择数据点。\n暗模式的一些 GUI 增强和修复。\n"
+                },
             "1.2.4": {
                 "en": "Fixed autocreate not working after renaming destination id.",
                 "de": "Behoben, dass die automatische Erstellung nach dem Umbenennen der Ziel-ID nicht funktionierte.",
@@ -162,7 +162,8 @@
             "zh-cn": "管理和创建别名"
         },
         "authors": [
-            "Sebastian Bormann <sebastian@bormann.net>"
+            "Sebastian Bormann <sebastian@bormann.net>",
+            "Iobroker Community<iobroker-community-adapters@gmx.de>"
         ],
         "keywords": [
             "Alias"
@@ -172,8 +173,8 @@
         "main": "main.js",
         "icon": "alias-manager.png",
         "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/sbormann/ioBroker.alias-manager/master/admin/alias-manager.png",
-        "readme": "https://github.com/sbormann/ioBroker.alias-manager/blob/master/README.md",
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.alias-manager/master/admin/alias-manager.png",
+        "readme": "https://github.com/iobroker-community-adapters/ioBroker.alias-manager/blob/master/README.md",
         "loglevel": "info",
         "mode": "none",
         "type": "general",
@@ -193,6 +194,7 @@
                 "it": "Alias-Manager",
                 "es": "Alias-Manager",
                 "pl": "Alias-Manager",
+                "uk": "Alias-Manager",
                 "zh-cn": "Alias-Manager"
             },
             "singleton": true,

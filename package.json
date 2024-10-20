@@ -6,14 +6,21 @@
     "name": "Sebastian Bormann",
     "email": "sebastian@bormann.net"
   },
-  "homepage": "https://github.com/sbormann/ioBroker.alias-manager",
+  "contributors": [
+    {
+      "name": "iobroker-community-adapters",
+      "email": "iobroker-community-adapters@gmx.de"
+    }
+  ],
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.alias-manager",
   "license": "MIT",
   "keywords": [
+    "ioBroker",
     "Alias"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/sbormann/ioBroker.alias-manager"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.alias-manager"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0"
@@ -48,7 +55,7 @@
     "lint": "eslint"
   },
   "bugs": {
-    "url": "https://github.com/Sebastian Bormann/ioBroker.alias-manager/issues"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.alias-manager/issues"
   },
   "readmeFilename": "README.md"
 }

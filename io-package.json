@@ -96,8 +96,9 @@
             "nl": "Alias-Manager",
             "fr": "Alias-Manager",
             "it": "Alias-manager",
-            "es": "Gerente de alias",
+            "es": "Alias-Manager",
             "pl": "Alias-Manager",
+            "uk": "Alias-Manager",
             "zh-cn": "别名经理"
         },
         "desc": {
@@ -110,6 +111,7 @@
             "it": "Gestisce e crea alias",
             "es": "Administra y crea alias",
             "pl": "Zarządza i tworzy aliasy",
+            "uk": "Управління та створення псевдонімів",
             "zh-cn": "管理和创建别名"
         },
         "authors": [
@@ -134,7 +136,6 @@
         "highlight": true,
         "compact": true,
         "singleton": true,
-        "materializeTab": true,
         "adminTab": {
             "name": {
                 "en": "Alias-Manager",
@@ -156,7 +157,6 @@
         "onlyWWW": true,
         "blockly": false,
         "messagebox": false,
-        "subscribe": "",
         "noIntro": true,
         "supportCustoms": false,
         "connectionType": "local",
@@ -172,7 +172,8 @@
             }
         ],
         "adminUI": {
-            "config": "materialize"
+            "config": "materialize",
+            "tab": "materialize"
         }
     },
     "native": {},

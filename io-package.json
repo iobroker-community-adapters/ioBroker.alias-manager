@@ -86,57 +86,8 @@
                 "es": "Manejo agregado de common.custom y common.states",
                 "pl": "Dodano obsługę stanów common.custom i common.states",
                 "zh-cn": "添加了对common.custom和common.states的处理"
-            },
-            "1.1.0": {
-                "en": "Added compatibility to new react-ui of admin-adapter.",
-                "de": "Kompatibilität zur neuen Reaktions-Benutzeroberfläche des Admin-Adapters hinzugefügt.",
-                "ru": "Добавлена ​​совместимость с новым response-ui админ-адаптера.",
-                "pt": "Adicionada compatibilidade para o novo react-ui do adaptador admin.",
-                "nl": "Compatibiliteit toegevoegd aan nieuwe react-ui van admin-adapter.",
-                "fr": "Ajout de la compatibilité avec le nouveau react-ui d'admin-adapter.",
-                "it": "Aggiunta compatibilità alla nuova interfaccia utente di reazione dell'adattatore di amministrazione.",
-                "es": "Se agregó compatibilidad con el nuevo react-ui de admin-adapter.",
-                "pl": "Dodano kompatybilność z nowym interfejsem reagowania adaptera administratora.",
-                "zh-cn": "添加了对新的admin-adapter-ui的兼容性。"
-            },
-            "1.0.2": {
-                "en": "Added info texts and translations.",
-                "de": "Infotexte und Übersetzungen hinzugefügt.",
-                "ru": "Добавлены информационные тексты и переводы.",
-                "pt": "Adicionados textos informativos e traduções.",
-                "nl": "Infoteksten en vertalingen toegevoegd.",
-                "fr": "Ajout de textes d'information et de traductions.",
-                "it": "Aggiunti testi informativi e traduzioni.",
-                "es": "Añadidos textos de información y traducciones.",
-                "pl": "Dodano teksty informacyjne i tłumaczenia.",
-                "zh-cn": "添加了信息文本和翻译。"
-            },
-            "1.0.1": {
-                "en": "Fixed alias read and alias write function not working, if containing quotation marks.",
-                "de": "Problem, dass die Lese- und Schreibfunktion für Alias ​​nicht funktionierte, wenn Anführungszeichen enthalten waren - gefixt",
-                "ru": "Исправлены функции чтения псевдонимов и записи псевдонимов, которые не работали, если они содержат кавычки.",
-                "pt": "As funções de leitura e gravação de alias corrigidas não funcionavam, caso contivessem aspas.",
-                "nl": "Vaste alias lezen en alias schrijffunctie niet werken, indien met aanhalingstekens.",
-                "fr": "Correction des fonctions de lecture d'alias et d'écriture d'alias ne fonctionnant pas, si elles contiennent des guillemets.",
-                "it": "Risolto il problema con la funzione di lettura alias e scrittura alias che non funzionava, se contenevano virgolette.",
-                "es": "Se corrigió que la función de lectura de alias y escritura de alias no funcionara, si contenía comillas.",
-                "pl": "Naprawiono niedziałającą funkcję odczytu aliasu i zapisu aliasu, jeśli zawierała cudzysłowy.",
-                "zh-cn": "修复了别名读取和别名写入功能（如果包含引号）不起作用的问题。"
-            },
-            "1.0.0": {
-                "en": "Updated dependencies, Removed bottom-border if used as tab.",
-                "de": "Aktualisierte Abhängigkeiten, unterer Rand entfernt, wenn als Registerkarte verwendet.",
-                "ru": "Обновлены зависимости, удалена нижняя граница, если используется как вкладка.",
-                "pt": "Dependências atualizadas, borda inferior removida se usada como guia.",
-                "nl": "Bijgewerkte afhankelijkheden, onderrand verwijderd indien gebruikt als tabblad.",
-                "fr": "Dépendances mises à jour, bordure inférieure supprimée si elle est utilisée comme onglet.",
-                "it": "Dipendenze aggiornate, bordo inferiore rimosso se utilizzato come scheda.",
-                "es": "Dependencias actualizadas, Borde inferior eliminado si se usa como pestaña.",
-                "pl": "Zaktualizowano zależności, usunięto dolną ramkę, jeśli jest używana jako karta.",
-                "zh-cn": "更新了相关性，如果用作选项卡，则删除了底部边框。"
             }
         },
-        "title": "Alias-Manager",
         "titleLang": {
             "en": "Alias-Manager",
             "de": "Alias-Manager",
@@ -168,9 +119,11 @@
         "keywords": [
             "Alias"
         ],
-        "license": "MIT",
+        "licenseInformation": {
+            "type": "free",
+            "license": "MIT"
+        },
         "platform": "Javascript/Node.js",
-        "main": "main.js",
         "icon": "alias-manager.png",
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.alias-manager/master/admin/alias-manager.png",
@@ -181,7 +134,6 @@
         "highlight": true,
         "compact": true,
         "singleton": true,
-        "materialize": true,
         "materializeTab": true,
         "adminTab": {
             "name": {
@@ -211,9 +163,17 @@
         "dataSource": "push",
         "dependencies": [
             {
-                "js-controller": ">=2.0.0"
+                "js-controller": ">=5.0.19"
             }
-        ]
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=6.17.14"
+            }
+        ],
+        "adminUI": {
+            "config": "materialize"
+        }
     },
     "native": {},
     "objects": [],

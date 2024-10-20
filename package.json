@@ -23,7 +23,7 @@
     "url": "https://github.com/iobroker-community-adapters/ioBroker.alias-manager"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.4.0"
+    "@iobroker/adapter-core": "^2.6.12"
   },
   "devDependencies": {
     "@iobroker/testing": "^5.0.0",

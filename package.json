@@ -28,7 +28,7 @@
   "devDependencies": {
     "@iobroker/testing": "^5.0.0",
     "@types/chai": "^4.2.11",
-    "@types/chai-as-promised": "^7.1.2",
+    "@types/chai-as-promised": "^8.0.1",
     "@types/gulp": "^4.0.6",
     "@types/mocha": "^7.0.2",
     "@types/node": "^12.12.38",
@@ -37,7 +37,7 @@
     "@types/sinon-chai": "^3.2.4",
     "axios": "^0.21.1",
     "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
+    "chai-as-promised": "^8.0.0",
     "eslint": "^6.8.0",
     "gulp": "^4.0.2",
     "mocha": "^7.1.2",

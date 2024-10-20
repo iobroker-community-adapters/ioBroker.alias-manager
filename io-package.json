@@ -1,182 +1,183 @@
 {
-    "common": {
-        "name": "alias-manager",
-        "version": "1.2.6",
-        "news": {
-			"1.2.6": {
-                "en": "Updated dependencies.\nFixed saving of common.custom",
-                "de": "Aktualisierte Abhängigkeiten.\nSpeichern von common.custom behoben",
-                "ru": "Обновлены зависимости.\nИсправлено сохранение ххх",
-                "pt": "Dependências atualizadas.\nEconomia fixa de common.custom",
-                "nl": "Bijgewerkte afhankelijkheden.\nVaste besparing van common.custom",
-                "fr": "Dépendances mises à jour.\nEnregistrement fixe de common.custom",
-                "it": "Dipendenze aggiornate.\nRisolto il salvataggio di common.custom",
-                "es": "Dependencias actualizadas.\nAhorro fijo de common.custom",
-                "pl": "Zaktualizowane zależności.\nNaprawiono zapisywanie common.custom",
-                "zh-cn": "更新了依赖项。\n固定保存common.custom"
-                },
-			"1.2.5": {
-                "en": "Added All and None Buttons to select Datapoint while autocreating alias.\nSome GUI-Enhancements and fixes for dark mode.\n",
-                "de": "Die Schaltflächen „Alle“ und „Keine“ wurden hinzugefügt, um Datenpunkte auszuwählen, während ein Alias automatisch erstellt wird.\nEinige GUI-Verbesserungen und Korrekturen für den Dunkelmodus.\n",
-                "ru": "Добавлены кнопки «Все» и «Нет» для выбора точки данных при автоматическом создании псевдонима.\nНекоторые улучшения графического интерфейса и исправления для темного режима.\n",
-                "pt": "Adicionados os botões All e None para selecionar Datapoint durante a criação automática de alias.\nAlguns aprimoramentos e correções da GUI para o modo escuro.\n",
-                "nl": "Knoppen Alles en Geen toegevoegd om Datapoint te selecteren tijdens het automatisch maken van een alias.\nEnkele GUI-verbeteringen en oplossingen voor de donkere modus.\n",
-                "fr": "Ajout des boutons Tout et Aucun pour sélectionner le point de données lors de la création automatique d'alias.\nQuelques améliorations de l'interface graphique et des correctifs pour le mode sombre.\n",
-                "it": "Aggiunti i pulsanti Tutto e Nessuno per selezionare Datapoint durante la creazione automatica dell'alias.\nAlcuni miglioramenti alla GUI e correzioni per la modalità oscura.\n",
-                "es": "Se agregaron los botones Todo y Ninguno para seleccionar el punto de datos mientras se crea automáticamente el alias.\nAlgunas mejoras de GUI y correcciones para el modo oscuro.\n",
-                "pl": "Dodano przyciski Wszystkie i Brak, aby wybrać punkt danych podczas automatycznego tworzenia aliasu.\nNiektóre ulepszenia GUI i poprawki dla trybu ciemnego.\n",
-                "zh-cn": "添加了所有和无按钮以在自动创建别名时选择数据点。\n暗模式的一些 GUI 增强和修复。\n"
-                },
-            "1.2.4": {
-                "en": "Fixed autocreate not working after renaming destination id.",
-                "de": "Behoben, dass die automatische Erstellung nach dem Umbenennen der Ziel-ID nicht funktionierte.",
-                "ru": "Исправлена ​​ошибка, из-за которой автосоздание не работало после переименования идентификатора назначения.",
-                "pt": "Corrigido autocreate não funcionando após renomear o id de destino.",
-                "nl": "Vaste autocreate werkte niet na het hernoemen van de bestemmings-ID.",
-                "fr": "Correction de la création automatique qui ne fonctionnait pas après avoir renommé l'identifiant de destination.",
-                "it": "Risolto il problema con la creazione automatica che non funzionava dopo aver rinominato l'ID di destinazione.",
-                "es": "Se corrigió que la creación automática no funcionaba después de cambiar el nombre de la identificación de destino.",
-                "pl": "Naprawiono niedziałające automatyczne tworzenie po zmianie nazwy identyfikatora docelowego.",
-                "zh-cn": "修复了重命名目标 ID 后自动创建不起作用的问题。"
-            },
-            "1.2.3": {
-                "en": "Fixed autocreate not working after deleting or renaming alias.",
-                "de": "Behoben, dass die automatische Erstellung nach dem Löschen oder Umbenennen des Alias ​​nicht funktionierte.",
-                "ru": "Исправлена ​​ошибка, из-за которой автосоздание не работало после удаления или переименования псевдонима.",
-                "pt": "A criação automática corrigida não funcionava após a exclusão ou renomeação de alias.",
-                "nl": "Vaste autocreate werkte niet na het verwijderen of hernoemen van alias.",
-                "fr": "Correction de la création automatique qui ne fonctionnait pas après la suppression ou le changement de nom d'alias.",
-                "it": "Risolto il problema con la creazione automatica che non funzionava dopo l'eliminazione o la ridenominazione dell'alias.",
-                "es": "Se corrigió que la creación automática no funcionaba después de eliminar o cambiar el nombre del alias.",
-                "pl": "Naprawiono niedziałające autotworzenie po usunięciu lub zmianie nazwy aliasu.",
-                "zh-cn": "修复了删除或重命名别名后自动创建不起作用的问题。"
-            },
-            "1.2.2": {
-                "en": "Updated dependencies, Add empty native-object to datapoint, if it is missing.",
-                "de": "Aktualisierte Abhängigkeiten. Fügen Sie dem Datenpunkt ein leeres natives Objekt hinzu, falls es fehlt.",
-                "ru": "Обновленные зависимости. Добавьте пустой родной объект в точку данных, если он отсутствует.",
-                "pt": "Dependências atualizadas, Adicionar objeto nativo vazio ao ponto de dados, se estiver faltando.",
-                "nl": "Bijgewerkte afhankelijkheden, voeg leeg native-object toe aan datapunt, als het ontbreekt.",
-                "fr": "Dépendances mises à jour, ajoutez un objet natif vide au point de données, s'il est manquant.",
-                "it": "Dipendenze aggiornate, aggiungi un oggetto nativo vuoto al punto dati, se mancante.",
-                "es": "Dependencias actualizadas, agregue un objeto nativo vacío al punto de datos, si falta.",
-                "pl": "Zaktualizowano zależności, dodaj pusty obiekt natywny do punktu danych, jeśli go brakuje.",
-                "zh-cn": "更新了依赖关系，如果缺少，则将空的本机对象添加到数据点。"
-            },
-            "1.2.1": {
-                "en": "Added treeview, Fixed renaming and copying of datapoints.",
-                "de": "Baumansicht hinzugefügt, Umbenennen und Kopieren von Datenpunkten behoben.",
-                "ru": "Добавлен древовидный вид, Исправлено переименование и копирование точек данных.",
-                "pt": "Adicionado treeview, renomeando e copiando fixos de pontos de dados.",
-                "nl": "Treeview toegevoegd, hernoemen en kopiëren van datapunten opgelost.",
-                "fr": "Ajout de l'arborescence, correction du changement de nom et de la copie des points de données.",
-                "it": "Aggiunta la visualizzazione ad albero, correzione della ridenominazione e copia dei punti dati.",
-                "es": "Vista de árbol agregada, cambio de nombre fijo y copia de puntos de datos.",
-                "pl": "Dodano widok drzewa, naprawiono zmianę nazwy i kopiowanie punktów danych.",
-                "zh-cn": "添加了树视图，修复了数据点的重命名和复制。"
-            },
-            "1.2.0": {
-                "en": "Added handling of common.custom and common.states",
-                "de": "Behandlung von common.custom und common.states hinzugefügt",
-                "ru": "Добавлена ​​обработка common.custom и common.states.",
-                "pt": "Adicionado tratamento de common.custom e common.states",
-                "nl": "Behandeling van common.custom en common.states toegevoegd",
-                "fr": "Ajout de la gestion de common.custom et common.states",
-                "it": "Aggiunta la gestione di common.custom e common.states",
-                "es": "Manejo agregado de common.custom y common.states",
-                "pl": "Dodano obsługę stanów common.custom i common.states",
-                "zh-cn": "添加了对common.custom和common.states的处理"
-            }
-        },
-        "titleLang": {
-            "en": "Alias-Manager",
-            "de": "Alias-Manager",
-            "ru": "Алиас-менеджер",
-            "pt": "Alias-Manager",
-            "nl": "Alias-Manager",
-            "fr": "Alias-Manager",
-            "it": "Alias-manager",
-            "es": "Alias-Manager",
-            "pl": "Alias-Manager",
-            "uk": "Alias-Manager",
-            "zh-cn": "别名经理"
-        },
-        "desc": {
-            "en": "Manages and creates aliases",
-            "de": "Verwaltet und erstellt Aliase",
-            "ru": "Управляет и создает псевдонимы",
-            "pt": "Gerencia e cria aliases",
-            "nl": "Beheert en maakt aliassen",
-            "fr": "Gère et crée des alias",
-            "it": "Gestisce e crea alias",
-            "es": "Administra y crea alias",
-            "pl": "Zarządza i tworzy aliasy",
-            "uk": "Управління та створення псевдонімів",
-            "zh-cn": "管理和创建别名"
-        },
-        "authors": [
-            "Sebastian Bormann <sebastian@bormann.net>",
-            "Iobroker Community<iobroker-community-adapters@gmx.de>"
-        ],
-        "keywords": [
-            "Alias"
-        ],
-        "licenseInformation": {
-            "type": "free",
-            "license": "MIT"
-        },
-        "platform": "Javascript/Node.js",
-        "icon": "alias-manager.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.alias-manager/master/admin/alias-manager.png",
-        "readme": "https://github.com/iobroker-community-adapters/ioBroker.alias-manager/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "none",
-        "type": "general",
-        "highlight": true,
-        "compact": true,
-        "singleton": true,
-        "adminTab": {
-            "name": {
-                "en": "Alias-Manager",
-                "de": "Alias-Manager",
-                "ru": "Alias-Manager",
-                "pt": "Alias-Manager",
-                "nl": "Alias-Manager",
-                "fr": "Alias-Manager",
-                "it": "Alias-Manager",
-                "es": "Alias-Manager",
-                "pl": "Alias-Manager",
-                "uk": "Alias-Manager",
-                "zh-cn": "Alias-Manager"
-            },
-            "singleton": true,
-            "fa-icon": "control_point_duplicate",
-            "link": "/adapter/alias-manager/index_m.html?0&noFooter"
-        },
-        "onlyWWW": true,
-        "blockly": false,
-        "messagebox": false,
-        "noIntro": true,
-        "supportCustoms": false,
-        "connectionType": "local",
-        "dataSource": "push",
-        "dependencies": [
-            {
-                "js-controller": ">=5.0.19"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=6.17.14"
-            }
-        ],
-        "adminUI": {
-            "config": "materialize",
-            "tab": "materialize"
-        }
+  "common": {
+    "name": "alias-manager",
+    "version": "2.0.0-alpha.0",
+    "news": {
+      "2.0.0-alpha.0": {
+        "en": "Adapter has been moved to iobroker-community-adapter organisation.\nAdapter requires js-controller 5, admin 6 and node.js 20 now.\nDependencies have been updated.",
+        "de": "Adapter wurde in die iobroker-community-Adapter-Organisation verschoben.\nAdapter benötigt jetzt js-controller 5, admin 6 und node.js 20.\nAbhängigkeiten wurden aktualisiert.",
+        "ru": "Адаптер был перемещен в организацию iobroker-community-adapter.\nAdapter requires js-controller 5, admin 6 and node.js 20 now.\nЗависимость была обновлена.",
+        "pt": "Adapter foi transferido para a organização iobroker-community-adapter.\nAdaptador requer js-controller 5, admin 6 e node.js 20 agora.\nAs dependências foram atualizadas.",
+        "nl": "Adapter is verplaatst naar iobroker-community-adapter organisatie.\nAdapter vereist js-controller 5, admin 6 en node.js 20 nu.\nAfhankelijkheden zijn bijgewerkt.",
+        "fr": "L'adaptateur a été transféré à l'organisation iobroker-community-adaptateur.\nAdaptateur nécessite js-controller 5, admin 6 et node.js 20 maintenant.\nLes dépendances ont été actualisées.",
+        "it": "L'adattatore è stato spostato nell'organizzazione di iobroker-community-adapter.\nAdattatore richiede js-controller 5, admin 6 e node.js 20 ora.\nLe dipendenze sono state aggiornate.",
+        "es": "El adaptador ha sido trasladado a la organización yobroker-community-adapter.\nAdaptador requiere js-controller 5, admin 6 y node.js 20 ahora.\nSe han actualizado las dependencias.",
+        "pl": "Adapter został przeniesiony do organizacji iobroker- community- adapter.\nAdapter wymaga sterownika js- controller 5, admin 6 i node.js 20.\nZaktualizowano zależność.",
+        "uk": "Переміщено перехід на iobroker-community-adapter.\nАдаптер вимагає js-controller 5, admin 6 і node.js 20 тепер.\nОновлено залежність.",
+        "zh-cn": "适应者已经转移到了职业经纪人-社区适应者组织.\n适配器现在需要js控制器5,admin 6和节点20.js.\n附属关系已经更新."
+      },
+      "1.2.6": {
+        "en": "Updated dependencies.\nFixed saving of common.custom",
+        "de": "Aktualisierte Abhängigkeiten.\nSpeichern von common.custom behoben",
+        "ru": "Обновлены зависимости.\nИсправлено сохранение ххх",
+        "pt": "Dependências atualizadas.\nEconomia fixa de common.custom",
+        "nl": "Bijgewerkte afhankelijkheden.\nVaste besparing van common.custom",
+        "fr": "Dépendances mises à jour.\nEnregistrement fixe de common.custom",
+        "it": "Dipendenze aggiornate.\nRisolto il salvataggio di common.custom",
+        "es": "Dependencias actualizadas.\nAhorro fijo de common.custom",
+        "pl": "Zaktualizowane zależności.\nNaprawiono zapisywanie common.custom",
+        "zh-cn": "更新了依赖项。\n固定保存common.custom"
+      },
+      "1.2.5": {
+        "en": "Added All and None Buttons to select Datapoint while autocreating alias.\nSome GUI-Enhancements and fixes for dark mode.\n",
+        "de": "Die Schaltflächen „Alle“ und „Keine“ wurden hinzugefügt, um Datenpunkte auszuwählen, während ein Alias automatisch erstellt wird.\nEinige GUI-Verbesserungen und Korrekturen für den Dunkelmodus.\n",
+        "ru": "Добавлены кнопки «Все» и «Нет» для выбора точки данных при автоматическом создании псевдонима.\nНекоторые улучшения графического интерфейса и исправления для темного режима.\n",
+        "pt": "Adicionados os botões All e None para selecionar Datapoint durante a criação automática de alias.\nAlguns aprimoramentos e correções da GUI para o modo escuro.\n",
+        "nl": "Knoppen Alles en Geen toegevoegd om Datapoint te selecteren tijdens het automatisch maken van een alias.\nEnkele GUI-verbeteringen en oplossingen voor de donkere modus.\n",
+        "fr": "Ajout des boutons Tout et Aucun pour sélectionner le point de données lors de la création automatique d'alias.\nQuelques améliorations de l'interface graphique et des correctifs pour le mode sombre.\n",
+        "it": "Aggiunti i pulsanti Tutto e Nessuno per selezionare Datapoint durante la creazione automatica dell'alias.\nAlcuni miglioramenti alla GUI e correzioni per la modalità oscura.\n",
+        "es": "Se agregaron los botones Todo y Ninguno para seleccionar el punto de datos mientras se crea automáticamente el alias.\nAlgunas mejoras de GUI y correcciones para el modo oscuro.\n",
+        "pl": "Dodano przyciski Wszystkie i Brak, aby wybrać punkt danych podczas automatycznego tworzenia aliasu.\nNiektóre ulepszenia GUI i poprawki dla trybu ciemnego.\n",
+        "zh-cn": "添加了所有和无按钮以在自动创建别名时选择数据点。\n暗模式的一些 GUI 增强和修复。\n"
+      },
+      "1.2.4": {
+        "en": "Fixed autocreate not working after renaming destination id.",
+        "de": "Behoben, dass die automatische Erstellung nach dem Umbenennen der Ziel-ID nicht funktionierte.",
+        "ru": "Исправлена ​​ошибка, из-за которой автосоздание не работало после переименования идентификатора назначения.",
+        "pt": "Corrigido autocreate não funcionando após renomear o id de destino.",
+        "nl": "Vaste autocreate werkte niet na het hernoemen van de bestemmings-ID.",
+        "fr": "Correction de la création automatique qui ne fonctionnait pas après avoir renommé l'identifiant de destination.",
+        "it": "Risolto il problema con la creazione automatica che non funzionava dopo aver rinominato l'ID di destinazione.",
+        "es": "Se corrigió que la creación automática no funcionaba después de cambiar el nombre de la identificación de destino.",
+        "pl": "Naprawiono niedziałające automatyczne tworzenie po zmianie nazwy identyfikatora docelowego.",
+        "zh-cn": "修复了重命名目标 ID 后自动创建不起作用的问题。"
+      },
+      "1.2.3": {
+        "en": "Fixed autocreate not working after deleting or renaming alias.",
+        "de": "Behoben, dass die automatische Erstellung nach dem Löschen oder Umbenennen des Alias ​​nicht funktionierte.",
+        "ru": "Исправлена ​​ошибка, из-за которой автосоздание не работало после удаления или переименования псевдонима.",
+        "pt": "A criação automática corrigida não funcionava após a exclusão ou renomeação de alias.",
+        "nl": "Vaste autocreate werkte niet na het verwijderen of hernoemen van alias.",
+        "fr": "Correction de la création automatique qui ne fonctionnait pas après la suppression ou le changement de nom d'alias.",
+        "it": "Risolto il problema con la creazione automatica che non funzionava dopo l'eliminazione o la ridenominazione dell'alias.",
+        "es": "Se corrigió que la creación automática no funcionaba después de eliminar o cambiar el nombre del alias.",
+        "pl": "Naprawiono niedziałające autotworzenie po usunięciu lub zmianie nazwy aliasu.",
+        "zh-cn": "修复了删除或重命名别名后自动创建不起作用的问题。"
+      },
+      "1.2.2": {
+        "en": "Updated dependencies, Add empty native-object to datapoint, if it is missing.",
+        "de": "Aktualisierte Abhängigkeiten. Fügen Sie dem Datenpunkt ein leeres natives Objekt hinzu, falls es fehlt.",
+        "ru": "Обновленные зависимости. Добавьте пустой родной объект в точку данных, если он отсутствует.",
+        "pt": "Dependências atualizadas, Adicionar objeto nativo vazio ao ponto de dados, se estiver faltando.",
+        "nl": "Bijgewerkte afhankelijkheden, voeg leeg native-object toe aan datapunt, als het ontbreekt.",
+        "fr": "Dépendances mises à jour, ajoutez un objet natif vide au point de données, s'il est manquant.",
+        "it": "Dipendenze aggiornate, aggiungi un oggetto nativo vuoto al punto dati, se mancante.",
+        "es": "Dependencias actualizadas, agregue un objeto nativo vacío al punto de datos, si falta.",
+        "pl": "Zaktualizowano zależności, dodaj pusty obiekt natywny do punktu danych, jeśli go brakuje.",
+        "zh-cn": "更新了依赖关系，如果缺少，则将空的本机对象添加到数据点。"
+      },
+      "1.2.1": {
+        "en": "Added treeview, Fixed renaming and copying of datapoints.",
+        "de": "Baumansicht hinzugefügt, Umbenennen und Kopieren von Datenpunkten behoben.",
+        "ru": "Добавлен древовидный вид, Исправлено переименование и копирование точек данных.",
+        "pt": "Adicionado treeview, renomeando e copiando fixos de pontos de dados.",
+        "nl": "Treeview toegevoegd, hernoemen en kopiëren van datapunten opgelost.",
+        "fr": "Ajout de l'arborescence, correction du changement de nom et de la copie des points de données.",
+        "it": "Aggiunta la visualizzazione ad albero, correzione della ridenominazione e copia dei punti dati.",
+        "es": "Vista de árbol agregada, cambio de nombre fijo y copia de puntos de datos.",
+        "pl": "Dodano widok drzewa, naprawiono zmianę nazwy i kopiowanie punktów danych.",
+        "zh-cn": "添加了树视图，修复了数据点的重命名和复制。"
+      }
     },
-    "native": {},
-    "objects": [],
-    "instanceObjects": []
+    "titleLang": {
+      "en": "Alias-Manager",
+      "de": "Alias-Manager",
+      "ru": "Алиас-менеджер",
+      "pt": "Alias-Manager",
+      "nl": "Alias-Manager",
+      "fr": "Alias-Manager",
+      "it": "Alias-manager",
+      "es": "Alias-Manager",
+      "pl": "Alias-Manager",
+      "uk": "Alias-Manager",
+      "zh-cn": "别名经理"
+    },
+    "desc": {
+      "en": "Manages and creates aliases",
+      "de": "Verwaltet und erstellt Aliase",
+      "ru": "Управляет и создает псевдонимы",
+      "pt": "Gerencia e cria aliases",
+      "nl": "Beheert en maakt aliassen",
+      "fr": "Gère et crée des alias",
+      "it": "Gestisce e crea alias",
+      "es": "Administra y crea alias",
+      "pl": "Zarządza i tworzy aliasy",
+      "uk": "Управління та створення псевдонімів",
+      "zh-cn": "管理和创建别名"
+    },
+    "authors": [
+      "Sebastian Bormann <sebastian@bormann.net>",
+      "Iobroker Community<iobroker-community-adapters@gmx.de>"
+    ],
+    "keywords": [
+      "Alias"
+    ],
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
+    "platform": "Javascript/Node.js",
+    "icon": "alias-manager.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.alias-manager/master/admin/alias-manager.png",
+    "readme": "https://github.com/iobroker-community-adapters/ioBroker.alias-manager/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "none",
+    "type": "general",
+    "highlight": true,
+    "compact": true,
+    "singleton": true,
+    "adminTab": {
+      "name": {
+        "en": "Alias-Manager",
+        "de": "Alias-Manager",
+        "ru": "Alias-Manager",
+        "pt": "Alias-Manager",
+        "nl": "Alias-Manager",
+        "fr": "Alias-Manager",
+        "it": "Alias-Manager",
+        "es": "Alias-Manager",
+        "pl": "Alias-Manager",
+        "uk": "Alias-Manager",
+        "zh-cn": "Alias-Manager"
+      },
+      "singleton": true,
+      "fa-icon": "control_point_duplicate",
+      "link": "/adapter/alias-manager/index_m.html?0&noFooter"
+    },
+    "onlyWWW": true,
+    "blockly": false,
+    "messagebox": false,
+    "noIntro": true,
+    "supportCustoms": false,
+    "connectionType": "local",
+    "dataSource": "push",
+    "dependencies": [
+      {
+        "js-controller": ">=5.0.19"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.17.14"
+      }
+    ],
+    "adminUI": {
+      "config": "materialize",
+      "tab": "materialize"
+    }
+  },
+  "native": {},
+  "objects": [],
+  "instanceObjects": []
 }

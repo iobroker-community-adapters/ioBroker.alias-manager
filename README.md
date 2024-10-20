@@ -16,6 +16,14 @@
 
 Manages and creates aliases.
 
+## Credits
+
+This adapter would not have been possible without the great work of @o0Shojo0o (https://github.com/o0Shojo0o), who developed former releases of this adapter.
+
+## How to report issues and feature requests
+
+Ideally, please use GitHub issues for this, with the best method achieved by setting the adapter to Debug log mode (Instances -> Expert mode -> Column Log level). Then retrieve the logfile from disk via the  'log' ioBroker subdirectory, **not** from Admin, which will cut lines. 
+
 ## Quick Intro
 
 ### Manage aliases
@@ -88,6 +96,15 @@ Here you can:
 
 
 ## Changelog
+<!--
+	Placeholder for the next version (at the beginning of the line):
+	### **WORK IN PROGRESS**
+-->
+
+### **WORK IN PROGRESS**
+- (mcm1957) Adapter has been moved to iobroker-community-adapter organisation.
+- (mcm1957) Adapter requires js-controller 5, admin 6 and node.js 20 now.
+- (mcm1957) Dependencies have been updated.
 
 ### 1.2.6 (2022-03-02)
 * (sbormann) Updated dependencies.
@@ -167,6 +184,7 @@ Here you can:
 ## License
 MIT License
 
+Copyright (c) 2024 iobroker-community-adapters <iobroker-community-adapters@gmx.de>  
 Copyright (c) 2022 Sebastian Bormann <sebastian@bormann.net>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

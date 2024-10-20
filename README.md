@@ -18,7 +18,7 @@ Manages and creates aliases.
 
 ## Credits
 
-This adapter would not have been possible without the great work of @o0Shojo0o (https://github.com/o0Shojo0o), who developed former releases of this adapter.
+This adapter would not have been possible without the great work of @sbormann (https://github.com/sbormann), who developed former releases of this adapter.
 
 ## How to report issues and feature requests
 

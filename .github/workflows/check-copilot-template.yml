@@ -81,7 +81,7 @@ jobs:
       - name: Check for existing update issues
         id: existing-issues
         if: steps.version-check.outputs.update_needed == 'true' || steps.version-check.outputs.copilot_initialized == 'false'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const { data: issues } = await github.rest.issues.listForRepo({
@@ -101,7 +101,7 @@ jobs:
             
       - name: Create setup issue for uninitialized repository
         if: steps.version-check.outputs.copilot_initialized == 'false' && steps.existing-issues.outputs.exists == 'false'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const body = `# 🤖 Automated ioBroker Copilot Setup Required
@@ -144,7 +144,7 @@ jobs:
             
       - name: Create update issue for outdated template
         if: steps.version-check.outputs.update_needed == 'true' && steps.version-check.outputs.copilot_initialized == 'true' && steps.existing-issues.outputs.exists == 'false'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const body = `# 🤖 ioBroker Copilot Template Update Available

@@ -108,6 +108,7 @@
     "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.alias-manager/master/admin/alias-manager.png",
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.alias-manager/blob/master/README.md",
     "loglevel": "info",
+    "tier": 2,
     "mode": "none",
     "type": "general",
     "highlight": true,

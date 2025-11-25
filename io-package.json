@@ -110,7 +110,6 @@
     "loglevel": "info",
     "mode": "none",
     "type": "general",
-    "highlight": true,
     "compact": true,
     "singleton": true,
     "adminTab": {

@@ -127,7 +127,6 @@
         "zh-cn": "Alias-Manager"
       },
       "singleton": true,
-      "fa-icon": "control_point_duplicate",
       "link": "/adapter/alias-manager/index_m.html?0&noFooter"
     },
     "onlyWWW": true,

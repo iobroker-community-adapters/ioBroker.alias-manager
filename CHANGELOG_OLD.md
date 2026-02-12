@@ -1,4 +1,7 @@
 # Older changes
+## 1.2.3 (2021-06-05)
+* (sbormann) Fixed autocreate not working after deleting or renaming alias.
+
 ## 1.2.2 (2021-05-13)
 * (sbormann) Updated dependencies.
 * (sbormann) Add empty native-object to datapoint, if it is missing.

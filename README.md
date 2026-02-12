@@ -104,6 +104,7 @@ Here you can:
 ### **WORK IN PROGRESS**
 - (copilot) Adapter requires js-controller >= 6.0.11 now
 - (copilot) Adapter requires admin >= 7.6.17 now
+- (copilot) Added Node.js 24.x to testing matrix
 
 ### 2.0.0 (2024-10-20)
 - (mcm1957) Adapter has been moved to iobroker-community-adapter organisation.

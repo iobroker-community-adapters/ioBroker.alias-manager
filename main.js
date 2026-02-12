@@ -84,7 +84,7 @@ class AliasManager extends utils.Adapter {
             this.log.info('cleaned everything up...');
             callback();
         } catch (e) {
-            this.log.error(`Error during unload: ${e.message}`);
+            this.log.error(`Error during unload: ${String(e)}`);
             callback();
         }
     }

@@ -126,6 +126,8 @@ Here you can:
 ### 1.2.4 (2021-08-25)
 * (sbormann) Fixed autocreate not working after renaming destination id.
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 MIT License
 

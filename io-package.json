@@ -130,23 +130,6 @@
     "type": "general",
     "compact": true,
     "singleton": true,
-    "adminTab": {
-      "name": {
-        "en": "Alias-Manager",
-        "de": "Alias-Manager",
-        "ru": "Alias-Manager",
-        "pt": "Alias-Manager",
-        "nl": "Alias-Manager",
-        "fr": "Alias-Manager",
-        "it": "Alias-Manager",
-        "es": "Alias-Manager",
-        "pl": "Alias-Manager",
-        "uk": "Alias-Manager",
-        "zh-cn": "Alias-Manager"
-      },
-      "singleton": true,
-      "link": "/adapter/alias-manager/index_m.html?0&noFooter"
-    },
     "onlyWWW": true,
     "blockly": false,
     "messagebox": false,
@@ -165,8 +148,7 @@
       }
     ],
     "adminUI": {
-      "config": "materialize",
-      "tab": "materialize"
+      "config": "json"
     }
   },
   "native": {},

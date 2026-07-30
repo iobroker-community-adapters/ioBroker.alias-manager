@@ -102,6 +102,7 @@ Here you can:
 -->
 ### **WORK IN PROGRESS**
 - (copilot) Adapter requires node.js >= 22 now
+- (copilot) **ENHANCED**: Migrated admin instance configuration to jsonConfig and short-form i18n files
 
 ### 2.1.0 (2026-02-12)
 - (copilot) Adapter requires node.js >= 20 now

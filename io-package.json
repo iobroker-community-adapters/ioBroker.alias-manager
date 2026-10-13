@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "alias-manager",
-    "version": "2.1.0",
+    "version": "3.0.0",
     "news": {
+      "3.0.0": {
+        "en": "Adapter requires node.js >= 22 now\nCorrected loading via ioBroker.pro",
+        "de": "Adapter benötigt jetzt node.js >= 22\nKorrigiertes Laden via ioBroker.Pro",
+        "ru": "Теперь для адаптера требуется файл node.js >= 22\nИсправлена загрузка через IOBroker.pro",
+        "pt": "O adaptador exige node.js >= 2\nCarga corrigida via IObroker.pro",
+        "nl": "Voor de adapter is nu node.js >= 22 nodig\nLaden gecorrigeerd via IOBroker.pro",
+        "fr": "Adapter nécessite node.js >= 22\nChargement corrigé via IObroker.pro",
+        "it": "Adapter richiede node.js =2 ora\nCarico corretto via IObroker.pro",
+        "es": "El adaptador necesita node.js >= 22 ahora\nSe corrigió la carga en IOBroker.pro",
+        "pl": "Adapter wymaga teraz node.js >= 22\nPoprawiono ładowanie za pośrednictwem iobroker.pro",
+        "uk": "Адаптер вимагає node.js >= 22 зараз\nВиправлено завантаження через iobroker.pro",
+        "zh-cn": "适配器现在需要 node.js >= 22\n更正了通过 iobroker.pro 加载的问题"
+      },
       "2.1.0": {
         "en": "Adapter requires node.js >= 20 now\nAdapter requires js-controller >= 6.0.11 now\nAdapter requires admin >= 7.6.17 now\nAdded Node.js 24.x to testing matrix\nDependencies have been updated.",
         "de": "Adapter benötigt node.js >= 20 jetzt\nAdapter benötigt jetzt js-controller >= 6.0.11\nAdapter benötigt admin >= 7.6.17 jetzt\nNode.js 24.x zur Testmatrix hinzugefügt\nAbhängigkeiten wurden aktualisiert.",

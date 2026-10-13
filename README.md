@@ -100,7 +100,7 @@ Here you can:
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.0.0 (2026-10-13)
 - (copilot) Adapter requires node.js >= 22 now
 - (@GermanBluefox) Corrected loading via ioBroker.pro
 
@@ -123,9 +123,6 @@ Here you can:
 ### 1.2.5 (2022-03-02)
 * (sbormann) Added All and None Buttons to select Datapoint while autocreating alias.
 * (sbormann) Some GUI-Enhancements and fixes for dark mode.
-
-### 1.2.4 (2021-08-25)
-* (sbormann) Fixed autocreate not working after renaming destination id.
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

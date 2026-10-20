@@ -100,6 +100,11 @@ Here you can:
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires admin >= 7.6.17 now
+- (mcm1957) unused backend code has been removed
+- (mcm1957) Dependencies have been updated.
+
 ### 3.0.0 (2026-10-13)
 - (copilot) Adapter requires node.js >= 22 now
 - (@GermanBluefox) Corrected loading via ioBroker.pro

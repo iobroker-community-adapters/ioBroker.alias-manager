@@ -36,7 +36,6 @@
     "ts-node": "^10.9.2",
     "typescript": "~6.0.3"
   },
-  "main": "main.js",
   "files": [
     "admin{,/!(src)/**}/!(tsconfig|tsconfig.*|.eslintrc).{json,json5}",
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",

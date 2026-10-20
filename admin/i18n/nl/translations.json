@@ -109,7 +109,5 @@
     "You can use search and replace in the 'Rename Alias' function to adjust multiple Alias-IDs at once (e.g. when replacing a broken device)": "U kunt zoeken en vervangen gebruiken in de functie 'Alias ​​hernoemen' om meerdere Alias-ID's tegelijk aan te passen (bijvoorbeeld bij het vervangen van een kapot apparaat)",
     "You may need to save it first.": "Mogelijk moet u deze eerst opslaan.",
     "alias-manager adapter settings": "Adapterinstellingen voor alias-manager",
-    "common.role": "common.rol",
-    "option1": "Optie 1",
-    "option2": "Optie 2"
+    "common.role": "common.rol"
 }

@@ -109,7 +109,5 @@
     "You can use search and replace in the 'Rename Alias' function to adjust multiple Alias-IDs at once (e.g. when replacing a broken device)": "Ви можете використовувати пошук і заміну у функції «Перейменувати псевдонім», щоб налаштувати кілька псевдонімів одночасно (наприклад, під час заміни зламаного пристрою)",
     "You may need to save it first.": "Можливо, спочатку потрібно зберегти його.",
     "alias-manager adapter settings": "Параметри адаптера для alias-manager",
-    "common.role": "заг.роль",
-    "option1": "варіант1",
-    "option2": "варіант2"
+    "common.role": "заг.роль"
 }

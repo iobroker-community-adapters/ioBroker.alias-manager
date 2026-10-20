@@ -109,7 +109,5 @@
     "You can use search and replace in the 'Rename Alias' function to adjust multiple Alias-IDs at once (e.g. when replacing a broken device)": "您可以在“重命名别名”功能中使用搜索和替换功能来一次调整多个别名ID（例如，在更换损坏的设备时）",
     "You may need to save it first.": "您可能需要先保存它。",
     "alias-manager adapter settings": "alias-manager的适配器设置",
-    "common.role": "通用角色",
-    "option1": "选项1",
-    "option2": "选项2"
+    "common.role": "通用角色"
 }

@@ -109,7 +109,5 @@
     "You can use search and replace in the 'Rename Alias' function to adjust multiple Alias-IDs at once (e.g. when replacing a broken device)": "Możesz użyć funkcji wyszukiwania i zamiany w funkcji `` Zmień nazwę aliasu '', aby dostosować wiele identyfikatorów aliasów jednocześnie (np. Podczas wymiany uszkodzonego urządzenia)",
     "You may need to save it first.": "Być może będziesz musiał go najpierw zapisać.",
     "alias-manager adapter settings": "Ustawienia adaptera dla alias-manager",
-    "common.role": "common.role",
-    "option1": "opcja 1",
-    "option2": "Opcja 2"
+    "common.role": "common.role"
 }
